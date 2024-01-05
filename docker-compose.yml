@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  web:
+    container_name: amui-web
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    environment:
+      # https://stackoverflow.com/a/65265986/10521456
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./web:/home/web
+
+      # Creates a separate volume for node_modules otherwise next.js won't start
+      - web_node_modules:/home/web/node_modules
+
+      # Links bundle from build output to api server.
+      - bundle:/home/web/dist
+    tty: true
+    ports:
+      - 3000:3000
+
+volumes:
+  web_node_modules:
+  bundle:
+    

@@ -1,0 +1,7 @@
+{
+  "name": "amui-web",
+  "service": "web",
+  "workspaceFolder": "/home/web",
+  "dockerComposeFile": "../docker-compose.yml",
+  "shutdownAction": "stopCompose"
+}
