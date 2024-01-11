@@ -16,6 +16,7 @@ Additive Manufacturing User Interface (AMUI)
     ```bash
     docker-compose up -d
     ```
+6. Follow further instructions for either [`api`](./api/README.md) or [`web`](./web/README.md)
 
 ## Contributing
 1. Create new branch on GitHub for your feature off of the [`main`](https://github.com/BaratiLab/AMUI) branch.
