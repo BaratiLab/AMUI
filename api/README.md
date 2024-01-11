@@ -9,3 +9,10 @@
       ![images/reopen_in_container.PNG](../images/reopen_in_container.PNG)
         - This will provide you access to container CLI when opening VSCode terminal.
         - It will also provide you with IDE tools while developing.
+
+## Contributing
+1. Follow instructions for contributing in project level [`README.md`](../README.md)
+2. Lint code before staging to commit.
+    ```bash
+    black .
+    ```

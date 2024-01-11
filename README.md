@@ -19,6 +19,8 @@ Additive Manufacturing User Interface (AMUI)
 6. Follow further instructions for either [`api`](./api/README.md) or [`web`](./web/README.md)
 
 ## Contributing
+Perform these commands inside a terminal not attached to Docker container.
+
 1. Create new branch on GitHub for your feature off of the [`main`](https://github.com/BaratiLab/AMUI) branch.
     - Provide the new branch with a descriptive feature title like: `README-troubleshooting-updates`.
 
@@ -30,27 +32,32 @@ Additive Manufacturing User Interface (AMUI)
     - You see that new branch now
 
       ![image/new_branch_pull.png](./images/new_branch_pull.png)
-3. Make your changes and stage them for commit.
+3. Change to this local branch.
+    ```bash
+    git checkout <REPLACE-WITH-BRANCH-NAME> 
+    ```
+4. Make your changes and stage them for commit.
     ```bash
     git add .
     ```
     - This will add all changes.
+    - Make sure to follow additional instructions for [`api`](./api/README.md) or [`web`](./web/README.md)
     - `git status` will show your staged changes in green.
 
       ![image/git_add_git_status](./images/git_add_git_status.png)
-4. Commit your changes with a descriptive commit message.
+5. Commit your changes with a descriptive commit message.
     ```bash
     git commit -m "Your 80 character maximum commit message goes here"
     ```
 
     ![image/git_commit](./images/git_commit.png)
-5. Push your changes to GitHub.
+6. Push your changes to GitHub.
     ```bash
     git push
     ```
 
     ![image/git_push](./images/git_push.png)
-6. Go back to repository on GitHub and create a Pull Request
+7. Go back to repository on GitHub and create a Pull Request
     - You should see a banner notification about your latest change.
     - Click on the "Compare & pull request" button to create a Pull Request
 
@@ -60,9 +67,9 @@ Additive Manufacturing User Interface (AMUI)
 
       ![image/make_pull_request](./images/make_pull_request.gif)
 
-7. Delete feature branch once pull request is merged
+8. Delete feature branch once pull request is merged
     ![image/delete_branch](./images/delete_branch.png)
-8. Pull and Checkout `main` branch locally
+9. Pull and Checkout `main` branch locally
     ```bash
     git pull
     git checkout main
