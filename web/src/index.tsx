@@ -10,6 +10,6 @@ const root = createRoot(document.getElementById('app-root') as Element);
 
 root.render(
   <div>
-    Hello World
+    Hello World!
   </div>
 );
