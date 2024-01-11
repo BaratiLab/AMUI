@@ -1,0 +1,7 @@
+{
+  "name": "amui-api",
+  "service": "api",
+  "workspaceFolder": "/home/api",
+  "dockerComposeFile": "../docker-compose.yml",
+  "shutdownAction": "stopCompose"
+}
