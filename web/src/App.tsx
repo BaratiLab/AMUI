@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
@@ -6,7 +6,7 @@ import Temp1 from './pages/Temp1';
 import Temp2 from './pages/Temp2';
 
 
-const App: React.FC = () => {
+const App: FC = () => {
     return (
         <div>
             <Navbar />
