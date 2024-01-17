@@ -4,21 +4,12 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Temp1 from './pages/Temp1';
 import Temp2 from './pages/Temp2';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
+import { theme } from './theme';
 
-const theme = createTheme({
-    palette: {
-      background: {
-        default: '#121212', // Change this to your desired background color
-      },
-      text: {
-        primary: '#FFFFFF', // Change this to your desired text color
-      },
-    },
-  });
-  
+
 const App: FC = () => {
     return (
         <ThemeProvider theme={theme}>
