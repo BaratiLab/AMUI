@@ -4,7 +4,7 @@ import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 
 const Navbar: FC = () => {
     return (
-        <AppBar position="static">
+        <AppBar position="static" style={{ background: '#272727' }}>
             <Toolbar>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     AMUI
@@ -19,7 +19,9 @@ const Navbar: FC = () => {
                     <Button color="inherit">Temp2</Button>
                 </Link>
             </Toolbar>
+            
         </AppBar>
+        
     );
 };
 
