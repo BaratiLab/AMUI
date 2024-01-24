@@ -63,6 +63,13 @@ services:
     depends_on:
       - sql
 
+  module-example:
+    container_name: amui-module-example
+    build:
+      context: ./module/example
+      dockerfile: Dockerfile
+    tty: true
+
 volumes:
   bundle:
   pgadmin:
