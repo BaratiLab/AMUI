@@ -13,4 +13,15 @@ export const theme = createTheme({
         primary: '#FFFFFF', // Change this to your desired text color
       },
     },
+    components:{
+      MuiTableRow: {
+        styleOverrides:{
+          root:{
+            backgroundColor: 'grey'
+          }
+        }
+      }
+    }
   });
+
+
