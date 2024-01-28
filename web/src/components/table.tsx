@@ -16,19 +16,19 @@ const DenseTable: FC<{ colNames: Array<string>, rows: Array<Array<string>> }> = 
 
                 <TableHead>
                     <TableRow key={0}>
-                        {colNames.map((colName, colIndex) => (
+                        {colNames.slice(0, 10).map((colName, colIndex) => (     // TODO: fix horizontal scroll and remove `slice`
                             <TableCell key={colIndex}>{colName}</TableCell>
                         ))}
                     </TableRow>
                 </TableHead>
 
                 <TableBody>
-                    {rows.map((row, index) => (
+                    {rows.slice(1, 50).map((row, index) => (    // TODO: paginate to display all rows and remove `slice`
                         <TableRow
                             key={index + 1}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
-                            {row.map((col, colIndex) => (
+                            {row.slice(0, 10).map((col, colIndex) => (     // TODO: fix horizontal scroll and remove `slice`
                                 <TableCell key={colIndex}>{col}</TableCell>
                             ))}
                         </TableRow>

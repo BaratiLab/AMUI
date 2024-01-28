@@ -15,7 +15,7 @@ const Temp2: FC = () => {
             .then( responseText => {
                 const data = Papa.parse(responseText);
                 setColNames( data.data[0] as string[] );
-                setRows( data.data.slice(1, 50) as string[][] );    // TODO: paginate to display all rows
+                setRows( data.data as string[][] );
             });
     }, []);
 
