@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import * as Papa from 'papaparse';
 import DenseTable from '../components/table';
 // @ts-ignore
 import meltpoolGeo from "../meltpoolgeometry.csv";
@@ -10,14 +9,12 @@ const Temp2: FC = () => {
     const [ rows, setRows ] = useState<Array<Array<string>>>([]);
 
     useEffect(() => {
-        fetch( meltpoolGeo )
-            .then( response => response.text() )
-            .then( responseText => {
-                const data = Papa.parse(responseText);
-                setColNames( data.data[0] as string[] );
-                setRows( data.data as string[][] );
-            });
-    }, []);
+        setColNames(Object.keys(meltpoolGeo[0]));
+    }, [meltpoolGeo]);
+
+    useEffect(() => {
+        setRows(meltpoolGeo.map((row: any) => colNames.map((colName: string) => row[colName])));
+    }, [colNames]);
 
     return (
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">

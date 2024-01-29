@@ -23,7 +23,7 @@ const DenseTable: FC<{ colNames: Array<string>, rows: Array<Array<string>> }> = 
                 </TableHead>
 
                 <TableBody>
-                    {rows.slice(1, 50).map((row, index) => (    // TODO: paginate to display all rows and remove `slice`
+                    {rows.slice(0, 50).map((row, index) => (    // TODO: paginate to display all rows and remove `slice`
                         <TableRow
                             key={index + 1}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
