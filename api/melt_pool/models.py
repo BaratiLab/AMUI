@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class MeltPoolGeometry(models.Model):
+class Geometry(models.Model):
     material = models.CharField(max_length=100)
     process = models.CharField(max_length=100)
     sub_process = models.CharField(max_length=100, blank=True, null=True)
@@ -55,7 +55,7 @@ class MeltPoolGeometry(models.Model):
     relative_density = models.FloatField(blank=True, null=True)
     comments = models.TextField(null=True, blank=True)
 
-class MeltPoolClassification(models.Model):
+class Classification(models.Model):
     material = models.CharField(max_length=255)
     process = models.CharField(max_length=255)
     power = models.IntegerField()
