@@ -2,18 +2,18 @@ import { FC, useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import DenseTable from '../components/table';
 // @ts-ignore
-import meltpoolGeo from "../meltpoolgeometry.csv";
+import meltpoolCls from "../meltpoolclassification.csv";
 
-const Temp2: FC = () => {
+const Temp3: FC = () => {
     const [ colNames, setColNames ] = useState<Array<string>>([]);
     const [ rows, setRows ] = useState<Array<Array<string>>>([]);
 
     useEffect(() => {
-        setColNames(Object.keys(meltpoolGeo[0]));
-    }, [meltpoolGeo]);
+        setColNames(Object.keys(meltpoolCls[0]));
+    }, [meltpoolCls]);
 
     useEffect(() => {
-        setRows(meltpoolGeo.map((row: any) => colNames.map((colName: string) => row[colName])));
+        setRows(meltpoolCls.map((row: any) => colNames.map((colName: string) => row[colName])));
     }, [colNames]);
 
     return (
@@ -25,4 +25,4 @@ const Temp2: FC = () => {
     );
 };
 
-export default Temp2;
+export default Temp3;

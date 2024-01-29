@@ -19,6 +19,9 @@ const Navbar: FC = () => {
                 <Link to="/temp2" style={{ textDecoration: 'none', color: 'inherit' }}>
                     <Button color="inherit">Temp2</Button>
                 </Link>
+                <Link to="/temp3" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Button color="inherit">Temp3</Button>
+                </Link>
             </Toolbar>
         </AppBar>
     );
