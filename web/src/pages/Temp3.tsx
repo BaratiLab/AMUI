@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import DenseTable from '../components/table';
+import DenseTable from '../components/Table';
 // @ts-ignore
 import meltpoolCls from "../meltpoolclassification.csv";
 
