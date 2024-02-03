@@ -62,6 +62,12 @@ services:
       - pgadmin:/var/lib/pgadmin
     depends_on:
       - sql
+  meltpoolnet:
+    container_name: amui-module-meltpoolnet
+    build:
+      context: ./module/meltpoolnet
+      dockerfile: Dockerfile
+    tty: true
 
   module-example:
     container_name: amui-module-example
