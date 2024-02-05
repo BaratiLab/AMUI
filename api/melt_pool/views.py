@@ -1,27 +1,30 @@
 from rest_framework import generics, mixins
+from rest_framework.permissions import AllowAny 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import generics, status, mixins
 
-from melt_pool.models import Classification, Geometry 
+from melt_pool.models import ClassificationRecord, GeometryRecord
+from melt_pool.serializers import ClassificationRecordSerializer, GeometryRecordSerializer
 
-class GeometryList(mixins.ListModelMixin, generics.GenericAPIView):
+class ClassificationRecordsList(mixins.ListModelMixin, generics.GenericAPIView):
   """
-  List melt pool entries.
+  List melt pool classification records.
   """
-  queryset = Geometry.objects.all()
-  # serializer_class = ProjectSerializer
-  # permission_classes = (IsAuthenticated, )
+  queryset = ClassificationRecord.objects.all()
+  serializer_class = ClassificationRecordSerializer 
+  permission_classes = (AllowAny, )
 
   def get(self, request, *args, **kwargs):
-    # print(request.user)
     return self.list(request, *args, **kwargs)
 
-class ClassificationList(mixins.ListModelMixin, generics.GenericAPIView):
+class GeometryRecordsList(mixins.ListModelMixin, generics.GenericAPIView):
   """
-  List melt pool entries.
+  List melt pool geometry records.
   """
-  queryset = Classification.objects.all()
-  # serializer_class = ProjectSerializer
-  # permission_classes = (IsAuthenticated, )
+  queryset = GeometryRecord.objects.all()
+  serializer_class = GeometryRecordSerializer 
+  permission_classes = (AllowAny, )
 
   def get(self, request, *args, **kwargs):
-    # print(request.user)
     return self.list(request, *args, **kwargs)

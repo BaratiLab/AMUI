@@ -7,11 +7,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 // Reducers
-import meltPoolClassificationRecordsReducer from 'melt_pool/classificationRecordsSlice';
+import classificationRecordsReducer from 'melt_pool/classificationRecordsSlice';
+import geometryRecordsReducer from 'melt_pool/geometryRecordsSlice';
 
 const store = configureStore({
   reducer: {
-    meltPoolClassificationRecords: meltPoolClassificationRecordsReducer,
+    meltPoolClassificationRecords: classificationRecordsReducer,
+    meltPoolGeometryRecords: geometryRecordsReducer,
   },
 })
 

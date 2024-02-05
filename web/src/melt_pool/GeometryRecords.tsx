@@ -1,5 +1,5 @@
 /**
- * ClassificationRecords.tsx
+ * GeometryRecords.tsx
  * Development component to test out classifications records route.
  */
 
@@ -9,24 +9,24 @@ import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
-import { setClassificationRecords } from './classificationRecordsSlice';
+import { setGeometryRecords } from './geometryRecordsSlice';
 
 // API
-import { getClassificationRecords } from './api';
+import { getGeometryRecords } from './api';
 
 // Store
 import { RootState } from 'store';
 
-const ClassificationRecords: FC = () => {
+const GeometryRecords: FC = () => {
   // Hooks
   const dispatch = useDispatch();
-  const classifications = useSelector((state: RootState) => state.meltPoolClassificationRecords);
+  const geometries = useSelector((state: RootState) => state.meltPoolGeometryRecords);
 
   useEffect(() => {
     // Retrieves projects from API and updates redux store.
     const refreshProjects = async () => {
-      const data = await getClassificationRecords();
-      dispatch(setClassificationRecords(data));
+      const data = await getGeometryRecords();
+      dispatch(setGeometryRecords(data));
     };
     refreshProjects();
   }, [dispatch]);
@@ -35,15 +35,15 @@ const ClassificationRecords: FC = () => {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1em'}}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography component="h2" variant="h4">
-          Classification Records Response (Truncated)
+          Geometry Records Response (Truncated)
         </Typography>
       </Box>
       <pre>
         {/* https://stackoverflow.com/a/17243919/10521456 */}
-        {JSON.stringify(classifications.results[0], null, 2)}
+        {JSON.stringify(geometries.results[0], null, 2)}
       </pre>
     </Box>
   );
 };
 
-export default ClassificationRecords;
+export default GeometryRecords;

@@ -27,6 +27,8 @@ services:
       context: ./web
       dockerfile: Dockerfile
     environment:
+      - API_DOMAIN=${API_DOMAIN}
+
       # https://stackoverflow.com/a/65265986/10521456
       - CHOKIDAR_USEPOLLING=true
     volumes:
