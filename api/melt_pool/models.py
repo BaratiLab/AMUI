@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 class GeometryRecord(models.Model):
     material = models.CharField(max_length=100)
@@ -55,6 +56,7 @@ class GeometryRecord(models.Model):
     relative_density = models.FloatField(blank=True, null=True)
     comments = models.TextField(null=True, blank=True)
     unknown = models.IntegerField(null=True)
+
 
 class ClassificationRecord(models.Model):
     material = models.CharField(max_length=255)
