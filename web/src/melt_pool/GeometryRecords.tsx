@@ -25,7 +25,12 @@ const GeometryRecords: FC = () => {
   useEffect(() => {
     // Retrieves projects from API and updates redux store.
     const refreshProjects = async () => {
-      const data = await getGeometryRecords();
+      const data = await getGeometryRecords({
+        material: "IN718",
+        process: "PBF",
+        power: 140,
+        velocity: 600
+      });
       dispatch(setGeometryRecords(data));
     };
     refreshProjects();

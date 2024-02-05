@@ -25,7 +25,11 @@ const ClassificationRecords: FC = () => {
   useEffect(() => {
     // Retrieves projects from API and updates redux store.
     const refreshProjects = async () => {
-      const data = await getClassificationRecords();
+      const data = await getClassificationRecords({
+        material: 'SS304L',
+        power: 300,
+        velocity: 2400,
+      });
       dispatch(setClassificationRecords(data));
     };
     refreshProjects();
