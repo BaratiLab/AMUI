@@ -19,7 +19,7 @@ from django.urls import include, path
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    path("", include("melt_pool.urls")),
+    path("melt_pool", include("melt_pool.urls")),
     path("", TemplateView.as_view(template_name="index.html"), {"resource": ""}),
     path("<path:resource>", TemplateView.as_view(template_name="index.html")),
     # path('admin/', admin.site.urls),
