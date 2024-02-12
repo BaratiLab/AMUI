@@ -1,26 +1,37 @@
 import { FC } from 'react';
-import { XAxis, YAxis, Tooltip, ScatterChart, CartesianGrid, Scatter, Legend } from 'recharts';
+import { XAxis, YAxis, Tooltip, CartesianGrid, Scatter, Legend, Area, ComposedChart } from 'recharts';
 
 const Chart: FC<{ data: any }> = ({ data }) => {
-    const kh = Array.from(data.filter((row: any) => row['meltpool shape'] == 'keyhole').map((row: any) => ({ v: row['Velocity'], p: row['Power'] })));
-    const d = Array.from(data.filter((row: any) => row['meltpool shape'] == 'desirable').map((row: any) => ({ v: row['Velocity'], p: row['Power'] })));
-    const lof = Array.from(data.filter((row: any) => row['meltpool shape'] == 'LOF').map((row: any) => ({ v: row['Velocity'], p: row['Power'] })));
+    console.log(data);
+    const kh = Array.from(data.filter((row: any) => row['melt_pool_shape'] == 'keyhole').map((row: any) => ({ v: row['velocity'], p: row['power'] })));
+    const d = Array.from(data.filter((row: any) => row['melt_pool_shape'] == 'desirable').map((row: any) => ({ v: row['velocity'], p: row['power'] })));
+    const lof = Array.from(data.filter((row: any) => row['melt_pool_shape'] == 'LOF').map((row: any) => ({ v: row['velocity'], p: row['power'] })));
+
+    // TODO: get these values from the backend
+    const areaMap = [
+        {'v': 0, 'kh': [0, 600], 'd': [0, 0], 'lof': [0, 0]},
+        {'v': 850, 'kh': [300, 600], 'd': [150, 300], 'lof': [0, 150]},
+        {'v': 1700, 'kh': [300, 600], 'd': [150, 300], 'lof': [0, 150]},
+        {'v': 2550, 'kh': [300, 600], 'd': [200, 300], 'lof': [0, 200]},
+        {'v': 3400, 'kh': [600, 600], 'd': [200, 600], 'lof': [0, 200]},
+    ]
 
     return (
-        <ScatterChart
-            width={730}
-            height={250}
-            margin={{ top: 20, right: 20, bottom: 10, left: 10 }}
-        >
+        <ComposedChart width={730} height={250} data={areaMap}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="v" type="number" name="Velocity" />
             <YAxis dataKey="p" type="number" name="Power" />
-            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+            {/* <Tooltip cursor={{ strokeDasharray: '3 3' }} /> */}
             <Legend />
             <Scatter name="Keyhole" data={kh} fill="#8884d8" />
             <Scatter name="Desirable" data={d} fill="#82ca9d" />
             <Scatter name="LOF" data={lof} fill="#f9849d" />
-        </ScatterChart>
+
+            <Area dataKey="kh" stroke="#8884d8" fill="#8884d8" />
+            <Area dataKey="d" stroke="#82ca9d" fill="#82ca9d" />
+            <Area dataKey="lof" stroke="#f9849d" fill="#f9849d" />
+            {/* <Tooltip /> */}
+        </ComposedChart>
     )
 }
 
