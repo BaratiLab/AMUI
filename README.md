@@ -23,8 +23,7 @@ Perform these commands inside a terminal not attached to Docker container.
 
 1. Create new branch on GitHub for your feature off of the [`main`](https://github.com/BaratiLab/AMUI) branch.
     - Provide the new branch with a descriptive feature title like: `README-troubleshooting-updates`.
-
-      ![image/new_branch.png](./images/new_branch.png)
+<img src="./images/new_branch.png" width="250px">
 2. Pull newly created branch locally.
     ```bash
     git pull
@@ -74,3 +73,9 @@ Perform these commands inside a terminal not attached to Docker container.
     git pull
     git checkout main
     ```
+
+## Notes
+- [PGAdmin](localhost:5050)
+    - Host name/address: `host.docker.internal`
+    - Username: `postgres`
+    - Password: check `POSTGRES_PASSWORD` in `.env`

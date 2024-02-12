@@ -22,6 +22,9 @@ const Navbar: FC = () => {
                 <Link to="/temp3" style={{ textDecoration: 'none', color: 'inherit' }}>
                     <Button color="inherit">Temp3</Button>
                 </Link>
+                <Link to="/melt_pool" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Button color="inherit">Melt Pool</Button>
+                </Link>
             </Toolbar>
         </AppBar>
     );

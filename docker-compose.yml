@@ -27,6 +27,8 @@ services:
       context: ./web
       dockerfile: Dockerfile
     environment:
+      - API_DOMAIN=${API_DOMAIN}
+
       # https://stackoverflow.com/a/65265986/10521456
       - CHOKIDAR_USEPOLLING=true
     volumes:
@@ -62,6 +64,12 @@ services:
       - pgadmin:/var/lib/pgadmin
     depends_on:
       - sql
+  meltpoolnet:
+    container_name: amui-module-meltpoolnet
+    build:
+      context: ./module/meltpoolnet
+      dockerfile: Dockerfile
+    tty: true
 
   module-example:
     container_name: amui-module-example
