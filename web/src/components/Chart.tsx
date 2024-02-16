@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { XAxis, YAxis, Tooltip, CartesianGrid, Scatter, Legend, Area, ComposedChart } from 'recharts';
 
 const Chart: FC<{ data: any }> = ({ data }) => {
-    console.log(data);
     const kh = Array.from(data.filter((row: any) => row['melt_pool_shape'] == 'keyhole').map((row: any) => ({ v: row['velocity'], p: row['power'] })));
     const d = Array.from(data.filter((row: any) => row['melt_pool_shape'] == 'desirable').map((row: any) => ({ v: row['velocity'], p: row['power'] })));
     const lof = Array.from(data.filter((row: any) => row['melt_pool_shape'] == 'LOF').map((row: any) => ({ v: row['velocity'], p: row['power'] })));
