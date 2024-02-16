@@ -14,7 +14,7 @@ import {
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
-const DenseTable: FC<{ colNames: Array<string>, rows: Array<Array<string>> }> = ({ colNames, rows }) => {
+const DenseTable: FC<{ colNames: Array<string>, rows: Array<object> }> = ({ colNames, rows }) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -30,20 +30,20 @@ const DenseTable: FC<{ colNames: Array<string>, rows: Array<Array<string>> }> = 
 
                 <TableHead>
                     <TableRow>
-                        {colNames.slice(0, 10).map((colName, colIndex) => (
+                        {colNames.map((colName, colIndex) => (
                             <TableCell key={colIndex}>{colName}</TableCell>
                         ))}
                     </TableRow>
                 </TableHead>
 
                 <TableBody>
-                    {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
+                    {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: { [key: string]: any }, index) => (
                         <TableRow
                             key={index}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
-                            {row.slice(0, 10).map((col, colIndex) => (
-                                <TableCell key={colIndex}>{col}</TableCell>
+                            {colNames.map((col, colIndex) => (
+                                <TableCell key={colIndex}>{row[col]}</TableCell>
                             ))}
                         </TableRow>
                     ))}
