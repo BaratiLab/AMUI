@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setClassificationRecords } from './classificationRecordsSlice';
 
 // API
-import { getClassificationRecords } from './api';
+import { getClassificationRecords } from './_api';
 
 // Store
 import { RootState } from 'store';

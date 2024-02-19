@@ -1,5 +1,5 @@
 /**
- * types.ts
+ * _types.ts
  * Types within melt pool app.
  */
 
@@ -10,3 +10,4 @@ export interface MeltPoolFilterset {
   velocity?: number;
   hatch_spacing?: number;
 }
+

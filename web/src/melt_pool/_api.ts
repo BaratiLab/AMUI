@@ -7,7 +7,7 @@
 import queryString from 'query-string';
 
 // Types
-import { MeltPoolFilterset } from './types';
+import { MeltPoolFilterset } from './_types';
 
 // Request
 import { request } from 'common/request';
