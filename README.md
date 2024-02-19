@@ -79,3 +79,7 @@ Perform these commands inside a terminal not attached to Docker container.
     - Host name/address: `host.docker.internal`
     - Username: `postgres`
     - Password: check `POSTGRES_PASSWORD` in `.env`
+
+## Troubleshooting
+- [Need `sudo` on Docker in Ubuntu](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo)
+

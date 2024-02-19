@@ -9,6 +9,7 @@ import { FC, useState } from 'react';
 
 // Components
 import DataVisualization from 'melt_pool/DataVisualization';
+import ClassificationRecordsForm from 'melt_pool/ClassificationRecordsForm';
 
 // Types
 import { RecordType } from 'melt_pool/_enums';
@@ -36,6 +37,7 @@ const ProcessMap: FC = () => {
             >
                Classification 
             </Button>
+            <ClassificationRecordsForm />
             <DataVisualization recordType={recordType} />
         </div>
     );
