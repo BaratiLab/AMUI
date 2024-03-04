@@ -49,3 +49,14 @@ export const getGeometryRecords = async (
     console.log(error)
   }
 };
+
+export const getProcessParameters = async () => {
+  try {
+    // const stringifiedFilterset = filterset && queryString.stringify(filterset);
+    const response = await request('melt_pool/process_parameters/');
+    const data = await response.json();
+    return data
+  } catch (error) {
+    console.log(error)
+  }
+}
