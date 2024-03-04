@@ -1,6 +1,6 @@
 /**
- * ClassificationRecordsForm.tsx
- * Form component for retrieving classification records.
+ * RecordsForm.tsx
+ * Form component for retrieving melt pool records.
  */
 
 // Node Modules
@@ -23,11 +23,15 @@ const REQUEST = {
 }
 
 // Enums
-import { Material } from './_enums';
+import { Status } from 'enums';
+
+// Hooks
+import { useProcessParameters } from 'melt_pool/_hooks';
 
 const ClassificationRecordsForm: FC = () => {
   // Hooks
   const [request, setRequest] = useState(REQUEST);
+  const [{data, status}] = useProcessParameters();
 
   // Callbacks
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -49,8 +53,8 @@ const ClassificationRecordsForm: FC = () => {
   }
 
   // JSX
-  const materialsJSX = Object.entries(Material).map(([key, value]) => (
-    <MenuItem key={key} value={value}>{value}</MenuItem>
+  const materialsJSX = status === Status.Succeeded && data.material.map((material) => (
+    <MenuItem key={material} value={material}>{material}</MenuItem>
   ));
 
   return (

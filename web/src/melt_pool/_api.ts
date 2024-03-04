@@ -13,16 +13,14 @@ import { MeltPoolFilterset } from './_types';
 import { request } from 'common/request';
 
 /**
- * @description API route to retrieve melt pool classification records.
+ * @description API route to retrieve melt pool records.
  * @returns 
  */
-export const getClassificationRecords = async (
-  filterset?: MeltPoolFilterset
-) => {
+export const getRecords = async (filterset?: MeltPoolFilterset) => {
   try {
     const stringifiedFilterset = filterset && queryString.stringify(filterset);
     const response = await request(
-      `melt_pool/classification_records/?${stringifiedFilterset || ""}`
+      `melt_pool/records/?${stringifiedFilterset || ""}`
     );
     const data = await response.json();
     return data
@@ -32,27 +30,11 @@ export const getClassificationRecords = async (
 };
 
 /**
- * @description API route to retrieve melt pool geometry records.
+ * @description API route to retrieve melt pool process parameters.
  * @returns 
  */
-export const getGeometryRecords = async (
-  filterset?: MeltPoolFilterset
-) => {
-  try {
-    const stringifiedFilterset = filterset && queryString.stringify(filterset);
-    const response = await request(
-      `melt_pool/geometry_records/?${stringifiedFilterset || ""}`
-    );
-    const data = await response.json();
-    return data
-  } catch (error) {
-    console.log(error)
-  }
-};
-
 export const getProcessParameters = async () => {
   try {
-    // const stringifiedFilterset = filterset && queryString.stringify(filterset);
     const response = await request('melt_pool/process_parameters/');
     const data = await response.json();
     return data

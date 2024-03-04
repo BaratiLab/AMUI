@@ -41,8 +41,9 @@ class ProcessParametersDict(APIView):
         serializer = RecordSerializer(queryset, many=True)
         data = serializer.data
 
-        for field_name in Record._meta.get_fields():
-            values = queryset.values_list(field_name.name, flat=True).distinct()
-            unique_values[field_name.name] = list(values)
+        for field_name in filterset_fields:
+            values = queryset.values_list(field_name, flat=True).distinct()
+
+            unique_values[field_name] = sorted([x for x in values if x is not None])
 
         return Response(unique_values)

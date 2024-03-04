@@ -15,14 +15,14 @@ import { Status } from 'enums';
 
 // Types
 interface InitialState {
-  processParameters: {},
+  data: {},
   status: Status,
   error: string | null | undefined
 }
 
 // Constants
 const initialState: InitialState = {
-  processParameters: {},
+  data: {},
   status: Status.Idle,
   error: null,
 };
@@ -33,8 +33,8 @@ const initialState: InitialState = {
 export const fetchProcessParameters = createAsyncThunk(
   'meltPool/fetchProcessParameters',
   async () => {
-    const response = await getProcessParameters()
-    return response.data
+    const response = await getProcessParameters();
+    return response
   }
 );
 
@@ -47,21 +47,21 @@ export const slice = createSlice({
   reducers: {
     setProcessParameters: (state, action) => {
       const { processParameters } = action.payload;
-      state.processParameters = processParameters;
+      state.data = processParameters;
     }
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchProcessParameters.pending, (state, action) => {
+      .addCase(fetchProcessParameters.pending, (state) => {
         state.status = Status.Loading;
       })
       .addCase(fetchProcessParameters.fulfilled, (state, action) => {
         state.status = Status.Succeeded;
-        state.processParameters = action.payload.processParameters; 
+        state.data = action.payload; 
       })
       .addCase(fetchProcessParameters.rejected, (state, action) => {
         state.status = Status.Failed;
-        state.processParameters = {};
+        state.data = {};
         state.error = action.error.message;
       })
   }
