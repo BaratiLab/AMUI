@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setGeometryRecords } from './geometryRecordsSlice';
 
 // API
-import { getGeometryRecords } from './api';
+import { getGeometryRecords } from './_api';
 
 // Store
 import { RootState } from 'store';

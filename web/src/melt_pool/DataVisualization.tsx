@@ -1,26 +1,67 @@
-import { FC, useState } from 'react';
+/**
+ * DataVisualization.tsx
+ * Visualizes melt pool API response with charts and tables.
+ */
+
+// Node Modules
 import { Box } from '@mui/material';
+import { FC, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+// API
+import { getClassificationRecords, getGeometryRecords } from './_api';
+
+// Components
 import Form from './Form';
 import Chart from './Chart';
-import DenseTable from './Table';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { setClassificationRecords } from '../melt_pool/classificationRecordsSlice';
-import { getClassificationRecords } from '../melt_pool/api';
-import { setGeometryRecords } from '../melt_pool/geometryRecordsSlice';
-import { getGeometryRecords } from '../melt_pool/api';
+import DenseTable from 'common/Table';
 
-const Viz: FC<{ clsgeo: string }> = ({ clsgeo }) => {
-    const [showViz, setShowViz] = useState<boolean>(false);
+// Constants
+const COLUMN_NAMES = [
+    'id',
+    'power',
+    'velocity',
+    'material',
+    'process',
+    'sub_process',
+    'hatch_spacing'
+]
 
+// Redux
+import { RootState } from 'store';
+import { setClassificationRecords } from './classificationRecordsSlice';
+import { setGeometryRecords } from './geometryRecordsSlice';
+
+// Types
+import { RecordType } from './_enums';
+
+interface Props {
+    recordType: RecordType
+}
+
+const DataVisualization: FC<Props> = ({ recordType }) => {
+    // Hooks
     const dispatch = useDispatch();
-    let meltPoolData: any;
-    if (clsgeo === 'geo') {
-        meltPoolData = useSelector((state: RootState) => state.meltPoolGeometryRecords);
-    } else if (clsgeo === 'cls') {
-        meltPoolData = useSelector((state: RootState) => state.meltPoolClassificationRecords);
-    }
+    const [showViz, setShowViz] = useState<boolean>(false);
+    const geometryRecords = useSelector(
+        (state: RootState) => state.meltPoolGeometryRecords
+    );
+    const classificationRecords = useSelector(
+        (state: RootState) => state.meltPoolClassificationRecords
+    );
 
+    const [results, setResults] = useState<never[]>([]);
+
+    useEffect(() => {
+        // Changes records in chart and table components given record type.
+        if (recordType === RecordType.Geometry) {
+            setResults(geometryRecords.results)
+        } else {
+            setResults(classificationRecords.results)
+        }
+    }, [classificationRecords.results, geometryRecords.results, recordType])
+
+    // TODO: Move this logic into `Form.tsx`
     const fetchData = async ({ 
         power, 
         velocity,
@@ -33,7 +74,7 @@ const Viz: FC<{ clsgeo: string }> = ({ clsgeo }) => {
         material: string, 
         process: string, 
         hatchSpacing: number }) => {
-            if (clsgeo === 'geo') {
+            if (recordType === RecordType.Geometry) {
                 const data = await getGeometryRecords({
                     power: power,
                     velocity: velocity,
@@ -42,7 +83,7 @@ const Viz: FC<{ clsgeo: string }> = ({ clsgeo }) => {
                     hatch_spacing: hatchSpacing
                 });
                 dispatch(setGeometryRecords(data));
-            } else if (clsgeo === 'cls') {
+            } else if (recordType === RecordType.Classification) {
                 const data = await getClassificationRecords({
                     power: power,
                     velocity: velocity,
@@ -54,6 +95,7 @@ const Viz: FC<{ clsgeo: string }> = ({ clsgeo }) => {
             }
     };
 
+    // TODO: Move this logic into `Form.tsx`
     const filterData = async () => {
         let power: any = (document.getElementById('power-input') as HTMLInputElement).value;
         if (power === '') {
@@ -93,23 +135,27 @@ const Viz: FC<{ clsgeo: string }> = ({ clsgeo }) => {
         setShowViz(true);
     };
 
+    // JSX
+    const chartJSX = showViz && (
+        <Chart data={results} />
+    );
+
+    const tableJSX = showViz && (
+        <DenseTable colNames={COLUMN_NAMES} rows={results} />
+    );
+
     return (
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh" flexDirection="column">
+        <Box
+            display="flex" justifyContent="center" alignItems="center" minHeight="80vh" flexDirection="column">
             <Form handler={filterData}/>
             <Box display="flex" justifyContent="center" alignItems="center">
-                {
-                    showViz &&
-                    <Chart data={meltPoolData.results}/>
-                }
+                {chartJSX}
             </Box>
             <Box display="flex" justifyContent="center" alignItems="center">
-                {
-                    showViz &&
-                    <DenseTable colNames={['id', 'power', 'velocity', 'material', 'process', 'sub_process', 'hatch_spacing']} rows={meltPoolData.results} />
-                }
+                {tableJSX}
             </Box>
         </Box>
     );
 };
 
-export default Viz;
+export default DataVisualization;

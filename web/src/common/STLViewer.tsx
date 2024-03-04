@@ -1,10 +1,17 @@
+/**
+ * STLViewer.tsx
+ * Component to upload and view STLs
+ */
+
+// Node Modules
+import { Box } from '@mui/material';
 import { FC, useRef, useEffect, useState, ChangeEvent } from 'react';
 import * as THREE from 'three';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { Box } from '@mui/material';
 
 const STLViewer: FC<{ height: number, width: number }> = ({ height, width }) => {
+    // Hooks
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [renderer, setRenderer] = useState<THREE.WebGLRenderer | null>(null);
     const [scene, setScene] = useState<THREE.Scene | null>(null);
