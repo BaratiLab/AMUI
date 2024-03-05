@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  run-web:
+  tests:
     runs-on: ubuntu-latest
     container:
       image: node:20-alpine
@@ -16,16 +16,14 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: Change Directory to `web` 
-      run: |
-        cd web
-        ls
-
-    - name: Install `node_modules` 
+    - name: Install `node_modules`
+      working-directory: ./web
       run: npm install
 
     - name: Build Webpack Bundle
+      working-directory: ./web
       run: npm run build
 
     - name: Run ESLint
+      working-directory: ./web
       run: npm run lint
