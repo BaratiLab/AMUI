@@ -31,19 +31,19 @@ import { useRecords } from 'melt_pool/_hooks';
 
 const ProcessMap: FC = () => {
   // Hooks
-  const [{data: recordsData, status: recordsStatus}, getRecords] = useRecords();
+  const [{data: recordsData, status: recordsStatus}] = useRecords();
 
   // JSX
   const chartJSX = recordsStatus ===  Status.Succeeded && (
-      <Chart data={recordsData.results} />
+      <Chart data={recordsData} />
   );
 
   const tableJSX = recordsStatus ===  Status.Succeeded && (
-      <Table colNames={COLUMN_NAMES} rows={recordsData.results} />
+      <Table colNames={COLUMN_NAMES} rows={recordsData} />
   );
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh" flexDirection="column">
+    <Box display="flex" alignItems="center" minHeight="80vh" flexDirection="column">
       <RecordsForm />
       <Box display="flex" justifyContent="center" alignItems="center">
           {chartJSX}

@@ -14,15 +14,17 @@ import { getProcessParameters } from './_api';
 import { Status } from 'enums';
 
 // Types
-interface InitialState {
-  data: {},
-  status: Status,
-  error: string | null | undefined
-}
+import { ProcessParametersInitialState } from './_types';
 
 // Constants
-const initialState: InitialState = {
-  data: {},
+const initialState: ProcessParametersInitialState = {
+  data: {
+    material: [],
+    process: [],
+    power: [],
+    velocity: [],
+    hatch_spacing: [],
+  },
   status: Status.Idle,
   error: null,
 };
@@ -61,7 +63,8 @@ export const slice = createSlice({
       })
       .addCase(fetchProcessParameters.rejected, (state, action) => {
         state.status = Status.Failed;
-        state.data = {};
+        // Probably needed for immutable behavior.
+        state.data = { ...initialState.data };
         state.error = action.error.message;
       })
   }

@@ -4,7 +4,8 @@
  */
 
 // Node Modules
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, FormEvent, useState } from 'react';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { 
   Box, 
   FormControl,
@@ -15,27 +16,37 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 
-// Constants
-const REQUEST = {
-  material: undefined,
-  power: 0,
-  velocity: 0,
-}
+// Types
+import { MeltPoolFilterset } from './_types';
 
 // Enums
 import { Status } from 'enums';
 
 // Hooks
 import { useProcessParameters } from 'melt_pool/_hooks';
+import { useRecords } from 'melt_pool/_hooks';
+
+// Constants
+const REQUEST: MeltPoolFilterset = {
+  material: '',
+  process: '',
+  power: undefined,
+  velocity: undefined,
+  hatch_spacing: undefined,
+}
 
 const ClassificationRecordsForm: FC = () => {
   // Hooks
   const [request, setRequest] = useState(REQUEST);
-  const [{data, status}] = useProcessParameters();
+  const [{
+    data: processParametersData,
+    status: processParametersStatus
+  }] = useProcessParameters();
+  const [{status: recordsStatus}, getRecords] = useRecords();
 
   // Callbacks
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const{ name, value } = e.target;
+    const { name, value } = e.target;
     setRequest((prevState) => ({
       ...prevState,
       [name]: value,
@@ -45,51 +56,102 @@ const ClassificationRecordsForm: FC = () => {
   // TODO: Findout how to fix `SelectChangeEvent<HTMLSelectElement>` type to
   // remove redundant code.
   const handleSelect = (e: SelectChangeEvent<HTMLSelectElement>) => {
-    const{ name, value } = e.target;
+    const { name, value } = e.target;
     setRequest((prevState) => ({
       ...prevState,
       [name]: value,
     }));
-  }
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await getRecords(request);
+  };
 
   // JSX
-  const materialsJSX = status === Status.Succeeded && data.material.map((material) => (
+  const materialsJSX = processParametersStatus === Status.Succeeded
+  && processParametersData.material.map((material) => (
     <MenuItem key={material} value={material}>{material}</MenuItem>
   ));
 
-  return (
-    <Box display="flex" justifyContent="center" alignItems="center">
-      <FormControl variant="standard">
-        <InputLabel>Power</InputLabel>
-        <Input
-          name="power"
-          onChange={handleChange}
-          type="number"
-          value={request.power}
-        />
-      </FormControl>
+  const processJSX = processParametersStatus === Status.Succeeded
+  && processParametersData.process.map((process) => (
+    <MenuItem key={process} value={process}>{process}</MenuItem>
+  ));
 
-      <FormControl variant="standard">
-        <InputLabel>Velocity</InputLabel>
-        <Input
-          name="velocity"
-          onChange={handleChange}
-          type="number"
-          value={request.velocity}
-        />
-      </FormControl>
-      <FormControl variant="standard" sx={{ minWidth: 120 }}>
-        <InputLabel>Material</InputLabel>
-        <Select
-          label="material"
-          name="material"
-          onChange={handleSelect}
-          value={request.material}
+  // TODO #79: Add form validation.
+  return (
+    <form onSubmit={handleSubmit}>
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <FormControl variant="standard" sx={{ minWidth: 120 }}>
+          <InputLabel>Material</InputLabel>
+          <Select
+            label="material"
+            name="material"
+            onChange={handleSelect}
+            value={request.material}
+          >
+            <MenuItem disabled value="">
+              <em>Material</em>
+            </MenuItem>
+            {materialsJSX}
+          </Select>
+        </FormControl>
+
+        <FormControl variant="standard">
+          <InputLabel>Power</InputLabel>
+          <Input
+            name="power"
+            onChange={handleChange}
+            type="number"
+            value={request.power}
+          />
+        </FormControl>
+
+        <FormControl variant="standard">
+          <InputLabel>Velocity</InputLabel>
+          <Input
+            name="velocity"
+            onChange={handleChange}
+            type="number"
+            value={request.velocity}
+          />
+        </FormControl>
+
+        <FormControl variant="standard">
+          <InputLabel>Hatch Spacing</InputLabel>
+          <Input
+            name="hatch_spacing"
+            onChange={handleChange}
+            type="number"
+            value={request.hatch_spacing}
+          />
+        </FormControl>
+
+        <FormControl variant="standard" sx={{ minWidth: 120 }}>
+          <InputLabel>Process</InputLabel>
+          <Select
+            label="process"
+            name="process"
+            onChange={handleSelect}
+            value={request.process}
+          >
+            <MenuItem disabled value="">
+              <em>Process</em>
+            </MenuItem>
+            {processJSX}
+          </Select>
+        </FormControl>
+
+        <LoadingButton
+          loading={recordsStatus === Status.Loading}
+          type="submit"
+          variant="outlined"
         >
-          {materialsJSX}
-        </Select>
-      </FormControl>
-    </Box>
+          Submit
+        </LoadingButton>
+      </Box>
+    </form>
   );
 };
 

@@ -28,6 +28,10 @@ type UseRecords = [
   (filterset: MeltPoolFilterset) => void
 ];
 
+/**
+ * @description Hook to manage melt pool process parameters store. 
+ * @returns [state]
+ */
 export const useProcessParameters = () => {
   const dispatch = useAppDispatch();
   const state = useAppSelector(state => state.meltPoolProcessParameters);
@@ -42,6 +46,10 @@ export const useProcessParameters = () => {
   return [state];
 };
 
+/**
+ * @description Hook to manage melt pool records store.
+ * @returns [state, getRecords]
+ */
 export const useRecords = (): UseRecords => {
   const dispatch = useAppDispatch();
   const state = useAppSelector(state => state.meltPoolRecords);

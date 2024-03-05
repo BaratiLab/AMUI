@@ -17,12 +17,13 @@ import { MeltPoolFilterset, RecordsSliceInitialState } from './_types';
 
 // Constants
 const initialState: RecordsSliceInitialState = {
-  data: {
+  response: {
     count: null,
     next: null,
     previous: null,
     results: [],
   },
+  data: [],
   status: Status.Idle,
   error: null,
 }
@@ -33,8 +34,8 @@ const initialState: RecordsSliceInitialState = {
 export const fetchRecords = createAsyncThunk(
   'meltPool/fetchRecords',
   async (filterset: MeltPoolFilterset) => {
-    const response = await getRecords(filterset)
-    return response.data
+    const response = await getRecords(filterset);
+    return response
   }
 );
 
@@ -44,29 +45,32 @@ export const slice = createSlice({
   reducers: {
     setRecords: (state, action) => {
       // Can't set `state = action.payload` directly as it won't update.
-      state.data.count = action.payload.count;
-      state.data.next = action.payload.next;
-      state.data.previous = action.payload;
-      state.data.results = action.payload.results;
+      state.response.count = action.payload.count;
+      state.response.next = action.payload.next;
+      state.response.previous = action.payload;
+      state.response.results = action.payload.results;
+      state.data = action.payload.results;
     }
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchRecords.pending, (state, action) => {
+      .addCase(fetchRecords.pending, (state) => {
         state.status = Status.Loading;
       })
       .addCase(fetchRecords.fulfilled, (state, action) => {
         state.status = Status.Succeeded;
-        state.data = action.payload.data; 
+        state.response = action.payload;
+        state.data = action.payload.results;
       })
       .addCase(fetchRecords.rejected, (state, action) => {
         state.status = Status.Failed;
-        state.data = {
+        state.response = {
           count: null,
           next: null,
           previous: null,
           results: [],
         };
+        state.data = [];
         state.error = action.error.message;
       })
   }
