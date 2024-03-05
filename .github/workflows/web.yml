@@ -7,20 +7,20 @@ on:
     branches: [main]
 
 jobs:
-  run-eslint:
+  run-web:
     runs-on: ubuntu-latest
     container:
       image: node:20-alpine
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - name: Checkout Code
+      uses: actions/checkout@v4
 
-    - name: Build Docker image for `web`
-      run: docker build -t web web
+    - name: Install `node_modules` 
+      run: npm install
 
-    - name: Run Webpack
-      run: docker run web
+    - name: Build Webpack Bundle
+      run: npm run build
 
     - name: Run ESLint
-      run: docker run web npm run lint
+      run: npm run lint
