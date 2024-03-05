@@ -7,12 +7,9 @@
 import { useCallback, useEffect } from 'react';
 
 // Actions
-import {
-  fetchProcessParameters,
-  setProcessParameters,
-} from 'melt_pool/processParametersSlice';
+import { fetchProcessParameters } from 'melt_pool/processParametersSlice';
 
-import { fetchRecords, setRecords } from 'melt_pool/recordsSlice';
+import { fetchRecords } from 'melt_pool/recordsSlice';
 
 // Enums
 import { Status } from 'enums';
@@ -59,7 +56,7 @@ export const useRecords = (): UseRecords => {
       if (state.status !== Status.Loading) {
         dispatch(fetchRecords(filterset))
       }
-    }, [dispatch]
+    }, [dispatch, state.status]
   );
 
   return [state, getRecords];

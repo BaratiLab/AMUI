@@ -20,3 +20,9 @@
         npm install
         ```
     4. Wait a couple seconds and reload page and the problem should be fixed.
+
+## Linting
+- Run ESLint with:
+  ```bash
+  npm run lint
+  ```
