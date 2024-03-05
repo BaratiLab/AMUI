@@ -1,0 +1,26 @@
+name: web
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  run-eslint:
+    runs-on: ubuntu-latest
+    container:
+      image: node:20-alpine
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build Docker image for `web`
+      run: docker build -t web web
+
+    - name: Run Webpack
+      run: docker run web
+
+    - name: Run ESLint
+      run: docker run web npm run lint
