@@ -1,0 +1,29 @@
+name: web
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    container:
+      image: node:20-alpine
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Install `node_modules`
+      working-directory: ./web
+      run: npm install
+
+    - name: Build Webpack Bundle
+      working-directory: ./web
+      run: npm run build
+
+    - name: Run ESLint
+      working-directory: ./web
+      run: npm run lint

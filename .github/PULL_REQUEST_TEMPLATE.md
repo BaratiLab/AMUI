@@ -8,5 +8,7 @@ Please remember to follow these steps when creating a pull request.
 
 # Description
 
+# Notes
+
 # Linked Issue(s)
 Resolves #
