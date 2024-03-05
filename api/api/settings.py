@@ -27,9 +27,7 @@ SECRET_KEY = "django-insecure-*sh&u3c5*zf$xy*jhw^#8*avojdb8m%u-#l*2g7^5-8=0^&l1w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    os.environ.get("DJANGO_HOST")
-]
+ALLOWED_HOSTS = [os.environ.get("DJANGO_HOST")]
 
 
 # Application definition
@@ -42,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Third Party
+    "corsheaders",
     "django_filters",
     "rest_framework",
     # Apps
@@ -56,6 +55,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # Third Party
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "api.urls"
@@ -78,6 +79,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "api.wsgi.application"
 
+# Cors
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (f"http://{os.environ.get('DJANGO_HOST')}",)
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

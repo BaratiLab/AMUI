@@ -13,7 +13,7 @@
 export const request = (
   route: string,
   method?: string,
-  body?: any
+  body?: object,
 ): Promise<Response> => {
   const headers = {
     'Content-Type': 'application/json',

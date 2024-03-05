@@ -1,15 +1,8 @@
 from rest_framework import serializers
-from melt_pool.models import ClassificationRecord, GeometryRecord
+from melt_pool.models import Record
 
 
-class ClassificationRecordSerializer(serializers.ModelSerializer):
+class RecordSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ClassificationRecord
-        fields = "__all__"
-        # extra_kwargs = {'created_by': {'required': False}}
-
-
-class GeometryRecordSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = GeometryRecord
+        model = Record
         fields = "__all__"

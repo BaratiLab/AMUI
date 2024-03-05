@@ -4,11 +4,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from melt_pool.models import ClassificationRecord, GeometryRecord
-from melt_pool.serializers import (
-    ClassificationRecordSerializer,
-    GeometryRecordSerializer,
-)
+from melt_pool.models import Record
+from melt_pool.serializers import RecordSerializer
 
 filterset_fields = [
     "material",
@@ -19,25 +16,34 @@ filterset_fields = [
 ]
 
 
-class ClassificationRecordsList(generics.ListAPIView):
+class RecordsList(generics.ListAPIView):
     """
     List melt pool classification records.
     """
 
-    queryset = ClassificationRecord.objects.all()
+    queryset = Record.objects.all()
     filter_backends = [DjangoFilterBackend]
     filterset_fields = filterset_fields
-    serializer_class = ClassificationRecordSerializer
+    serializer_class = RecordSerializer
     permission_classes = (AllowAny,)
 
 
-class GeometryRecordsList(generics.ListAPIView):
+class ProcessParametersDict(APIView):
     """
-    List melt pool geometry records.
+    Dictionary of melt pool process parameters
     """
 
-    queryset = GeometryRecord.objects.all()
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = filterset_fields
-    serializer_class = GeometryRecordSerializer
     permission_classes = (AllowAny,)
+
+    def get(self, request):
+        unique_values = {}
+        queryset = Record.objects.all()
+        serializer = RecordSerializer(queryset, many=True)
+        data = serializer.data
+
+        for field_name in filterset_fields:
+            values = queryset.values_list(field_name, flat=True).distinct()
+
+            unique_values[field_name] = sorted([x for x in values if x is not None])
+
+        return Response(unique_values)
