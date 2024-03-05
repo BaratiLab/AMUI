@@ -8,10 +8,10 @@ import { FC } from 'react';
 import { XAxis, YAxis, CartesianGrid, Scatter, Legend, Area, ComposedChart } from 'recharts';
 
 // TODO: Cleanup
-const Chart: FC<{ data: any }> = ({ data }) => {
-    const kh = Array.from(data.filter((row: any) => row['melt_pool_shape'] == 'keyhole').map((row: any) => ({ v: row['velocity'], p: row['power'] })));
-    const d = Array.from(data.filter((row: any) => row['melt_pool_shape'] == 'desirable').map((row: any) => ({ v: row['velocity'], p: row['power'] })));
-    const lof = Array.from(data.filter((row: any) => row['melt_pool_shape'] == 'LOF').map((row: any) => ({ v: row['velocity'], p: row['power'] })));
+const Chart: FC<{ data: Record<string, unknown>[] }> = ({ data }) => {
+    const kh = Array.from(data.filter((row: Record<string, unknown>) => row['melt_pool_shape'] == 'keyhole').map((row: Record<string, unknown>) => ({ v: row['velocity'], p: row['power'] })));
+    const d = Array.from(data.filter((row: Record<string, unknown>) => row['melt_pool_shape'] == 'desirable').map((row: Record<string, unknown>) => ({ v: row['velocity'], p: row['power'] })));
+    const lof = Array.from(data.filter((row: Record<string, unknown>) => row['melt_pool_shape'] == 'LOF').map((row: Record<string, unknown>) => ({ v: row['velocity'], p: row['power'] })));
 
     // TODO: get these values from the backend
     const areaMap = [
