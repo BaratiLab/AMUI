@@ -44,14 +44,14 @@ const SpecificationCard: FC<Props> = ({ specification }) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader
-        title="Shrimp and Chorizo Paella"
+        title={specification.machine}
         subheader="September 14, 2016"
       />
       <CardMedia
         component="img"
         height="194"
-        image="/static/images/cards/paella.jpg"
-        alt="Paella dish"
+        image={specification.image_link}
+        alt="Machine image"
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">

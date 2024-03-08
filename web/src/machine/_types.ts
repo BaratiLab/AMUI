@@ -21,6 +21,7 @@ export interface SpecificationsSliceInitialState extends AsyncThunkInitialState 
 export interface MachineSpecification {
   id: number,
   machine: string,
+  company: string,
   power_max_w: number | null,
   power_min_w: number | null,
   velocity_max_m_per_s: number | null,
@@ -30,5 +31,7 @@ export interface MachineSpecification {
   laser_type: string,
   layer_thickness_min_microns: number | null,
   layer_thickness_max_microns: number | null,
-  tds_link: string,
+  tds_link: string | null,
+  image_link?: string,
+  company_logo_link?: string,
 }
