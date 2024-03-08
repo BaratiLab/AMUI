@@ -20,6 +20,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path("", include("melt_pool.urls")),
+    path("", include("machine.urls")),
     path("", TemplateView.as_view(template_name="index.html"), {"resource": ""}),
     path("<path:resource>", TemplateView.as_view(template_name="index.html")),
     # path('admin/', admin.site.urls),
