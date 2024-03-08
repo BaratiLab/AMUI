@@ -16,7 +16,7 @@ import { useAppSelector } from 'hooks';
 // Pages 
 import Navbar from '_pages/_Navbar';
 import ProcessMap from '_pages/ProcessMap';
-import ProcessMapWizard from '_pages/ProcessMapWizard';
+import ProcessMapAccordion from '_pages/ProcessMapAccordion';
 import ViewSTL from '_pages/ViewSTL';
 
 const App: FC = () => {
@@ -35,7 +35,7 @@ const App: FC = () => {
       <Container>
         <Navbar />
         <Routes>
-          <Route path="" element={<ProcessMapWizard />} />
+          <Route path="" element={<ProcessMapAccordion />} />
           <Route path="/view_stl" element={<ViewSTL />} />
           <Route path="/process_map" element={<ProcessMap />} />
         </Routes>

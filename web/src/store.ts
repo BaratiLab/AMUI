@@ -7,12 +7,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 // Reducers
+import specificationsReducer from 'machine/specificationsSlice';
 import recordsReducer from 'melt_pool/recordsSlice';
 import processParametersReducer from 'melt_pool/processParametersSlice';
 import themeReducer from 'common/themeSlice';
 
 const store = configureStore({
   reducer: {
+    machineSpecifications: specificationsReducer,
     meltPoolProcessParameters: processParametersReducer,
     meltPoolRecords: recordsReducer,
     theme: themeReducer,

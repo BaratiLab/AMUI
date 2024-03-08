@@ -8,7 +8,6 @@ import { useCallback, useEffect } from 'react';
 
 // Actions
 import { fetchProcessParameters } from 'melt_pool/processParametersSlice';
-
 import { fetchRecords } from 'melt_pool/recordsSlice';
 
 // Enums
