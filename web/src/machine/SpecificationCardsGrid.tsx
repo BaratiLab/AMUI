@@ -29,7 +29,7 @@ const SpecificationCardsGrid: FC = () => {
 
   // Callbacks
   const handleClick = () => {
-    length = machineSpecificationsData.length;
+    const length = machineSpecificationsData.length;
     setLimit((prevState) => prevState === length ? INITIAL_SHOW_LIMIT : length);
   };
 

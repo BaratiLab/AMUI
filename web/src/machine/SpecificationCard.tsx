@@ -42,14 +42,14 @@ interface Props {
 const minMaxToString = (min?: number | null, max?: number | null) => {
   let minMaxString = "";
 
-  if (min === null) {
-    minMaxString = `Maximum ${max}`;
-  } else if (max === null) {
-    minMaxString = `Mininum ${min}`;
-  } else if (min === null && max === null) {
+  if (min === null && max === null) {
     minMaxString = 'No Data';
   } else if (min === max) {
     minMaxString = `${min}`;
+  } else if (min === null) {
+    minMaxString = `Maximum ${max}`;
+  } else if (max === null) {
+    minMaxString = `Mininum ${min}`;
   } else {
     minMaxString = `Ranges from ${min} - ${max}`;
   }
