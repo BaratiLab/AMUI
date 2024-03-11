@@ -20,6 +20,9 @@ const Navbar: FC = () => (
             <Link to="/process_map" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <Button color="inherit">Process Map</Button>
             </Link>
+            <Link to="/worksheet" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <Button color="inherit">Process Worksheet</Button>
+            </Link>
         </Toolbar>
     </AppBar>
 )

@@ -12,6 +12,7 @@ import { Route, Routes } from 'react-router-dom';
 import Navbar from '_pages/_Navbar';
 import ProcessMap from '_pages/ProcessMap';
 import ViewSTL from '_pages/ViewSTL';
+import Worksheet from '_pages/Worksheet'
 
 const App: FC = () => (
   <Container>
@@ -19,6 +20,7 @@ const App: FC = () => (
     <Routes>
       <Route path="/view_stl" element={<ViewSTL />} />
       <Route path="/process_map" element={<ProcessMap />} />
+      <Route path="/worksheet" element={<Worksheet />} />
     </Routes>
   </Container>
 );
