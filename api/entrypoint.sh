@@ -10,5 +10,6 @@ python manage.py createsuperuser --noinput \
 
 # Seed melt pool data.
 python manage.py loaddata melt_pool/fixture/records.json
+python manage.py loaddata machine/fixture/specifications.json
 
 python manage.py runserver 0.0.0.0:8000

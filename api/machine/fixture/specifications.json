@@ -1,0 +1,282 @@
+[
+  {
+    "fields": {
+      "machine": "EOS M290",
+      "company": "EOS",
+      "power_max_w": 400,
+      "power_min_w": null,
+      "velocity_max_m_per_s": 7,
+      "velocity_min_m_per_s": null,
+      "spot_size_min_microns": 100,
+      "spot_size_max_microns": 100,
+      "laser_type": "Yb-fiber laser",
+      "layer_thickness_min_microns": 40,
+      "layer_thickness_max_microns": 40,
+      "tds_link": "https://www.eos.info/en-us/metal-solutions/metal-printers/data-sheets/sds-eos-m-290",
+      "image_link": "static/images/EOS_M290.webp",
+      "company_logo_link": "static/images/EOS_Logo_2022.svg"
+    },
+    "model": "machine.Specification",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "machine": "EOSINT M280",
+      "company": "EOS",
+      "power_max_w": 400,
+      "power_min_w": 200,
+      "velocity_max_m_per_s": 7,
+      "velocity_min_m_per_s": null,
+      "spot_size_min_microns": 100,
+      "spot_size_max_microns": 500,
+      "laser_type": "Yb-fiber laser",
+      "layer_thickness_min_microns": 20,
+      "layer_thickness_max_microns": 40,
+      "tds_link": "https://webbuilder5.asiannet.com/ftp/2684/TD_M280_en_2011-03-29.pdf",
+      "image_link": "static/images/EOSINT_M280.jpg",
+      "company_logo_link": "static/images/EOS_Logo_2022.svg"
+    },
+    "model": "machine.Specification",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "machine": "EOSINT M270",
+      "company": "EOS",
+      "power_max_w": 200,
+      "power_min_w": null,
+      "velocity_max_m_per_s": 7,
+      "velocity_min_m_per_s": null,
+      "spot_size_min_microns": 100,
+      "spot_size_max_microns": 100,
+      "laser_type": "Yb-fiber laser",
+      "layer_thickness_min_microns": 20,
+      "layer_thickness_max_microns": 40,
+      "tds_link": "https://www.eos.info/01_parts-and-applications/industry_different_parts_applications/metal_parts_applications/parts_metal_medical/dental/eos_m-270_dental_2017_en_web.pdf",
+      "image_link": "static/images/EOSINT_M270.webp",
+      "company_logo_link": "static/images/EOS_Logo_2022.svg"
+    },
+    "model": "machine.Specification",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "machine": "Concept Laser M2",
+      "company": "GE",
+      "power_max_w": 1000,
+      "power_min_w": 400,
+      "velocity_max_m_per_s": 4.5,
+      "velocity_min_m_per_s": null,
+      "spot_size_min_microns": 70,
+      "spot_size_max_microns": 500,
+      "laser_type": "Yb-fiber laser",
+      "layer_thickness_min_microns": 25,
+      "layer_thickness_max_microns": 120,
+      "tds_link": "https://www.ge.com/additive/sites/default/files/2023-08/DMLM_M2Series5_Bro_4_A4_EN__3.pdf",
+      "image_link": "static/images/concept_laser_m2.jpg",
+      "company_logo_link": "static/images/GE_logo.svg"
+    },
+    "model": "machine.Specification",
+    "pk": 4
+  },
+  {
+    "fields": {
+      "machine": "Renishaw AM500",
+      "company": "Renishaw",
+      "power_max_w": 500,
+      "power_min_w": null,
+      "velocity_max_m_per_s": 10,
+      "velocity_min_m_per_s": null,
+      "spot_size_min_microns": 80,
+      "spot_size_max_microns": 500,
+      "laser_type": "Yb-fiber laser",
+      "layer_thickness_min_microns": 20,
+      "layer_thickness_max_microns": 100,
+      "tds_link": "https://www.renishaw.com/resourcecentre/en/details?data=135078&lang=en",
+      "image_link": null,
+      "company_logo_link": null
+    },
+    "model": "machine.Specification",
+    "pk": 5
+  },
+  {
+    "fields": {
+      "machine": "Renishaw AM400",
+      "company": "Renishaw",
+      "power_max_w": 400,
+      "power_min_w": null,
+      "velocity_max_m_per_s": 2,
+      "velocity_min_m_per_s": null,
+      "spot_size_min_microns": 70,
+      "spot_size_max_microns": 70,
+      "laser_type": "Yb-fiber laser",
+      "layer_thickness_min_microns": 20,
+      "layer_thickness_max_microns": 100,
+      "tds_link": "https://tech-labs.com/sites/default/files/H-5800-3137-01-A_EN-07%20-%20AM400%20Data%20Sheet%20-%20Media.pdf",
+      "image_link": null,
+      "company_logo_link": null
+    },
+    "model": "machine.Specification",
+    "pk": 6
+  },
+  {
+    "fields": {
+      "machine": "Renishaw AM250",
+      "company": "Renishaw",
+      "power_max_w": 400,
+      "power_min_w": 200,
+      "velocity_max_m_per_s": 1,
+      "velocity_min_m_per_s": null,
+      "spot_size_min_microns": 70,
+      "spot_size_max_microns": 70,
+      "laser_type": "Yb-fiber laser",
+      "layer_thickness_min_microns": 20,
+      "layer_thickness_max_microns": 100,
+      "tds_link": "https://www.starrapid.de/wp-content/uploads/2015/09/DMLM-Datasheet-AM250-machine.pdf",
+      "image_link": null,
+      "company_logo_link": null
+    },
+    "model": "machine.Specification",
+    "pk": 7
+  },
+  {
+    "fields": {
+      "machine": "BLT S200",
+      "company": "BLT",
+      "power_max_w": 500,
+      "power_min_w": null,
+      "velocity_max_m_per_s": 7,
+      "velocity_min_m_per_s": null,
+      "spot_size_min_microns": 60,
+      "spot_size_max_microns": 60,
+      "laser_type": "Yb-fiber laser",
+      "layer_thickness_min_microns": 20,
+      "layer_thickness_max_microns": 60,
+      "tds_link": "https://www.multistation.com/en/product/blt-s-serie/",
+      "image_link": null,
+      "company_logo_link": null
+    },
+    "model": "machine.Specification",
+    "pk": 8
+  },
+  {
+    "fields": {
+      "machine": "Arcam EBM A2X",
+      "company": "GE",
+      "power_max_w": 3000,
+      "power_min_w": null,
+      "velocity_max_m_per_s": 7000,
+      "velocity_min_m_per_s": null,
+      "spot_size_min_microns": 250,
+      "spot_size_max_microns": 250,
+      "laser_type": "electron beam",
+      "layer_thickness_min_microns": 50,
+      "layer_thickness_max_microns": 75,
+      "tds_link": "https://www.ge.com/additive/sites/default/files/2020-01/EBM_A2X_DS_EN_US_1_v1.pdf",
+      "image_link": null,
+      "company_logo_link": "static/images/GE_logo.svg"
+    },
+    "model": "machine.Specification",
+    "pk": 9
+  },
+  {
+    "fields": {
+      "machine": "Arcam EBM S12",
+      "company": "GE",
+      "power_max_w": 3500,
+      "power_min_w": null,
+      "velocity_max_m_per_s": null,
+      "velocity_min_m_per_s": 1000,
+      "spot_size_min_microns": 50,
+      "spot_size_max_microns": 50,
+      "laser_type": "electron beam",
+      "layer_thickness_min_microns": 5,
+      "layer_thickness_max_microns": null,
+      "tds_link": "https://engineering.cmu.edu/next/_files/documents/arcam-s12-description.pdf",
+      "image_link": null,
+      "company_logo_link": "static/images/GE_logo.svg"
+    },
+    "model": "machine.Specification",
+    "pk": 10
+  },
+  {
+    "fields": {
+      "machine": "Aconity MINI",
+      "company": "Aconity 3D",
+      "power_max_w": 1200,
+      "power_min_w": 400,
+      "velocity_max_m_per_s": 12,
+      "velocity_min_m_per_s": null,
+      "spot_size_min_microns": 80,
+      "spot_size_max_microns": 80,
+      "laser_type": "Yb-fiber laser",
+      "layer_thickness_min_microns": 10,
+      "layer_thickness_max_microns": 10,
+      "tds_link": "https://aconity3d.com/products/aconity-mini/",
+      "image_link": null,
+      "company_logo_link": null
+    },
+    "model": "machine.Specification",
+    "pk": 11
+  },
+  {
+    "fields": {
+      "machine": "SLM 500 HL",
+      "company": "SLM Solutions",
+      "power_max_w": 700,
+      "power_min_w": 400,
+      "velocity_max_m_per_s": 10,
+      "velocity_min_m_per_s": null,
+      "spot_size_min_microns": 80,
+      "spot_size_max_microns": 115,
+      "laser_type": "Yb-fiber laser",
+      "layer_thickness_min_microns": 20,
+      "layer_thickness_max_microns": 75,
+      "tds_link": "https://www.3dpe.ir/wp-content/uploads/slm-500-catalog.pdf",
+      "image_link": null,
+      "company_logo_link": null
+    },
+    "model": "machine.Specification",
+    "pk": 12
+  },
+  {
+    "fields": {
+      "machine": "SLM 280 HL",
+      "company": "SLM Solutions",
+      "power_max_w": 1000,
+      "power_min_w": 400,
+      "velocity_max_m_per_s": 10,
+      "velocity_min_m_per_s": null,
+      "spot_size_min_microns": 80,
+      "spot_size_max_microns": 115,
+      "laser_type": "Yb-fiber laser",
+      "layer_thickness_min_microns": 20,
+      "layer_thickness_max_microns": 75,
+      "tds_link": "https://www.3dprintekzo.be/wp-content/uploads/2016/08/151028_slm280_en_0.pdf",
+      "image_link": null,
+      "company_logo_link": null
+    },
+    "model": "machine.Specification",
+    "pk": 13
+  },
+  {
+    "fields": {
+      "machine": "SLM 125 HL",
+      "company": "SLM Solutions",
+      "power_max_w": 400,
+      "power_min_w": 400,
+      "velocity_max_m_per_s": 10,
+      "velocity_min_m_per_s": null,
+      "spot_size_min_microns": 70,
+      "spot_size_max_microns": 100,
+      "laser_type": "Yb-fiber laser",
+      "layer_thickness_min_microns": 20,
+      "layer_thickness_max_microns": 75,
+      "tds_link": "https://www.3dprintekzo.be/products-services/3d-printers/slm-125hl/",
+      "image_link": null,
+      "company_logo_link": null
+    },
+    "model": "machine.Specification",
+    "pk": 14
+  }
+]
