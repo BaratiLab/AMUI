@@ -14,39 +14,26 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { FC, useState } from 'react';
 
 // Components
-import MachineSpecificationCard from 'machine/SpecificationCard';
-
-// Hooks
-import { useSpecifications } from 'machine/_hooks';
+import SpecificationCardsGrid from 'machine/SpecificationCardsGrid'
 
 // Enums
-import { Status } from 'enums';
 enum Section {
+  None = 'none',
   Machine = 'machine',
-  MeltPool = 'meltPool',
+  ParameterSelection = 'parameterSelection',
+  ProcessMap = 'processMap'
 }
 
 const ProcessMapAccordion: FC = () => {
   // Hooks
   const [activeSection, setActiveSection] = useState(Section.Machine);
-  const [{
-    data: machineSpecificationsdata,
-    status: machineSpecificationsStatus
-  }] = useSpecifications();
 
   // Callbacks
   const handleChange = (section: Section) => () => {
-    setActiveSection(section);
-  };
-
-  // JSX
-  const machineSpecificationsJSX =
-    machineSpecificationsStatus === Status.Succeeded &&
-    machineSpecificationsdata.map(
-      (specification) => (
-        <MachineSpecificationCard specification={specification}/>
-      )
+    setActiveSection(
+      (prevState) => prevState === section ? Section.None : section
     );
+  };
 
   return (
     <>
@@ -61,22 +48,37 @@ const ProcessMapAccordion: FC = () => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          {machineSpecificationsJSX}
+          <SpecificationCardsGrid />
         </AccordionDetails>
       </Accordion>
 
       {/* Parameter Selection */}
       <Accordion
-        expanded={activeSection === Section.MeltPool}
-        onChange={handleChange(Section.MeltPool)}
+        expanded={activeSection === Section.ParameterSelection}
+        onChange={handleChange(Section.ParameterSelection)}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography sx={{ width: '33%', flexShrink: 0 }}>
-            Machine Specifications
+            Parameter Selection
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          asdf
+          Parameter selction form
+        </AccordionDetails>
+      </Accordion>
+
+      {/* Process Map */}
+      <Accordion
+        expanded={activeSection === Section.ProcessMap}
+        onChange={handleChange(Section.ProcessMap)}
+      >
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography sx={{ width: '33%', flexShrink: 0 }}>
+            Process Map
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          Process Map form
         </AccordionDetails>
       </Accordion>
     </>
