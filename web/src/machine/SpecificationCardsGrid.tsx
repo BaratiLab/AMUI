@@ -7,20 +7,30 @@
 import { Button, Grid } from '@mui/material';
 import { FC, useState } from 'react';
 
+// Actions
+import {
+  setProcessMapMachineConfiguration,
+} from 'process_map/configurationSlice';
+
 // Components
 import MachineSpecificationCard from 'machine/SpecificationCard';
 
 // Constants
 const INITIAL_SHOW_LIMIT = 6;
 
-// Hooks
-import { useSpecifications } from 'machine/_hooks';
-
 // Enums
 import { Status } from 'enums';
 
+// Hooks
+import { useAppDispatch } from 'hooks';
+import { useSpecifications } from 'machine/_hooks';
+
+// Types
+import { MachineSpecification } from './_types';
+
 const SpecificationCardsGrid: FC = () => {
   // Hooks
+  const dispatch = useAppDispatch();
   const [limit, setLimit] = useState(INITIAL_SHOW_LIMIT);
   const [{
     data: machineSpecificationsData,
@@ -28,9 +38,29 @@ const SpecificationCardsGrid: FC = () => {
   }] = useSpecifications();
 
   // Callbacks
-  const handleClick = () => {
+  const handleShowMoreButtonClick = () => {
     const length = machineSpecificationsData.length;
     setLimit((prevState) => prevState === length ? INITIAL_SHOW_LIMIT : length);
+  };
+
+  const handleMachineSpecificationClick = (id: MachineSpecification['id']) => {
+    const machine = machineSpecificationsData.filter(
+      (machineSpecification) => machineSpecification.id === id
+    )[0];
+
+    dispatch(
+      setProcessMapMachineConfiguration({
+        machine_id: id,
+        power_max: machine.power_max_w,
+        power_min: machine.power_min_w,
+        velocity_max: machine.velocity_max_m_per_s,
+        velocity_min: machine.velocity_min_m_per_s,
+        spot_size_max: machine.spot_size_max_microns,
+        spot_size_min: machine.spot_size_min_microns,
+        layer_thickness_max: machine.layer_thickness_max_microns,
+        layer_thickness_min: machine.layer_thickness_min_microns,
+      })
+    );
   };
 
   // JSX
@@ -41,14 +71,17 @@ const SpecificationCardsGrid: FC = () => {
       .map(
         (specification) => (
           <Grid key={specification.id} item xs={2} sm={4} md={4}>
-            <MachineSpecificationCard specification={specification}/>
+            <MachineSpecificationCard
+              onClick={handleMachineSpecificationClick}
+              specification={specification}
+            />
           </Grid>
         )
       );
 
   const showMoreButtonJSX = limit === INITIAL_SHOW_LIMIT && (
     <Grid item xs={2} sm={4} md={4}>
-      <Button onClick={handleClick}>Show More</Button>
+      <Button onClick={handleShowMoreButtonClick}>Show More</Button>
     </Grid>
   );
 

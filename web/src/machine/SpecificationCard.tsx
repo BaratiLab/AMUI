@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardMedia } from '@mui/material';
 import { Avatar, Typography } from '@mui/material';
 import styled from '@mui/styled-engine';
 import { func } from 'prop-types';
-import { FC, MouseEvent } from 'react';
+import { FC } from 'react';
 
 // Prop Types
 import { machineSpecificationPropType } from './_propTypes';
@@ -28,7 +28,7 @@ const StyledCard = styled(Card)`
 import { MachineSpecification } from './_types';
 
 interface Props {
-  onClick?: (e: MouseEvent<HTMLDivElement>) => void,
+  onClick?: (id: MachineSpecification['id']) => void,
   specification: MachineSpecification,
 }
 
@@ -57,8 +57,11 @@ const minMaxToString = (min?: number | null, max?: number | null) => {
   return minMaxString;
 };
 
-const SpecificationCard: FC<Props> = ({ onClick, specification }) => (
-  <StyledCard onClick={onClick} variant="outlined">
+const SpecificationCard: FC<Props> = ({
+  onClick = () => {},
+  specification,
+}) => (
+  <StyledCard onClick={() => onClick(specification.id)} variant="outlined">
     <CardHeader
       avatar={<Avatar src={specification.company_logo_link} />}
       title={specification.machine}
