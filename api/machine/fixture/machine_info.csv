@@ -3,13 +3,13 @@ EOS M290,EOS,400,,7,,100,100,Yb-fiber laser,40,40,https://www.eos.info/en-us/met
 EOSINT M280,EOS,400,200,7,,100,500,Yb-fiber laser,20,40,https://webbuilder5.asiannet.com/ftp/2684/TD_M280_en_2011-03-29.pdf,static/images/EOSINT_M280.jpg,static/images/EOS_Logo_2022.svg
 EOSINT M270,EOS,200,,7,,100,100,Yb-fiber laser,20,40,https://www.eos.info/01_parts-and-applications/industry_different_parts_applications/metal_parts_applications/parts_metal_medical/dental/eos_m-270_dental_2017_en_web.pdf,static/images/EOSINT_M270.webp,static/images/EOS_Logo_2022.svg
 Concept Laser M2,GE,1000,400,4.5,,70,500,Yb-fiber laser,25,120,https://www.ge.com/additive/sites/default/files/2023-08/DMLM_M2Series5_Bro_4_A4_EN__3.pdf,static/images/concept_laser_m2.jpg,static/images/GE_logo.svg
-Renishaw AM500,Renishaw,500,,10,,80,500,Yb-fiber laser,20,100,https://www.renishaw.com/resourcecentre/en/details?data=135078&lang=en,,
-Renishaw AM400,Renishaw,400,,2,,70,70,Yb-fiber laser,20,100,https://tech-labs.com/sites/default/files/H-5800-3137-01-A_EN-07%20-%20AM400%20Data%20Sheet%20-%20Media.pdf,,
-Renishaw AM250,Renishaw,400,200,1,,70,70,Yb-fiber laser,20,100,https://www.starrapid.de/wp-content/uploads/2015/09/DMLM-Datasheet-AM250-machine.pdf,,
-BLT S200,BLT,500,,7,,60,60,Yb-fiber laser,20,60,https://www.multistation.com/en/product/blt-s-serie/,,
-Arcam EBM A2X,GE,3000,,7000,,250,250,electron beam,50,75,https://www.ge.com/additive/sites/default/files/2020-01/EBM_A2X_DS_EN_US_1_v1.pdf,,static/images/GE_logo.svg
-Arcam EBM S12,GE,3500,,,1000,50,50,electron beam,5,,https://engineering.cmu.edu/next/_files/documents/arcam-s12-description.pdf,,static/images/GE_logo.svg
-Aconity MINI,Aconity 3D,1200,400,12,,80,80,Yb-fiber laser,10,10,https://aconity3d.com/products/aconity-mini/,,
-SLM 500 HL,SLM Solutions,700,400,10,,80,115,Yb-fiber laser,20,75,https://www.3dpe.ir/wp-content/uploads/slm-500-catalog.pdf,,
-SLM 280 HL,SLM Solutions,1000,400,10,,80,115,Yb-fiber laser,20,75,https://www.3dprintekzo.be/wp-content/uploads/2016/08/151028_slm280_en_0.pdf,,
-SLM 125 HL,SLM Solutions,400,400,10,,70,100,Yb-fiber laser,20,75,https://www.3dprintekzo.be/products-services/3d-printers/slm-125hl/,,
+Renishaw AM500,Renishaw,500,,10,,80,500,Yb-fiber laser,20,100,https://www.renishaw.com/resourcecentre/en/details?data=135078&lang=en,static/images/am500.jpeg,static/images/renishaw_logo.jpeg
+Renishaw AM400,Renishaw,400,,2,,70,70,Yb-fiber laser,20,100,https://tech-labs.com/sites/default/files/H-5800-3137-01-A_EN-07%20-%20AM400%20Data%20Sheet%20-%20Media.pdf,static/images/am400.jpeg,static/images/renishaw_logo.jpeg
+Renishaw AM250,Renishaw,400,200,1,,70,70,Yb-fiber laser,20,100,https://www.starrapid.de/wp-content/uploads/2015/09/DMLM-Datasheet-AM250-machine.pdf,api/static/images/am250.jpeg,static/images/renishaw_logo.jpeg
+BLT S210,BLT,500,,7,,60,60,Yb-fiber laser,20,60,https://www.multistation.com/en/product/blt-s-serie/,static/images/BLTS210.jpeg,static/images/blt_logo.png
+Arcam EBM A2X,GE,3000,,7000,,250,250,electron beam,50,75,https://www.ge.com/additive/sites/default/files/2020-01/EBM_A2X_DS_EN_US_1_v1.pdf,static/images/arcam_ebm_a2x.png,static/images/GE_logo.svg
+Arcam EBM S12,GE,3500,,,1000,50,50,electron beam,5,,https://engineering.cmu.edu/next/_files/documents/arcam-s12-description.pdf,static/images/arcam_ebm_s12.png,static/images/GE_logo.svg
+Aconity MINI,Aconity 3D,1200,400,12,,80,80,Yb-fiber laser,10,10,https://aconity3d.com/products/aconity-mini/,static/images/aconity_mini.png,static/images/aconity_logo.jpeg
+SLM 500 HL,SLM Solutions,700,400,10,,80,115,Yb-fiber laser,20,75,https://www.3dpe.ir/wp-content/uploads/slm-500-catalog.pdf,static/images/slm500.jpeg,static/images/slm_logo.jpeg
+SLM 280 HL,SLM Solutions,1000,400,10,,80,115,Yb-fiber laser,20,75,https://www.3dprintekzo.be/wp-content/uploads/2016/08/151028_slm280_en_0.pdf,api/static/images/slm280.jpeg,static/images/slm_logo.jpeg
+SLM 125 HL,SLM Solutions,400,400,10,,70,100,Yb-fiber laser,20,75,https://www.3dprintekzo.be/products-services/3d-printers/slm-125hl/,static/images/slm_125.jpeg,static/images/slm_logo.jpeg
