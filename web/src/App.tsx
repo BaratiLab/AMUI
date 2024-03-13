@@ -18,6 +18,7 @@ import Navbar from '_pages/_Navbar';
 import ProcessMap from '_pages/ProcessMap';
 import ProcessMapAccordion from '_pages/ProcessMapAccordion';
 import ViewSTL from '_pages/ViewSTL';
+import Worksheet from '_pages/Worksheet'
 
 const App: FC = () => {
   // Hooks
@@ -38,6 +39,7 @@ const App: FC = () => {
           <Route path="" element={<ProcessMapAccordion />} />
           <Route path="/view_stl" element={<ViewSTL />} />
           <Route path="/process_map" element={<ProcessMap />} />
+          <Route path="/worksheet" element={<Worksheet />} />
         </Routes>
       </Container>
     </ThemeProvider>
