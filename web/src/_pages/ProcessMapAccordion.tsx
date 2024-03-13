@@ -14,10 +14,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { FC, useEffect, useState } from 'react';
 
 // Actions
-import { setProcessMapSection } from 'process_map/configurationSlice';
+import {
+  setProcessMapConfigurationSection
+} from 'process_map/configurationSlice';
 
 // Components
-import SpecificationCardsGrid from 'machine/SpecificationCardsGrid'
+import SpecificationAlert from 'machine/SpecificationAlert';
+import SpecificationCardsGrid from 'machine/SpecificationCardsGrid';
 
 // Enums
 import { Status } from 'enums';
@@ -58,14 +61,18 @@ const ProcessMapAccordion: FC = () => {
 
   // Callbacks
   const handleSetProccessMapSection = (section: Section) => () => {
-    dispatch(setProcessMapSection(section));
+    dispatch(
+      setProcessMapConfigurationSection(
+        section === processMapConfigurationState.section
+          ? Section.None
+          : section
+      )
+    );
   };
 
   // JSX
   const machineConfigurationJSX = machine?.id && (
-    <Typography>
-      {machine.machine}
-    </Typography>
+    <SpecificationAlert specification={machine} />
   );
 
   return (

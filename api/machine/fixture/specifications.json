@@ -93,8 +93,8 @@
       "layer_thickness_min_microns": 20,
       "layer_thickness_max_microns": 100,
       "tds_link": "https://www.renishaw.com/resourcecentre/en/details?data=135078&lang=en",
-      "image_link": null,
-      "company_logo_link": null
+      "image_link": "static/images/am500.jpeg",
+      "company_logo_link": "static/images/renishaw_logo.jpeg"
     },
     "model": "machine.Specification",
     "pk": 5
@@ -113,8 +113,8 @@
       "layer_thickness_min_microns": 20,
       "layer_thickness_max_microns": 100,
       "tds_link": "https://tech-labs.com/sites/default/files/H-5800-3137-01-A_EN-07%20-%20AM400%20Data%20Sheet%20-%20Media.pdf",
-      "image_link": null,
-      "company_logo_link": null
+      "image_link": "static/images/am400.jpeg",
+      "company_logo_link": "static/images/renishaw_logo.jpeg"
     },
     "model": "machine.Specification",
     "pk": 6
@@ -133,15 +133,15 @@
       "layer_thickness_min_microns": 20,
       "layer_thickness_max_microns": 100,
       "tds_link": "https://www.starrapid.de/wp-content/uploads/2015/09/DMLM-Datasheet-AM250-machine.pdf",
-      "image_link": null,
-      "company_logo_link": null
+      "image_link": "static/images/am250.jpeg",
+      "company_logo_link": "static/images/renishaw_logo.jpeg"
     },
     "model": "machine.Specification",
     "pk": 7
   },
   {
     "fields": {
-      "machine": "BLT S200",
+      "machine": "BLT S210",
       "company": "BLT",
       "power_max_w": 500,
       "power_min_w": null,
@@ -153,8 +153,8 @@
       "layer_thickness_min_microns": 20,
       "layer_thickness_max_microns": 60,
       "tds_link": "https://www.multistation.com/en/product/blt-s-serie/",
-      "image_link": null,
-      "company_logo_link": null
+      "image_link": "static/images/BLTS210.jpeg",
+      "company_logo_link": "static/images/blt_logo.png"
     },
     "model": "machine.Specification",
     "pk": 8
@@ -173,7 +173,7 @@
       "layer_thickness_min_microns": 50,
       "layer_thickness_max_microns": 75,
       "tds_link": "https://www.ge.com/additive/sites/default/files/2020-01/EBM_A2X_DS_EN_US_1_v1.pdf",
-      "image_link": null,
+      "image_link": "static/images/arcam_ebm_a2x.png",
       "company_logo_link": "static/images/GE_logo.svg"
     },
     "model": "machine.Specification",
@@ -193,7 +193,7 @@
       "layer_thickness_min_microns": 5,
       "layer_thickness_max_microns": null,
       "tds_link": "https://engineering.cmu.edu/next/_files/documents/arcam-s12-description.pdf",
-      "image_link": null,
+      "image_link": "static/images/arcam_ebm_s12.png",
       "company_logo_link": "static/images/GE_logo.svg"
     },
     "model": "machine.Specification",
@@ -213,8 +213,8 @@
       "layer_thickness_min_microns": 10,
       "layer_thickness_max_microns": 10,
       "tds_link": "https://aconity3d.com/products/aconity-mini/",
-      "image_link": null,
-      "company_logo_link": null
+      "image_link": "static/images/aconity_mini.png",
+      "company_logo_link": "static/images/aconity_logo.jpeg"
     },
     "model": "machine.Specification",
     "pk": 11
@@ -233,8 +233,8 @@
       "layer_thickness_min_microns": 20,
       "layer_thickness_max_microns": 75,
       "tds_link": "https://www.3dpe.ir/wp-content/uploads/slm-500-catalog.pdf",
-      "image_link": null,
-      "company_logo_link": null
+      "image_link": "static/images/slm500.jpeg",
+      "company_logo_link": "static/images/slm_logo.jpeg"
     },
     "model": "machine.Specification",
     "pk": 12
@@ -253,8 +253,8 @@
       "layer_thickness_min_microns": 20,
       "layer_thickness_max_microns": 75,
       "tds_link": "https://www.3dprintekzo.be/wp-content/uploads/2016/08/151028_slm280_en_0.pdf",
-      "image_link": null,
-      "company_logo_link": null
+      "image_link": "static/images/slm280.jpeg",
+      "company_logo_link": "static/images/slm_logo.jpeg"
     },
     "model": "machine.Specification",
     "pk": 13
@@ -273,8 +273,8 @@
       "layer_thickness_min_microns": 20,
       "layer_thickness_max_microns": 75,
       "tds_link": "https://www.3dprintekzo.be/products-services/3d-printers/slm-125hl/",
-      "image_link": null,
-      "company_logo_link": null
+      "image_link": "static/images/slm_125.jpeg",
+      "company_logo_link": "static/images/slm_logo.jpeg"
     },
     "model": "machine.Specification",
     "pk": 14

@@ -39,7 +39,7 @@ export const slice = createSlice({
     setProcessMapConfiguration: (state, action) => {
       state = action.payload;
     },
-    setProcessMapMachineConfiguration: (state, action) => {
+    setProcessMapConfigurationMachine: (state, action) => {
       state.machine_id = action.payload.machine_id;
       state.power_max = action.payload.power_max;
       state.power_min = action.payload.power_min;
@@ -50,7 +50,7 @@ export const slice = createSlice({
       state.layer_thickness_max = action.payload.layer_thickness_max;
       state.layer_thickness_min = action.payload.layer_thickness_min;
     },
-    setProcessMapSection: (state, action) => {
+    setProcessMapConfigurationSection: (state, action) => {
       state.section = action.payload;
     }
   },
@@ -59,8 +59,8 @@ export const slice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   setProcessMapConfiguration,
-  setProcessMapMachineConfiguration,
-  setProcessMapSection,
+  setProcessMapConfigurationSection,
+  setProcessMapConfigurationMachine,
 } = slice.actions;
 
 export default slice.reducer;

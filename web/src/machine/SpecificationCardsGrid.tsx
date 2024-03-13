@@ -9,7 +9,8 @@ import { FC, useState } from 'react';
 
 // Actions
 import {
-  setProcessMapMachineConfiguration,
+  setProcessMapConfigurationMachine,
+  setProcessMapConfigurationSection,
 } from 'process_map/configurationSlice';
 
 // Components
@@ -20,6 +21,7 @@ const INITIAL_SHOW_LIMIT = 6;
 
 // Enums
 import { Status } from 'enums';
+import { Section } from 'process_map/_enums';
 
 // Hooks
 import { useAppDispatch } from 'hooks';
@@ -49,7 +51,7 @@ const SpecificationCardsGrid: FC = () => {
     )[0];
 
     dispatch(
-      setProcessMapMachineConfiguration({
+      setProcessMapConfigurationMachine({
         machine_id: id,
         power_max: machine.power_max_w,
         power_min: machine.power_min_w,
@@ -61,6 +63,7 @@ const SpecificationCardsGrid: FC = () => {
         layer_thickness_min: machine.layer_thickness_min_microns,
       })
     );
+    dispatch(setProcessMapConfigurationSection(Section.ParameterSelection));
   };
 
   // JSX
