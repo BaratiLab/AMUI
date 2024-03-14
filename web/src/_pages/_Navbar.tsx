@@ -32,12 +32,12 @@ const Navbar: FC = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           AMUI
         </Typography>
-        <Link to="/view_stl" style={{ textDecoration: 'none', color: 'inherit' }}>
+        {/* <Link to="/view_stl" style={{ textDecoration: 'none', color: 'inherit' }}>
           <Button color="inherit">View STL</Button>
         </Link>
         <Link to="/process_map" style={{ textDecoration: 'none', color: 'inherit' }}>
           <Button color="inherit">Process Map</Button>
-        </Link>
+        </Link> */}
         <Link to="/worksheet" style={{ textDecoration: 'none', color: 'inherit' }}>
           <Button color="inherit">Process Worksheet</Button>
         </Link>

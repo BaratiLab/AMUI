@@ -42,8 +42,8 @@ const DenseTable: FC<{ colNames: Array<string>, rows: Array<object> }> = ({ colN
                         >
                             {colNames.map((col, colIndex) => (
                                 // TODO: Create the appropriate types that will fit in here.
-                                // <TableCell key={colIndex}>{row[col]}</TableCell>
-                                <TableCell key={colIndex}>Fix Me{col}</TableCell>
+                                <TableCell key={colIndex}>{row[col]}</TableCell>
+                                // <TableCell key={colIndex}>Fix Me{col}</TableCell>
                             ))}
                         </TableRow>
                     ))}
