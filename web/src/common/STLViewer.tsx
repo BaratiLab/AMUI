@@ -4,11 +4,25 @@
  */
 
 // Node Modules
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { FC, useRef, useEffect, useState, ChangeEvent } from 'react';
 import * as THREE from 'three';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/material/styles';
+
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+});
 
 const STLViewer: FC<{ height: number, width: number }> = ({ height, width }) => {
     // Hooks
@@ -63,7 +77,14 @@ const STLViewer: FC<{ height: number, width: number }> = ({ height, width }) => 
     return (
         <Box display='flex' justifyContent='center' alignItems='center' flexDirection='column'>
             <canvas ref={canvasRef} />
-            <input type='file' onChange={handleFileChange} accept='.stl'/>
+            <Button
+                component='label'
+                variant='contained'
+                startIcon={<CloudUploadIcon />}
+            >
+                Upload file
+                <VisuallyHiddenInput type='file' onChange={handleFileChange} />
+            </Button>
         </Box>
     );
 };

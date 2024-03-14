@@ -14,7 +14,7 @@ import {
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
-const DenseTable: FC<{ colNames: Array<string>, rows: Array<object> }> = ({ colNames, rows }) => {
+const DenseTable: FC<{ colNames: Array<string>, rows: Array<{ [key: string]: string }> }> = ({ colNames, rows }) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage] = useState(10);
 
