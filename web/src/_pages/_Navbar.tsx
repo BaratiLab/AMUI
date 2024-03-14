@@ -30,7 +30,9 @@ const Navbar: FC = () => {
     <AppBar position="static" color="secondary">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          AMUI
+          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Button color="inherit">AMUI</Button>
+          </Link>
         </Typography>
         <Link to="/view_stl" style={{ textDecoration: 'none', color: 'inherit' }}>
           <Button color="inherit">View STL</Button>
