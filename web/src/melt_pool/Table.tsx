@@ -14,7 +14,7 @@ import {
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
-const DenseTable: FC<{ colNames: Array<string>, rows: Array<object> }> = ({ colNames, rows }) => {
+const DenseTable: FC<{ colNames: Array<string>, rows: Array<{ [key: string]: string }> }> = ({ colNames, rows }) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage] = useState(10);
 
@@ -41,9 +41,7 @@ const DenseTable: FC<{ colNames: Array<string>, rows: Array<object> }> = ({ colN
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             {colNames.map((col, colIndex) => (
-                                // TODO: Create the appropriate types that will fit in here.
-                                // <TableCell key={colIndex}>{row[col]}</TableCell>
-                                <TableCell key={colIndex}>Fix Me{col}</TableCell>
+                                <TableCell key={colIndex}>{row[col]}</TableCell>
                             ))}
                         </TableRow>
                     ))}
