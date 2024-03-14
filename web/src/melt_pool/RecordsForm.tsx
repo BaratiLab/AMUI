@@ -90,7 +90,7 @@ const ClassificationRecordsForm: FC = () => {
             name="material"
             onChange={handleSelect}
             value={request.material}
-            required
+            // required
           >
             <MenuItem disabled value="">
               <em>Material</em>
@@ -106,7 +106,7 @@ const ClassificationRecordsForm: FC = () => {
             onChange={handleChange}
             type="number"
             value={request.power}
-            required
+            // required
           />
         </FormControl>
 
@@ -117,7 +117,7 @@ const ClassificationRecordsForm: FC = () => {
             onChange={handleChange}
             type="number"
             value={request.velocity}
-            required
+            // required
           />
         </FormControl>
 
