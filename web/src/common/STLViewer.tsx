@@ -45,7 +45,7 @@ const STLViewer: FC<{ height: number; width: number }> = ({
       setScene(new THREE.Scene());
       setCamera(new THREE.PerspectiveCamera(75, width / height, 0.1, 1000));
     }
-  }, []);
+  }, [height, width]);
 
   useEffect(() => {
     if (camera) {
