@@ -25,6 +25,7 @@ const Chart: FC<{ data: Record<string, unknown>[] }> = ({ data }) => {
     const lof = Array.from(data.filter((row: Record<string, unknown>) => row['melt_pool_shape'] == 'LOF').map((row: Record<string, unknown>) => ({ v: row['velocity'], p: row['power'] })));
 
     const handleToggleAreaMap = () => {
+        // @ts-ignore: 2345
         setAreaMap((prevState) => prevState.length ? [] : AREAMAP);
     };
 

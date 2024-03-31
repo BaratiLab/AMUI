@@ -21,7 +21,6 @@ const DenseTable: FC<{ colNames: Array<string>, rows: Array<{ [key: string]: str
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
-   
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">

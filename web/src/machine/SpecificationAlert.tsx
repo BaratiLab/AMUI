@@ -20,7 +20,7 @@ const minMaxToRangeString = (min?: number | null, max?: number | null) => {
   if (min === null && max === null) {
     minMaxString = 'No Data';
   } else if (min === max) {
-    minMaxString = min;
+    minMaxString = `${min}`;
   } else {
     minMaxString = `${min === null ? 0 : min} - ${max === null ? 'unknown' : max}`;
   }

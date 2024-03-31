@@ -71,3 +71,12 @@ class Inference(APIView):
         prediction = model.predict(features)
 
         return Response({'prediction': prediction[0]})
+
+# class EagarTsai(APIView):
+#     """
+#     Performs Eagar Tsai calculations given a range of power and velocity
+#     """
+
+#     permission_classes = (AllowAny,)
+
+#     def get(self, request):
