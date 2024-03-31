@@ -1,10 +1,10 @@
 /**
  * _propTypes.ts
- * Commonly reused prop types. 
+ * Commonly reused prop types.
  */
 
 // Node Modules
-import { number, shape, string } from 'prop-types';
+import { number, shape, string } from "prop-types";
 
 export const machineSpecificationPropType = shape({
   id: number.isRequired,

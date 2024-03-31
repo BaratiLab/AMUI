@@ -4,13 +4,13 @@
  */
 
 // Node Modules
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 // Enums
-import { Section } from './_enums';
+import { Section } from "./_enums";
 
 // Types
-import { ConfigurationSliceInitialState } from './_types';
+import { ConfigurationSliceInitialState } from "./_types";
 
 // Constants
 const initialState: ConfigurationSliceInitialState = {
@@ -33,7 +33,7 @@ const initialState: ConfigurationSliceInitialState = {
  * @description Slice for handling process map configuration redux logic.
  */
 export const slice = createSlice({
-  name: 'processMapConfiguration',
+  name: "processMapConfiguration",
   initialState,
   reducers: {
     setProcessMapConfiguration: (state, action) => {
@@ -52,7 +52,7 @@ export const slice = createSlice({
     },
     setProcessMapConfigurationSection: (state, action) => {
       state.section = action.payload;
-    }
+    },
   },
 });
 

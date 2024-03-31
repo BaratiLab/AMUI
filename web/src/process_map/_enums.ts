@@ -4,8 +4,8 @@
  */
 
 export enum Section {
-  None = 'none',
-  Machine = 'machine',
-  ParameterSelection = 'parameterSelection',
-  ProcessMap = 'processMap'
+  None = "none",
+  Machine = "machine",
+  ParameterSelection = "parameterSelection",
+  ProcessMap = "processMap",
 }

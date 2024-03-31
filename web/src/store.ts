@@ -4,14 +4,14 @@
  */
 
 // Node Modules
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from "@reduxjs/toolkit";
 
 // Reducers
-import themeReducer from 'common/themeSlice';
-import specificationsReducer from 'machine/specificationsSlice';
-import recordsReducer from 'melt_pool/recordsSlice';
-import processParametersReducer from 'melt_pool/processParametersSlice';
-import configurationReducer from 'process_map/configurationSlice';
+import themeReducer from "common/themeSlice";
+import specificationsReducer from "machine/specificationsSlice";
+import recordsReducer from "melt_pool/recordsSlice";
+import processParametersReducer from "melt_pool/processParametersSlice";
+import configurationReducer from "process_map/configurationSlice";
 
 const store = configureStore({
   reducer: {
@@ -21,7 +21,7 @@ const store = configureStore({
     processMapConfiguration: configurationReducer,
     theme: themeReducer,
   },
-})
+});
 
 // https://redux.js.org/usage/usage-with-typescript#define-root-state-and-dispatch-types
 // Infer the `RootState` and `AppDispatch` types from the store itself

@@ -4,16 +4,16 @@
  */
 
 // Node Modules
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // API
-import { getSpecifications } from './_api';
+import { getSpecifications } from "./_api";
 
 // Enums
-import { Status } from 'enums';
+import { Status } from "enums";
 
 // Types
-import { SpecificationsSliceInitialState } from './_types';
+import { SpecificationsSliceInitialState } from "./_types";
 
 // Constants
 const initialState: SpecificationsSliceInitialState = {
@@ -26,21 +26,21 @@ const initialState: SpecificationsSliceInitialState = {
   data: [],
   status: Status.Idle,
   error: null,
-}
+};
 
 /**
  * @description Retrieves available machine specifications.
  */
 export const fetchSpecifications = createAsyncThunk(
-  'machine/specifications',
+  "machine/specifications",
   async () => {
     const response = await getSpecifications();
-    return response
-  }
+    return response;
+  },
 );
 
 export const slice = createSlice({
-  name: 'machineSpecifications',
+  name: "machineSpecifications",
   initialState,
   reducers: {},
   extraReducers(builder) {
@@ -63,8 +63,8 @@ export const slice = createSlice({
         };
         state.data = [];
         state.error = action.error.message;
-      })
-  }
-})
+      });
+  },
+});
 
 export default slice.reducer;

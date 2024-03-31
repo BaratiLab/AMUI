@@ -5,10 +5,10 @@
 
 /**
  * @description Wraps fetch request with Auth0 token.
- * @param route 
- * @param method 
- * @param body 
- * @returns 
+ * @param route
+ * @param method
+ * @param body
+ * @returns
  */
 export const request = (
   route: string,
@@ -16,12 +16,12 @@ export const request = (
   body?: object,
 ): Promise<Response> => {
   const headers = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   };
 
   return fetch(`${process.env.API_DOMAIN}/${route}`, {
     headers,
-    method: method || 'GET',
+    method: method || "GET",
     body: body ? JSON.stringify(body) : undefined,
   });
 };

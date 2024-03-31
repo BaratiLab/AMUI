@@ -4,22 +4,22 @@
  */
 
 // Node Modules
-import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
 
 // Components
-import App from 'App';
+import App from "App";
 
 // Store
-import store from 'store';
+import store from "store";
 
-const root = createRoot(document.getElementById('app-root') as Element);
+const root = createRoot(document.getElementById("app-root") as Element);
 
 root.render(
   <Provider store={store}>
     <BrowserRouter>
-        <App />
+      <App />
     </BrowserRouter>
-  </Provider>
+  </Provider>,
 );
