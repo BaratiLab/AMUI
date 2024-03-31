@@ -4,9 +4,9 @@
  */
 
 // Types
-import { AsyncThunkInitialState } from 'types';
+import { AsyncThunkInitialState } from "types";
 
-// Request 
+// Request
 export interface MeltPoolFilterset {
   material?: "" | HTMLSelectElement;
   process?: "" | HTMLSelectElement;
@@ -17,26 +17,26 @@ export interface MeltPoolFilterset {
 
 // Initial State
 export interface RecordsSliceInitialState extends AsyncThunkInitialState {
-  data: [],
+  data: [];
   response: {
-    count: null | number,
-    next: null | string,
-    previous: null | string,
-    results: MeltPoolRecord[] 
-  }
+    count: null | number;
+    next: null | string;
+    previous: null | string;
+    results: MeltPoolRecord[];
+  };
 }
 
 export interface ProcessParametersInitialState extends AsyncThunkInitialState {
-  data: MeltPoolProcessParameters,
+  data: MeltPoolProcessParameters;
 }
 
 // Response
 export interface MeltPoolProcessParameters {
-  material: string[],
-  process: string[],
-  power: number[],
-  velocity: number[],
-  hatch_spacing: number[],
+  material: string[];
+  process: string[];
+  power: number[];
+  velocity: number[];
+  hatch_spacing: number[];
 }
 
 export interface MeltPoolRecord {
