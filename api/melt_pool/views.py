@@ -72,11 +72,12 @@ class Inference(APIView):
 
         return Response({'prediction': prediction[0]})
 
-# class EagarTsai(APIView):
-#     """
-#     Performs Eagar Tsai calculations given a range of power and velocity
-#     """
+class EagarTsai(APIView):
+    """
+    Performs Eagar Tsai calculations given a range of power and velocity
+    """
 
-#     permission_classes = (AllowAny,)
+    permission_classes = (AllowAny,)
 
-#     def get(self, request):
+    def get(self, request):
+        print("called a")
