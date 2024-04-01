@@ -20,3 +20,11 @@ export interface ConfigurationSliceInitialState {
   layer_thickness_max: number | null;
   layer_thickness_min: number | null;
 }
+
+export interface ProcessMapPoints {
+  velocity: number;
+  keyhole?: number | [number, number];
+  desirable?: number | [number, number];
+  lackOfFusion?: number | [number, number];
+  power?: number;
+}

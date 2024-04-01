@@ -63,6 +63,8 @@ const Chart: FC<{ data: Record<string, unknown>[] }> = ({ data }) => {
     setAreaMap((prevState) => (prevState.length ? [] : AREAMAP));
   };
 
+  console.log(lof);
+
   return (
     <>
       <Button onClick={handleToggleAreaMap}>Display Example Process Map</Button>
