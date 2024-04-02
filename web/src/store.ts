@@ -9,6 +9,7 @@ import { configureStore } from "@reduxjs/toolkit";
 // Reducers
 import themeReducer from "common/themeSlice";
 import specificationsReducer from "machine/specificationsSlice";
+import eagarTsaiSliceReducer from "melt_pool/eagarTsaiSlice";
 import recordsReducer from "melt_pool/recordsSlice";
 import processParametersReducer from "melt_pool/processParametersSlice";
 import configurationReducer from "process_map/configurationSlice";
@@ -16,6 +17,7 @@ import configurationReducer from "process_map/configurationSlice";
 const store = configureStore({
   reducer: {
     machineSpecifications: specificationsReducer,
+    meltPoolEagarTsai: eagarTsaiSliceReducer,
     meltPoolProcessParameters: processParametersReducer,
     meltPoolRecords: recordsReducer,
     processMapConfiguration: configurationReducer,

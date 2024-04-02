@@ -1,6 +1,6 @@
 /**
  * RecordsForm.tsx
- * Form component for retrieving melt pool records.
+ * Form component for retrieving melt pool records given a machine preset.
  */
 
 // Node Modules
@@ -14,6 +14,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Slider,
 } from "@mui/material";
 
 // Types
@@ -23,6 +24,7 @@ import { MeltPoolFilterset } from "./_types";
 import { Status } from "enums";
 
 // Hooks
+import { useAppSelector } from "hooks";
 import { useProcessParameters } from "melt_pool/_hooks";
 import { useRecords } from "melt_pool/_hooks";
 
@@ -35,12 +37,13 @@ const REQUEST: MeltPoolFilterset = {
   hatch_spacing: undefined,
 };
 
-const ClassificationRecordsForm: FC = () => {
+const RecordsForm: FC = () => {
   // Hooks
   const [request, setRequest] = useState(REQUEST);
   const [{ data: processParametersData, status: processParametersStatus }] =
     useProcessParameters();
   const [{ status: recordsStatus }, getRecords] = useRecords();
+  const processMapConfiguration = useAppSelector((state) => state.processMapConfiguration);
 
   // Callbacks
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -112,6 +115,13 @@ const ClassificationRecordsForm: FC = () => {
             value={request.power}
             // required
           />
+          <Slider
+            name="power"
+            // value={value}
+            // onChange={handleChange}
+            min={processMapConfiguration.power_min}
+            max={processMapConfiguration.power_max}
+          />
         </FormControl>
 
         <FormControl variant="standard">
@@ -162,4 +172,4 @@ const ClassificationRecordsForm: FC = () => {
   );
 };
 
-export default ClassificationRecordsForm;
+export default RecordsForm;

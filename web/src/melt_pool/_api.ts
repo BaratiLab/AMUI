@@ -44,3 +44,17 @@ export const getProcessParameters = async () => {
     console.log(error);
   }
 };
+
+/**
+ * @description API route to retrieve Eagar Tsai data for process map
+ * @returns
+ */
+export const getEagarTsai = async () => {
+  try {
+    const response = await request("melt_pool/eagar_tsai/");
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};

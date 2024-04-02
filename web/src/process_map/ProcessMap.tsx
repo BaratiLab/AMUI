@@ -65,6 +65,7 @@ const ProcessMap: FC<Props> = ({
   margin = MARGIN,
   width = WIDTH,
 }) => {
+
   return (
     <ComposedChart data={data} height={height} margin={margin} width={width}>
       <CartesianGrid strokeDasharray="3 3" />

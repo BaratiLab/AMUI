@@ -19,8 +19,8 @@ const initialState: ConfigurationSliceInitialState = {
 
   // Machine
   machine_id: null,
-  power_max: null,
-  power_min: null,
+  power_max: 0,
+  power_min: 0,
   velocity_max: null,
   velocity_min: null,
   spot_size_max: null,
