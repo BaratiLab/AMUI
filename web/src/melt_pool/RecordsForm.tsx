@@ -4,45 +4,43 @@
  */
 
 // Node Modules
-import { ChangeEvent, FC, FormEvent, useState } from 'react';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { 
-  Box, 
+import { ChangeEvent, FC, FormEvent, useState } from "react";
+import LoadingButton from "@mui/lab/LoadingButton";
+import {
+  Box,
   FormControl,
   Input,
   InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
-} from '@mui/material';
+} from "@mui/material";
 
 // Types
-import { MeltPoolFilterset } from './_types';
+import { MeltPoolFilterset } from "./_types";
 
 // Enums
-import { Status } from 'enums';
+import { Status } from "enums";
 
 // Hooks
-import { useProcessParameters } from 'melt_pool/_hooks';
-import { useRecords } from 'melt_pool/_hooks';
+import { useProcessParameters } from "melt_pool/_hooks";
+import { useRecords } from "melt_pool/_hooks";
 
 // Constants
 const REQUEST: MeltPoolFilterset = {
-  material: '',
-  process: '',
+  material: "",
+  process: "",
   power: undefined,
   velocity: undefined,
   hatch_spacing: undefined,
-}
+};
 
 const ClassificationRecordsForm: FC = () => {
   // Hooks
   const [request, setRequest] = useState(REQUEST);
-  const [{
-    data: processParametersData,
-    status: processParametersStatus
-  }] = useProcessParameters();
-  const [{status: recordsStatus}, getRecords] = useRecords();
+  const [{ data: processParametersData, status: processParametersStatus }] =
+    useProcessParameters();
+  const [{ status: recordsStatus }, getRecords] = useRecords();
 
   // Callbacks
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -69,15 +67,21 @@ const ClassificationRecordsForm: FC = () => {
   };
 
   // JSX
-  const materialsJSX = processParametersStatus === Status.Succeeded
-  && processParametersData.material.map((material) => (
-    <MenuItem key={material} value={material}>{material}</MenuItem>
-  ));
+  const materialsJSX =
+    processParametersStatus === Status.Succeeded &&
+    processParametersData.material.map((material) => (
+      <MenuItem key={material} value={material}>
+        {material}
+      </MenuItem>
+    ));
 
-  const processJSX = processParametersStatus === Status.Succeeded
-  && processParametersData.process.map((process) => (
-    <MenuItem key={process} value={process}>{process}</MenuItem>
-  ));
+  const processJSX =
+    processParametersStatus === Status.Succeeded &&
+    processParametersData.process.map((process) => (
+      <MenuItem key={process} value={process}>
+        {process}
+      </MenuItem>
+    ));
 
   // TODO #79: Add form validation.
   return (
@@ -158,4 +162,4 @@ const ClassificationRecordsForm: FC = () => {
   );
 };
 
-export default ClassificationRecordsForm
+export default ClassificationRecordsForm;

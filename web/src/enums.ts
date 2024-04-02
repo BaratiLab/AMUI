@@ -4,8 +4,8 @@
  */
 
 export enum Status {
-  Failed = 'failed',
-  Idle = 'idle',
-  Loading = 'loading',
-  Succeeded = 'succeeded',
+  Failed = "failed",
+  Idle = "idle",
+  Loading = "loading",
+  Succeeded = "succeeded",
 }

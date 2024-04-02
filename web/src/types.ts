@@ -4,9 +4,9 @@
  */
 
 // Enums
-import { Status } from 'enums';
+import { Status } from "enums";
 
 export interface AsyncThunkInitialState {
-  status: Status,
-  error: string | null | undefined,
+  status: Status;
+  error: string | null | undefined;
 }

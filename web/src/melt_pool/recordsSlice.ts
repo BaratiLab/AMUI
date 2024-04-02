@@ -4,16 +4,16 @@
  */
 
 // Node Modules
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // API
-import { getRecords } from './_api';
+import { getRecords } from "./_api";
 
 // Enums
-import { Status } from 'enums';
+import { Status } from "enums";
 
 // Types
-import { MeltPoolFilterset, RecordsSliceInitialState } from './_types';
+import { MeltPoolFilterset, RecordsSliceInitialState } from "./_types";
 
 // Constants
 const initialState: RecordsSliceInitialState = {
@@ -26,21 +26,21 @@ const initialState: RecordsSliceInitialState = {
   data: [],
   status: Status.Idle,
   error: null,
-}
+};
 
 /**
  * @description Retrieves available melt pool records.
  */
 export const fetchRecords = createAsyncThunk(
-  'meltPool/fetchRecords',
+  "meltPool/fetchRecords",
   async (filterset: MeltPoolFilterset) => {
     const response = await getRecords(filterset);
-    return response
-  }
+    return response;
+  },
 );
 
 export const slice = createSlice({
-  name: 'meltPoolRecords',
+  name: "meltPoolRecords",
   initialState,
   reducers: {
     setRecords: (state, action) => {
@@ -50,7 +50,7 @@ export const slice = createSlice({
       state.response.previous = action.payload;
       state.response.results = action.payload.results;
       state.data = action.payload.results;
-    }
+    },
   },
   extraReducers(builder) {
     builder
@@ -72,9 +72,9 @@ export const slice = createSlice({
         };
         state.data = [];
         state.error = action.error.message;
-      })
-  }
-})
+      });
+  },
+});
 
 // Action creators are generated for each case reducer function
 export const { setRecords } = slice.actions;

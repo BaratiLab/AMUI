@@ -4,20 +4,20 @@
  */
 
 // Node Modules
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 // Actions
-import { fetchSpecifications } from './specificationsSlice';
+import { fetchSpecifications } from "./specificationsSlice";
 
 // Enums
-import { Status } from 'enums';
+import { Status } from "enums";
 
 // Hooks
-import { useAppDispatch, useAppSelector } from 'hooks';
+import { useAppDispatch, useAppSelector } from "hooks";
 
 export const useSpecifications = () => {
   const dispatch = useAppDispatch();
-  const state = useAppSelector(state => state.machineSpecifications);
+  const state = useAppSelector((state) => state.machineSpecifications);
 
   useEffect(() => {
     if (state.status === Status.Idle) {
@@ -25,5 +25,5 @@ export const useSpecifications = () => {
     }
   }, [dispatch, state.status]);
 
-  return [state]
+  return [state];
 };

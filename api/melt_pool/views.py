@@ -82,3 +82,12 @@ class Inference(APIView):
             power -= p_step
 
         return Response({'prediction': preds})
+
+# class EagarTsai(APIView):
+#     """
+#     Performs Eagar Tsai calculations given a range of power and velocity
+#     """
+
+#     permission_classes = (AllowAny,)
+
+#     def get(self, request):

@@ -1,0 +1,7 @@
+{
+  "name": "amui-module-rosenthal_amui",
+  "service": "module-rosenthal_amui",
+  "workspaceFolder": "/home/rosenthal_amui",
+  "dockerComposeFile": "../docker-compose.yml",
+  "shutdownAction": "stopCompose"
+}
