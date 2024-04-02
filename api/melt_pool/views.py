@@ -63,11 +63,22 @@ class Inference(APIView):
         with open('./melt_pool/material_mapping.pkl', 'rb') as f:
             material_mapping = pickle.load(f)
 
-        material = request.query_params.get('mat')
-        power = float(request.query_params.get('p'))
-        velocity = float(request.query_params.get('v'))
+        material = material_mapping[request.query_params.get('mat')]
+        min_p = int(request.query_params.get('minp'))
+        power = int(request.query_params.get('maxp'))
+        velocity = int(request.query_params.get('minv'))
+        max_v = int(request.query_params.get('maxv'))
 
-        features = np.array([power, velocity, *material_mapping[material]]).reshape(1, -1)
-        prediction = model.predict(features)
+        p_step, v_step = 10, 0.1
+        preds = []
+        while power >= min_p:
+            temp = []
+            v = velocity
+            while v <= max_v:
+                features = np.array([[power, v, *material]])
+                temp.append(model.predict(features)[0])
+                v += v_step
+            preds.append(temp)
+            power -= p_step
 
-        return Response({'prediction': prediction[0]})
+        return Response({'prediction': preds})
