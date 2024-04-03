@@ -3,6 +3,7 @@ import numpy as np
 from scipy import signal
 import scipy.integrate as integrate
 import numba
+from tqdm import tqdm
 # from numba import jitclass, njit
 # from numba import boolean, int_, float64,uint8
 import matplotlib.ticker as ticker
@@ -513,7 +514,7 @@ class EagarTsai():
         return theta_diffuse
     
 
-    def meltpool(self, calc_length = False, calc_width = False):
+    def meltpool(self, calc_length = False, calc_width = False, verbose = False):
         y_center = np.unravel_index(np.argmax(self.theta[:, :,-1 ]), self.theta[:, :, -1].shape)[1]
         #  breakpoint()
         if not np.array(self.theta[:,:,-1]>self.melt_T).any():
@@ -530,7 +531,6 @@ class EagarTsai():
             else:
                 return  depth, depths
         else:
-            print("HERE")
             if calc_length:
                 f = interp.CubicSpline(self.xs, self.theta[:, y_center, -1] - self.melt_T)
                 try:
@@ -538,7 +538,8 @@ class EagarTsai():
 
                     root2 = optimize.brentq(f, self.location[0] - self.dimstep, self.xs[-1])
                     length = root2 - root
-                    print("Length: " + str((root2 - root)*1e6))
+                    if verbose:
+                        print("Length: " + str((root2 - root)*1e6))
                     prop = measure.regionprops(np.array(self.theta[:,:,-1]>self.melt_T, dtype = 'int'))
                     prop_l = prop[0].major_axis_length*self.dimstep
                     # length =  prop_l
@@ -553,7 +554,8 @@ class EagarTsai():
                     else:
                         prop_l = prop[0].major_axis_length*self.dimstep
                     length =  prop_l
-                    print("Length: {:.04} ± {:.04}".format(prop_l*1e6, self.dimstep*1e6))
+                    if verbose:
+                        print("Length: {:.04} ± {:.04}".format(prop_l*1e6, self.dimstep*1e6))
 
                 
             if calc_width:
@@ -568,8 +570,8 @@ class EagarTsai():
                 from skimage import measure
                 prop = measure.regionprops(np.array(self.theta[:,:,-1]>self.melt_T, dtype = 'int'))
                 prop_w = prop[0].minor_axis_length*self.dimstep
-
-                print("Width: {:.04} ± {:.04}".format(prop_w*1e6, self.dimstep*1e6))
+                if verbose:
+                    print("Width: {:.04} ± {:.04}".format(prop_w*1e6, self.dimstep*1e6))
 
 
             depths = []
@@ -625,7 +627,7 @@ def run_sample(bc = 'flux',
                melt_T= 1649, # Melting Temperature [K]
                save = False, 
                resolution = 5e-6, # Resolution [m]
-               bounds = {'x': [0, 1000e-6], 'y': [-300e-6, 300e-6], 'z': [-400e-6, 0]}
+               bounds = {'x': [0, 1000e-6], 'y': [-300e-6, 300e-6], 'z': [-400e-6, 0]}, output_folder = None, show = False
                ):
     
     test = EagarTsai(resolution,
@@ -661,9 +663,8 @@ def run_sample(bc = 'flux',
         print(f'Velocity {V} m/s is too high to simulate, either expand the domain or reduce the velocity to a max of {800e-6/250e-6} m/s')
         return
     # breakpoint()
-    for i, dt in enumerate(np.arange(0, time, 250e-6)):
+    for i, dt in tqdm(enumerate(np.arange(0, time, 250e-6)), total = int(time/250e-6)):
         test.forward(250e-6, 0, V = V, P = P)
-        print(np.max(test.theta))
         times.append(test.time)
         # width = 
         # breakpoint()
@@ -675,21 +676,28 @@ def run_sample(bc = 'flux',
 
         depth.append(d)
         if save:
-            np.save('meltpool_timestep_{}.npy'.format(i), test.theta)
-            np.savetxt('times.txt',times)
-            np.savetxt('widths_output.txt',widths_text)
-            np.savetxt('lengths_output.txt',lengths_text)
-            np.savetxt('depths_output.txt',depths_text)
-
-            np.savetxt('widths.txt',widths)
-            np.savetxt('lengths.txt',lengths)
-            np.savetxt('depths.txt',depths)
-            test.plot_video()
+            if output_folder is not None:
+                
+                os.makedirs(output_folder, exist_ok = True)
+            else:
+                output_folder = 'output'
+                os.makedirs(output_folder, exist_ok = True)
+            
+            np.save(os.path.join(output_folder, 'meltpool_timestep_{}.npy'.format(i)), test.theta)
+            np.savetxt(os.path.join(output_folder, 'times.txt'),times)
+            np.savetxt(os.path.join(output_folder, 'widths_output.txt'),widths_text)
+            np.savetxt(os.path.join(output_folder, 'lengths_output.txt'),lengths_text)
+            np.savetxt(os.path.join(output_folder, 'depths_output.txt'),depths_text)
+            np.savetxt(os.path.join(output_folder, 'widths.txt'),widths)
+            np.savetxt(os.path.join(output_folder, 'lengths.txt'),lengths)
+            np.savetxt(os.path.join(output_folder, 'depths.txt'),depths)
+            if show:
+                test.plot_video()
 
     return test
 
 
-def run_from_data(data_dict, absorp = 0.5, resolution = 5e-6):
+def run_from_data(data_dict, absorp = 0.5, resolution  = 5e-6):
 
     run_sample(bc='temp', 
                 V=data_dict['V'], #  Velocity [m/s]
