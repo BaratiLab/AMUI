@@ -20,6 +20,7 @@ import { setProcessMapConfigurationSection } from "process_map/configurationSlic
 // Components
 import SpecificationAlert from "machine/SpecificationAlert";
 import SpecificationCardsGrid from "machine/SpecificationCardsGrid";
+import MaterialForm from "material/MaterialForm";
 import RecordsForm from "melt_pool/RecordsForm";
 import Chart from "process_map/Chart";
 import Table from "melt_pool/Table";
@@ -116,6 +117,22 @@ const ProcessMapAccordion: FC = () => {
           <SpecificationCardsGrid />
         </AccordionDetails>
       </Accordion>
+
+      {/* Material Selection */}
+      <Accordion
+        expanded={processMapConfigurationState.section === Section.Material}
+        onChange={handleSetProccessMapSection(Section.Material)}
+      >
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography sx={{ width: "33%", flexShrink: 0 }}>
+            Material 
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <MaterialForm />
+        </AccordionDetails>
+      </Accordion>
+
 
       {/* Parameter Selection */}
       <Accordion

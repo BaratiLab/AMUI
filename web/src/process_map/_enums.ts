@@ -6,6 +6,7 @@
 export enum Section {
   None = "none",
   Machine = "machine",
+  Material = "material",
   ParameterSelection = "parameterSelection",
   ProcessMap = "processMap",
 }

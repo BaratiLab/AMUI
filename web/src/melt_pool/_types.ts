@@ -7,9 +7,12 @@
 export interface MeltPoolFilterset {
   material?: "" | HTMLSelectElement;
   process?: "" | HTMLSelectElement;
-  power?: number;
-  velocity?: number;
-  hatch_spacing?: number;
+  power_min: number;
+  power_max: number;
+  velocity_min: number;
+  velocity_max: number;
+  hatch_spacing_min: number;
+  hatch_spacing_max: number;
 }
 
 // Response

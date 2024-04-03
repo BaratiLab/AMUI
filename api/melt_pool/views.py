@@ -1,4 +1,4 @@
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet, NumberFilter
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
@@ -18,17 +18,30 @@ filterset_fields = [
 ]
 
 
+
+class RecordFilter(FilterSet):
+    power_min = NumberFilter(field_name="power", lookup_expr='gte')
+    power_max = NumberFilter(field_name="power", lookup_expr='lte')
+    velocity_min = NumberFilter(field_name="velocity", lookup_expr='gte')
+    velocity_max = NumberFilter(field_name="velocity", lookup_expr='lte')
+    hatch_spacing_min = NumberFilter(field_name="hatch_spacing", lookup_expr='gte')
+    hatch_spacing_max = NumberFilter(field_name="hatch_spacing", lookup_expr='lte')
+
+    class Meta:
+        model = Record
+        fields = filterset_fields + ['power_min', 'power_max', 'velocity_min', 'velocity_max', 'hatch_spacing_min', 'hatch_spacing_max']
+
+
 class RecordsList(generics.ListAPIView):
     """
     List melt pool classification records.
     """
 
     queryset = Record.objects.all()
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = filterset_fields
     serializer_class = RecordSerializer
     permission_classes = (AllowAny,)
-
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = RecordFilter
 
 class ProcessParametersDict(APIView):
     """
@@ -74,7 +87,7 @@ class ProcessParametersByMaterialDict(APIView):
 
             unique_values[field_name] = sorted([x for x in values if x is not None])
 
-        power_marks = [{"value": x, "label": f"{x} W"} for x in unique_values["power"]]
+        power_marks = [{"value": x, "label": f"{x:.0f}"} for x in unique_values["power"]]
         hatch_spacing_marks = [{"value": x, "label": f"{x} µm"} for x in unique_values["hatch_spacing"]]
         velocity_marks = [{"value": x, "label": f"{x} m/s"} for x in unique_values["velocity"]]
 

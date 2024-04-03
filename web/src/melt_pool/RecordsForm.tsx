@@ -4,90 +4,137 @@
  */
 
 // Node Modules
-import { ChangeEvent, FC, FormEvent, useState } from "react";
+import { FC, FormEvent, useEffect, useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
-import {
-  Box,
-  FormControl,
-  Input,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Slider,
-} from "@mui/material";
-
-// Types
-import { MeltPoolFilterset } from "./_types";
+import { Box, FormControl, Slider, Typography } from "@mui/material";
 
 // Enums
 import { Status } from "enums";
 
 // Hooks
 import { useAppSelector } from "hooks";
-import {
-  useProcessParameters,
-  useProcessParametersByMaterial,
-  useRecords,
-} from "melt_pool/_hooks";
+import { useProcessParametersByMaterial, useRecords } from "melt_pool/_hooks";
+
+// Types
+import { MeltPoolFilterset } from "./_types";
 
 // Constants
+const MIN_RANGE = {
+  hatch_spacing: 10,
+  power: 50,
+  velocity: 5,
+};
+
 const REQUEST: MeltPoolFilterset = {
   material: "",
-  process: "",
-  power: undefined,
-  velocity: undefined,
-  hatch_spacing: undefined,
+  power_min: 0,
+  power_max: 1000,
+  velocity_min: 0,
+  velocity_max: 100,
+  hatch_spacing_min: 0,
+  hatch_spacing_max: 100,
 };
 
 const RecordsForm: FC = () => {
   // Hooks
   const [request, setRequest] = useState(REQUEST);
-  const [{ data: processParametersData, status: processParametersStatus }] =
-    useProcessParameters();
   const [
     {
       data: processParametersByMaterialData,
       status: processParametersByMaterialStatus,
-    },
-    getProcessParametersByMaterial,
+    }
   ] = useProcessParametersByMaterial();
   const [{ status: recordsStatus }, getRecords] = useRecords();
   const processMapConfiguration = useAppSelector(
     (state) => state.processMapConfiguration,
   );
 
-  console.log(processParametersByMaterialData);
+  console.log(request)
+
+  useEffect(() => {
+    // Sets initial process parameter range slider values.
+    if (processParametersByMaterialStatus === Status.Succeeded) {
+      const {
+        // hatch_spacing_marks,
+        power_marks,
+        velocity_marks,
+      } = processParametersByMaterialData;
+
+      const request = {
+        power_min: processMapConfiguration.power_min,
+        power_max: processMapConfiguration.power_max,
+        velocity_min: processMapConfiguration.velocity_min,
+        velocity_max: processMapConfiguration.velocity_max,
+      };
+
+      if (power_marks.length > 1) {
+        request.power_min = power_marks[0].value
+        request.power_max = power_marks[1].value
+      }
+
+      if (velocity_marks.length > 1) {
+        request.velocity_min = velocity_marks[0].value
+        request.velocity_max = velocity_marks[1].value
+      }
+
+      setRequest((prevState) => ({
+        ...prevState,
+        ...request,
+      }))
+    }
+  }, [
+    processMapConfiguration,
+    processParametersByMaterialData,
+    processParametersByMaterialStatus,
+  ]);
 
   // Callbacks
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setRequest((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
 
-  // TODO: Findout how to fix `SelectChangeEvent<HTMLSelectElement>` type to
-  // remove redundant code.
-  const handleSelect = (e: SelectChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setRequest((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  /**
+   * @description Updates request state with range slider values.
+   * @param e Event
+   * @param newValue number | number[]
+   * @param activeThumb number
+   * @returns 
+   */
+  const handleRangeSliderChange = (
+    e: Event,
+    newValue: number | number[],
+    activeThumb: number
+  ) => {
+    const formElement = e.target as HTMLFormElement;
+    const name = formElement?.name as "power" | "velocity" | "hatch_spacing";
 
-  const handleSelectMaterial = (e: SelectChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setRequest((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    if (!Array.isArray(newValue)) {
+      return;
+    }
 
-    if (typeof value == "string" && value !== "") {
-      // Retrieves process parameters by the selected material.
-      getProcessParametersByMaterial(value);
+    const minRange = MIN_RANGE[name];
+
+    if (newValue[1] - newValue[0] < MIN_RANGE[name]) {
+      if (activeThumb === 0) {
+        // Left Thumb
+        const clamped = Math.min(newValue[0], 100 - minRange);
+        setRequest((prevState) => ({
+          ...prevState,
+          [`${name}_min`]: clamped,
+          [`${name}_max`]: clamped + minRange
+        }));
+      } else {
+        // Right Thumb
+        const clamped = Math.max(newValue[1], minRange);
+        setRequest((prevState) => ({
+          ...prevState,
+          [`${name}_min`]: clamped - minRange,
+          [`${name}_max`]: clamped,
+        }));
+      }
+    } else {
+      setRequest((prevState) => ({
+        ...prevState,
+        [`${name}_min`]: newValue[0],
+        [`${name}_max`]: newValue[1],
+      }));
     }
   };
 
@@ -96,24 +143,6 @@ const RecordsForm: FC = () => {
     await getRecords(request);
   };
 
-  // JSX
-  const materialsJSX =
-    processParametersStatus === Status.Succeeded &&
-    processParametersData.material.map((material) => (
-      <MenuItem key={material} value={material}>
-        {material}
-      </MenuItem>
-    ));
-
-  const processJSX =
-    processParametersStatus === Status.Succeeded &&
-    processParametersData.process.map((process) => (
-      <MenuItem key={process} value={process}>
-        {process}
-      </MenuItem>
-    ));
-
-  // TODO #79: Add form validation.
   return (
     <form onSubmit={handleSubmit}>
       <Box
@@ -123,94 +152,48 @@ const RecordsForm: FC = () => {
         sx={{ flexDirection: "column" }}
       >
         <FormControl fullWidth variant="standard">
-          <InputLabel>Material</InputLabel>
-          <Select
-            label="material"
-            name="material"
-            onChange={handleSelectMaterial}
-            value={request.material}
-            // required
-          >
-            <MenuItem disabled value="">
-              <em>Material</em>
-            </MenuItem>
-            {materialsJSX}
-          </Select>
-        </FormControl>
-
-        <FormControl fullWidth variant="standard">
-          <InputLabel>Power</InputLabel>
-          <Input
-            name="power"
-            onChange={handleChange}
-            type="number"
-            value={request.power}
-            disabled={processParametersByMaterialStatus === Status.Idle}
-            // required
-          />
+          <Typography>Power (W)</Typography>
           <Slider
             name="power"
-            // value={value}
-            // onChange={handleChange}
+            value={[request.power_min, request.power_max]}
+            disabled={processParametersByMaterialStatus === Status.Idle}
+            onChange={handleRangeSliderChange}
+            valueLabelDisplay="auto"
             min={processMapConfiguration.power_min}
             max={processMapConfiguration.power_max}
             marks={processParametersByMaterialData.power_marks}
+            disableSwap
           />
         </FormControl>
 
         <FormControl fullWidth variant="standard">
-          <InputLabel>Velocity</InputLabel>
-          <Input
-            name="velocity"
-            onChange={handleChange}
-            type="number"
-            value={request.velocity}
-            disabled={processParametersByMaterialStatus === Status.Idle}
-            // required
-          />
+          <Typography>Velocity (m/s)</Typography>
           <Slider
             name="velocity"
-            // value={value}
-            // onChange={handleChange}
+            value={[request.velocity_min, request.velocity_max]}
+            valueLabelDisplay="auto"
+            disabled={processParametersByMaterialStatus === Status.Idle}
+            onChange={handleRangeSliderChange}
             min={processMapConfiguration.velocity_min}
             max={processMapConfiguration.velocity_max}
             marks={processParametersByMaterialData.velocity_marks}
+            disableSwap
           />
         </FormControl>
 
         <FormControl fullWidth variant="standard">
-          <InputLabel>Hatch Spacing</InputLabel>
-          <Input
-            name="hatch_spacing"
-            onChange={handleChange}
-            type="number"
-            value={request.hatch_spacing}
-            disabled={processParametersByMaterialStatus === Status.Idle}
-          />
+          <Typography>Hatch Spacing (µm)</Typography>
           <Slider
+            disabled={processParametersByMaterialStatus === Status.Idle}
             name="hatch_spacing"
-            // value={value}
-            // onChange={handleChange}
+            valueLabelDisplay="auto"
+            value={[request.hatch_spacing_min, request.hatch_spacing_max]}
+            onChange={handleRangeSliderChange}
             min={0}
             max={1000}
             marks={processParametersByMaterialData.hatch_spacing_marks}
+            disableSwap
           />
-        </FormControl>
-
-        <FormControl fullWidth variant="standard">
-          <InputLabel>Process</InputLabel>
-          <Select
-            label="process"
-            name="process"
-            onChange={handleSelect}
-            value={request.process}
-            disabled={processParametersByMaterialStatus === Status.Idle}
-          >
-            <MenuItem disabled value="">
-              <em>Process</em>
-            </MenuItem>
-            {processJSX}
-          </Select>
         </FormControl>
 
         <LoadingButton
