@@ -5,26 +5,36 @@
  */
 
 // Node Modules
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { AsyncThunkInitialState } from "types";
 
 // API
-import { getEagarTsai } from './_api';
+import { getEagarTsai } from "./_api";
 
 // Enums
-import { Status } from 'enums';
+import { Status } from "enums";
 
 // Types
-import { ProcessParametersInitialState } from './_types';
+import { MeltPoolRecord } from "./_types";
+export interface EagarTsaiInitialState extends AsyncThunkInitialState {
+  data: [];
+  response: {
+    count: null | number;
+    next: null | string;
+    previous: null | string;
+    results: MeltPoolRecord[];
+  };
+}
 
 // Constants
-const initialState: ProcessParametersInitialState = {
-  data: {
-    material: [],
-    process: [],
-    power: [],
-    velocity: [],
-    hatch_spacing: [],
+const initialState: EagarTsaiInitialState = {
+  response: {
+    count: null,
+    next: null,
+    previous: null,
+    results: [],
   },
+  data: [],
   status: Status.Idle,
   error: null,
 };
@@ -33,24 +43,24 @@ const initialState: ProcessParametersInitialState = {
  * @description Retrieves available melt pool process parameters.
  */
 export const fetchEagarTsai = createAsyncThunk(
-  'meltPool/fetchEagarTsai',
+  "meltPool/fetchEagarTsai",
   async () => {
     const response = await getEagarTsai();
-    return response
-  }
+    return response;
+  },
 );
 
 /**
  * @description Slice component for handling redux logic.
  */
 export const slice = createSlice({
-  name: 'meltPoolEagarTsai',
+  name: "meltPoolEagarTsai",
   initialState,
   reducers: {
     setEagarTsai: (state, action) => {
       const { eagarTsai } = action.payload;
       state.data = eagarTsai;
-    }
+    },
   },
   extraReducers(builder) {
     builder
@@ -66,9 +76,9 @@ export const slice = createSlice({
         // Probably needed for immutable behavior.
         state.data = { ...initialState.data };
         state.error = action.error.message;
-      })
-  }
-})
+      });
+  },
+});
 
 // Action creators are generated for each case reducer function
 export const { setEagarTsai } = slice.actions;

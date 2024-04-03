@@ -3,9 +3,6 @@
  * Types within melt pool app.
  */
 
-// Types
-import { AsyncThunkInitialState } from "types";
-
 // Request
 export interface MeltPoolFilterset {
   material?: "" | HTMLSelectElement;
@@ -15,21 +12,6 @@ export interface MeltPoolFilterset {
   hatch_spacing?: number;
 }
 
-// Initial State
-export interface RecordsSliceInitialState extends AsyncThunkInitialState {
-  data: [];
-  response: {
-    count: null | number;
-    next: null | string;
-    previous: null | string;
-    results: MeltPoolRecord[];
-  };
-}
-
-export interface ProcessParametersInitialState extends AsyncThunkInitialState {
-  data: MeltPoolProcessParameters;
-}
-
 // Response
 export interface MeltPoolProcessParameters {
   material: string[];
@@ -37,6 +19,17 @@ export interface MeltPoolProcessParameters {
   power: number[];
   velocity: number[];
   hatch_spacing: number[];
+}
+
+// TODO: Deprecate this type
+interface Mark {
+  value: number;
+  label: string;
+}
+export interface MeltPoolProcessParametersByMaterial {
+  power_marks: Mark[];
+  velocity_marks: Mark[];
+  hatch_spacing_marks: Mark[];
 }
 
 export interface MeltPoolRecord {

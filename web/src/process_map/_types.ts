@@ -13,8 +13,8 @@ export interface ConfigurationSliceInitialState {
   machine_id: number | null;
   power_max: number;
   power_min: number;
-  velocity_max: number | null;
-  velocity_min: number | null;
+  velocity_max: number;
+  velocity_min: number;
   spot_size_max: number | null;
   spot_size_min: number | null;
   layer_thickness_max: number | null;

@@ -6,6 +6,7 @@
 
 // Node Modules
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { AsyncThunkInitialState } from "types";
 
 // API
 import { getProcessParameters } from "./_api";
@@ -14,7 +15,10 @@ import { getProcessParameters } from "./_api";
 import { Status } from "enums";
 
 // Types
-import { ProcessParametersInitialState } from "./_types";
+import { MeltPoolProcessParameters } from "./_types";
+interface ProcessParametersInitialState extends AsyncThunkInitialState {
+  data: MeltPoolProcessParameters;
+}
 
 // Constants
 const initialState: ProcessParametersInitialState = {

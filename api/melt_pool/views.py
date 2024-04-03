@@ -50,6 +50,42 @@ class ProcessParametersDict(APIView):
 
         return Response(unique_values)
 
+class ProcessParametersByMaterialDict(APIView):
+    """
+    Provides a dictionary of process parameters by material
+    """
+
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+
+        material = request.GET.get("material", None)
+        # print(material)
+        unique_values = {}
+        if material is not None:
+            queryset = Record.objects.filter(material=material)
+        else: 
+            queryset = Record.objects.all()
+        serializer = RecordSerializer(queryset, many=True)
+        data = serializer.data
+
+        for field_name in filterset_fields:
+            values = queryset.values_list(field_name, flat=True).distinct()
+
+            unique_values[field_name] = sorted([x for x in values if x is not None])
+
+        power_marks = [{"value": x, "label": f"{x} W"} for x in unique_values["power"]]
+        hatch_spacing_marks = [{"value": x, "label": f"{x} µm"} for x in unique_values["hatch_spacing"]]
+        velocity_marks = [{"value": x, "label": f"{x} m/s"} for x in unique_values["velocity"]]
+
+        marks = {
+            "power_marks": power_marks,
+            "hatch_spacing_marks": hatch_spacing_marks,
+            "velocity_marks": velocity_marks,
+        }
+
+        return Response(marks)
+
 class Inference(APIView):
     """
     Load classfication model and run inference

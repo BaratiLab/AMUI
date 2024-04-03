@@ -11,6 +11,7 @@ import themeReducer from "common/themeSlice";
 import specificationsReducer from "machine/specificationsSlice";
 import eagarTsaiSliceReducer from "melt_pool/eagarTsaiSlice";
 import recordsReducer from "melt_pool/recordsSlice";
+import processParametersByMaterialReducer from "melt_pool/processParametersByMaterialSlice";
 import processParametersReducer from "melt_pool/processParametersSlice";
 import configurationReducer from "process_map/configurationSlice";
 
@@ -19,6 +20,10 @@ const store = configureStore({
     machineSpecifications: specificationsReducer,
     meltPoolEagarTsai: eagarTsaiSliceReducer,
     meltPoolProcessParameters: processParametersReducer,
+
+    // TODO: Deprecate this reducer
+    meltPoolProcessParametersByMaterial: processParametersByMaterialReducer,
+
     meltPoolRecords: recordsReducer,
     processMapConfiguration: configurationReducer,
     theme: themeReducer,
