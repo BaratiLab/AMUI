@@ -16,20 +16,11 @@ export interface MeltPoolFilterset {
 }
 
 // Response
-export interface MeltPoolProcessParameters {
-  material: string[];
-  process: string[];
-  power: number[];
-  velocity: number[];
-  hatch_spacing: number[];
-}
-
-// TODO: Deprecate this type
 interface Mark {
   value: number;
   label: string;
 }
-export interface MeltPoolProcessParametersByMaterial {
+export interface MeltPoolProcessParameters {
   power_marks: Mark[];
   velocity_marks: Mark[];
   hatch_spacing_marks: Mark[];

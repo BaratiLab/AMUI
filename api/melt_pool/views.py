@@ -17,8 +17,6 @@ filterset_fields = [
     "hatch_spacing",
 ]
 
-
-
 class RecordFilter(FilterSet):
     power_min = NumberFilter(field_name="power", lookup_expr='gte')
     power_max = NumberFilter(field_name="power", lookup_expr='lte')
@@ -43,27 +41,27 @@ class RecordsList(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend]
     filterset_class = RecordFilter
 
+# class ProcessParametersDict(APIView):
+#     """
+#     Dictionary of melt pool process parameters
+#     """
+
+#     permission_classes = (AllowAny,)
+
+#     def get(self, request):
+#         unique_values = {}
+#         queryset = Record.objects.all()
+#         serializer = RecordSerializer(queryset, many=True)
+#         data = serializer.data
+
+#         for field_name in filterset_fields:
+#             values = queryset.values_list(field_name, flat=True).distinct()
+
+#             unique_values[field_name] = sorted([x for x in values if x is not None])
+
+#         return Response(unique_values)
+
 class ProcessParametersDict(APIView):
-    """
-    Dictionary of melt pool process parameters
-    """
-
-    permission_classes = (AllowAny,)
-
-    def get(self, request):
-        unique_values = {}
-        queryset = Record.objects.all()
-        serializer = RecordSerializer(queryset, many=True)
-        data = serializer.data
-
-        for field_name in filterset_fields:
-            values = queryset.values_list(field_name, flat=True).distinct()
-
-            unique_values[field_name] = sorted([x for x in values if x is not None])
-
-        return Response(unique_values)
-
-class ProcessParametersByMaterialDict(APIView):
     """
     Provides a dictionary of process parameters by material
     """
@@ -98,6 +96,27 @@ class ProcessParametersByMaterialDict(APIView):
         }
 
         return Response(marks)
+
+class MetalsDict(APIView):
+    """
+    Retreives materials from records
+    TODO: Move this to material app.
+    """
+
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        unique_values = {}
+        queryset = Record.objects.all()
+        serializer = RecordSerializer(queryset, many=True)
+        data = serializer.data
+
+        # for field_name in filterset_fields:
+        values = queryset.values_list('material', flat=True).distinct()
+
+        metals = sorted([x for x in values if x is not None])
+
+        return Response(metals)
 
 class Inference(APIView):
     """

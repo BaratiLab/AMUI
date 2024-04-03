@@ -6,14 +6,14 @@
 // Node Modules
 import { FC, FormEvent, useEffect, useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { Box, FormControl, Slider, Typography } from "@mui/material";
+import { Box, Checkbox, FormControl, Slider, FormControlLabel, Typography } from "@mui/material";
 
 // Enums
 import { Status } from "enums";
 
 // Hooks
 import { useAppSelector } from "hooks";
-import { useProcessParametersByMaterial, useRecords } from "melt_pool/_hooks";
+import { useProcessParameters, useRecords } from "melt_pool/_hooks";
 
 // Types
 import { MeltPoolFilterset } from "./_types";
@@ -22,7 +22,7 @@ import { MeltPoolFilterset } from "./_types";
 const MIN_RANGE = {
   hatch_spacing: 10,
   power: 50,
-  velocity: 5,
+  velocity: 1,
 };
 
 const REQUEST: MeltPoolFilterset = {
@@ -30,20 +30,40 @@ const REQUEST: MeltPoolFilterset = {
   power_min: 0,
   power_max: 1000,
   velocity_min: 0,
-  velocity_max: 100,
+  velocity_max: 10,
   hatch_spacing_min: 0,
   hatch_spacing_max: 100,
 };
 
+// Utils
+const boundsFromRequest = (request: MeltPoolFilterset) => ({
+  power: [request.power_min, request.power_max],
+  velocity: [request.velocity_min, request.velocity_max],
+  hatch_spacing: [request.hatch_spacing_min, request.hatch_spacing_max]
+});
+
+// const createStartEndMarks = (start: number, end: number) => ([
+//   {
+//     value: start,
+//     label: `${start}`
+//   },
+//   {
+//     value: end,
+//     label: `${end}`
+//   }
+// ])
+
 const RecordsForm: FC = () => {
   // Hooks
+  const [showDatapoints, setShowDatapoints] = useState(false);
+  const [bounds, setBounds] = useState(boundsFromRequest(REQUEST));
   const [request, setRequest] = useState(REQUEST);
   const [
     {
-      data: processParametersByMaterialData,
-      status: processParametersByMaterialStatus,
+      data: processParametersData,
+      status: processParametersStatus,
     }
-  ] = useProcessParametersByMaterial();
+  ] = useProcessParameters();
   const [{ status: recordsStatus }, getRecords] = useRecords();
   const processMapConfiguration = useAppSelector(
     (state) => state.processMapConfiguration,
@@ -53,12 +73,12 @@ const RecordsForm: FC = () => {
 
   useEffect(() => {
     // Sets initial process parameter range slider values.
-    if (processParametersByMaterialStatus === Status.Succeeded) {
+    if (processParametersStatus === Status.Succeeded) {
       const {
         // hatch_spacing_marks,
         power_marks,
         velocity_marks,
-      } = processParametersByMaterialData;
+      } = processParametersData;
 
       const request = {
         power_min: processMapConfiguration.power_min,
@@ -84,9 +104,27 @@ const RecordsForm: FC = () => {
     }
   }, [
     processMapConfiguration,
-    processParametersByMaterialData,
-    processParametersByMaterialStatus,
+    processParametersData,
+    processParametersStatus,
   ]);
+
+  useEffect(() => {
+    // Updates bounds of slider bars
+    if (showDatapoints && processParametersStatus === Status.Succeeded) {
+      const {power_marks, velocity_marks, hatch_spacing_marks} = processParametersData;
+      setBounds({
+        power: [power_marks[0].value, power_marks[power_marks.length-1].value],
+        velocity: [velocity_marks[0].value, velocity_marks[velocity_marks.length-1].value],
+        hatch_spacing: [hatch_spacing_marks[0].value, hatch_spacing_marks[hatch_spacing_marks.length-1].value]
+      });
+    } else {
+      setBounds({
+        power: [processMapConfiguration.power_min, processMapConfiguration.power_max],
+        velocity: [processMapConfiguration.velocity_min, processMapConfiguration.velocity_max],
+        hatch_spacing: [REQUEST.hatch_spacing_min, REQUEST.hatch_spacing_max]
+      });
+    }
+  }, [showDatapoints, processParametersData, processParametersStatus, processMapConfiguration])
 
   // Callbacks
 
@@ -144,67 +182,106 @@ const RecordsForm: FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Box
-        alignItems="center"
-        display="flex"
-        justifyContent="center"
-        sx={{ flexDirection: "column" }}
-      >
-        <FormControl fullWidth variant="standard">
-          <Typography>Power (W)</Typography>
-          <Slider
-            name="power"
-            value={[request.power_min, request.power_max]}
-            disabled={processParametersByMaterialStatus === Status.Idle}
-            onChange={handleRangeSliderChange}
-            valueLabelDisplay="auto"
-            min={processMapConfiguration.power_min}
-            max={processMapConfiguration.power_max}
-            marks={processParametersByMaterialData.power_marks}
-            disableSwap
+    <>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={showDatapoints}
+            onClick={() => setShowDatapoints((prevState) => !prevState)}
           />
-        </FormControl>
-
-        <FormControl fullWidth variant="standard">
-          <Typography>Velocity (m/s)</Typography>
-          <Slider
-            name="velocity"
-            value={[request.velocity_min, request.velocity_max]}
-            valueLabelDisplay="auto"
-            disabled={processParametersByMaterialStatus === Status.Idle}
-            onChange={handleRangeSliderChange}
-            min={processMapConfiguration.velocity_min}
-            max={processMapConfiguration.velocity_max}
-            marks={processParametersByMaterialData.velocity_marks}
-            disableSwap
-          />
-        </FormControl>
-
-        <FormControl fullWidth variant="standard">
-          <Typography>Hatch Spacing (µm)</Typography>
-          <Slider
-            disabled={processParametersByMaterialStatus === Status.Idle}
-            name="hatch_spacing"
-            valueLabelDisplay="auto"
-            value={[request.hatch_spacing_min, request.hatch_spacing_max]}
-            onChange={handleRangeSliderChange}
-            min={0}
-            max={1000}
-            marks={processParametersByMaterialData.hatch_spacing_marks}
-            disableSwap
-          />
-        </FormControl>
-
-        <LoadingButton
-          loading={recordsStatus === Status.Loading}
-          type="submit"
-          variant="outlined"
+        }
+        label="Show Datapoints"
+      />
+      <form onSubmit={handleSubmit}>
+        <Box
+          alignItems="center"
+          display="flex"
+          justifyContent="center"
+          marginTop="5px"
+          sx={{ flexDirection: "column" }}
         >
-          Submit
-        </LoadingButton>
-      </Box>
-    </form>
+          <FormControl fullWidth variant="standard" sx={{ marginTop: "30px" }}>
+            <Typography>Power (W)</Typography>
+            <Slider
+              disabled={processParametersStatus === Status.Idle}
+              disableSwap
+              name="power"
+              value={[request.power_min, request.power_max]}
+              valueLabelDisplay="auto"
+              onChange={handleRangeSliderChange}
+              min={bounds.power[0]}
+              max={bounds.power[1]}
+              marks={!showDatapoints || processParametersData.power_marks}
+              step={showDatapoints ? null : MIN_RANGE.power}
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Typography variant="body2">
+                {bounds.power[0] || 0} W
+              </Typography>
+              <Typography variant="body2">
+                {bounds.power[1]} W 
+              </Typography>
+            </Box>
+          </FormControl>
+
+          <FormControl fullWidth variant="standard" sx={{ marginTop: "30px" }}>
+            <Typography>Velocity (m/s)</Typography>
+            <Slider
+              disabled={processParametersStatus === Status.Idle}
+              disableSwap
+              name="velocity"
+              value={[request.velocity_min, request.velocity_max]}
+              valueLabelDisplay="auto"
+              onChange={handleRangeSliderChange}
+              min={bounds.velocity[0]}
+              max={bounds.velocity[1]}
+              marks={!showDatapoints || processParametersData.velocity_marks}
+              step={showDatapoints ? null : MIN_RANGE.velocity}
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Typography variant="body2">
+                {bounds.velocity[0] || 0} m/s
+              </Typography>
+              <Typography variant="body2">
+                {bounds.velocity[1]} m/s
+              </Typography>
+            </Box>
+          </FormControl>
+
+          <FormControl fullWidth variant="standard" sx={{ marginTop: "30px" }}>
+            <Typography>Hatch Spacing (µm)</Typography>
+            <Slider
+              disabled={processParametersStatus === Status.Idle}
+              disableSwap
+              name="hatch_spacing"
+              value={[request.hatch_spacing_min, request.hatch_spacing_max]}
+              valueLabelDisplay="auto"
+              onChange={handleRangeSliderChange}
+              min={bounds.hatch_spacing[0]}
+              max={bounds.hatch_spacing[1]}
+              marks={!showDatapoints || processParametersData.hatch_spacing_marks}
+              step={showDatapoints ? null : MIN_RANGE.hatch_spacing}
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Typography variant="body2">
+                {bounds.hatch_spacing[0] || 0} µm
+              </Typography>
+              <Typography variant="body2">
+                {bounds.hatch_spacing[1]} µm
+              </Typography>
+            </Box>
+          </FormControl>
+
+          <LoadingButton
+            loading={recordsStatus === Status.Loading}
+            type="submit"
+            variant="outlined"
+          >
+            Submit
+          </LoadingButton>
+        </Box>
+      </form>
+    </>
   );
 };
 

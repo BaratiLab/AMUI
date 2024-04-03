@@ -16,18 +16,16 @@ import { Status } from "enums";
 
 // Types
 import { MeltPoolProcessParameters } from "./_types";
-interface ProcessParametersInitialState extends AsyncThunkInitialState {
+export interface ProcessParametersInitialState extends AsyncThunkInitialState {
   data: MeltPoolProcessParameters;
 }
 
 // Constants
 const initialState: ProcessParametersInitialState = {
   data: {
-    material: [],
-    process: [],
-    power: [],
-    velocity: [],
-    hatch_spacing: [],
+    power_marks: [],
+    velocity_marks: [],
+    hatch_spacing_marks: [],
   },
   status: Status.Idle,
   error: null,
@@ -38,8 +36,8 @@ const initialState: ProcessParametersInitialState = {
  */
 export const fetchProcessParameters = createAsyncThunk(
   "meltPool/fetchProcessParameters",
-  async () => {
-    const response = await getProcessParameters();
+  async (material: string) => {
+    const response = await getProcessParameters(material);
     return response;
   },
 );

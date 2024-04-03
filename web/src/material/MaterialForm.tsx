@@ -16,6 +16,7 @@ import {
 
 // Actions
 import { setProcessMapConfigurationSection } from "process_map/configurationSlice";
+import { fetchMetals } from "material/metalsSlice";
 
 // Enums
 import { Status } from "enums";
@@ -23,27 +24,33 @@ import { Section } from "process_map/_enums";
 
 // Hooks
 import { useAppDispatch, useAppSelector } from "hooks";
-import { useProcessParameters, useProcessParametersByMaterial } from "melt_pool/_hooks";
+import { useProcessParameters } from "melt_pool/_hooks";
 
 const RecordsForm: FC = () => {
   // Hooks
   const dispatch = useAppDispatch();
   const [material, setMaterial] = useState<"" | HTMLSelectElement>("");
-  const [{ data: processParametersData, status: processParametersStatus }] =
-    useProcessParameters();
+  const state = useAppSelector((state) => state.materialMetals);
   const [
     {
-      status: processParametersByMaterialStatus,
+      status: processParametersStatus,
     },
-    getProcessParametersByMaterial,
-  ] = useProcessParametersByMaterial();
+    getProcessParameters,
+  ] = useProcessParameters();
 
   useEffect(() => {
     // Changes section to process parameter selection once material is selected.
-    if (processParametersByMaterialStatus === Status.Succeeded) {
+    if (processParametersStatus === Status.Succeeded) {
       dispatch(setProcessMapConfigurationSection(Section.ParameterSelection));
     }
-  }, [dispatch, processParametersByMaterialStatus]);
+  }, [dispatch, processParametersStatus]);
+
+  useEffect(() => {
+    // Retreives available metals from materials app.
+    if (state.status === Status.Idle) {
+      dispatch(fetchMetals());
+    }
+  }, [dispatch, state.status]);
 
   // Callbacks
   const handleSelect = (e: SelectChangeEvent<HTMLSelectElement>) => {
@@ -52,14 +59,14 @@ const RecordsForm: FC = () => {
 
     if (typeof value == "string" && value !== "") {
       // Retrieves process parameters by the selected material.
-      getProcessParametersByMaterial(value);
+      getProcessParameters(value);
     }
   };
 
   // JSX
   const materialsJSX =
-    processParametersStatus === Status.Succeeded &&
-    processParametersData.material.map((material) => (
+    state.status === Status.Succeeded &&
+    state.data.map((material) => (
       <MenuItem key={material} value={material}>
         {material}
       </MenuItem>

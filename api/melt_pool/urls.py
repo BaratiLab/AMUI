@@ -5,7 +5,10 @@ from melt_pool import views
 urlpatterns = [
     path("melt_pool/records/", views.RecordsList.as_view()),
     path("melt_pool/process_parameters/", views.ProcessParametersDict.as_view()),
-    path("melt_pool/process_parameters_by_material/", views.ProcessParametersByMaterialDict.as_view()),
+
+    # TODO: Move route to materials app
+    path("melt_pool/metals/", views.MetalsDict.as_view()),
+
     path("melt_pool/infer/", views.Inference.as_view()),
 ]
 
