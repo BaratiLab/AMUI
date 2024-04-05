@@ -3,6 +3,7 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from datasets import load_dataset
 import pickle
 import numpy as np
 
@@ -160,3 +161,10 @@ class EagarTsai(APIView):
 
     def get(self, request):
         print("called a")
+        ds = load_dataset("baratilab/Eagar-Tsai", streaming="true", split="Ti64")
+        dimensions = {}
+        for data in ds:
+            dimensions = data
+            
+        print(f"ds, {dimensions}")
+        return Response(dimensions)

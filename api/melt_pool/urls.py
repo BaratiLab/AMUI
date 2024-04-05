@@ -10,6 +10,7 @@ urlpatterns = [
     path("melt_pool/metals/", views.MetalsDict.as_view()),
 
     path("melt_pool/infer/", views.Inference.as_view()),
+    path("melt_pool/eagar_tsai/", views.EagarTsai.as_view())
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -8,11 +8,14 @@ import { FC, FormEvent, useEffect, useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Box, Checkbox, FormControl, Slider, FormControlLabel, Typography } from "@mui/material";
 
+// Actions
+import { fetchEagarTsai } from "melt_pool/eagarTsaiSlice"
+
 // Enums
 import { Status } from "enums";
 
 // Hooks
-import { useAppSelector } from "hooks";
+import { useAppDispatch, useAppSelector } from "hooks";
 import { useProcessParameters, useRecords } from "melt_pool/_hooks";
 
 // Types
@@ -55,6 +58,7 @@ const boundsFromRequest = (request: MeltPoolFilterset) => ({
 
 const RecordsForm: FC = () => {
   // Hooks
+  const dispatch = useAppDispatch();
   const [showDatapoints, setShowDatapoints] = useState(false);
   const [bounds, setBounds] = useState(boundsFromRequest(REQUEST));
   const [request, setRequest] = useState(REQUEST);
@@ -179,6 +183,7 @@ const RecordsForm: FC = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await getRecords(request);
+    await dispatch(fetchEagarTsai());
   };
 
   return (
