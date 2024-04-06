@@ -166,5 +166,4 @@ class EagarTsai(APIView):
         for data in ds:
             dimensions = data
             
-        print(f"ds, {dimensions}")
         return Response(dimensions)

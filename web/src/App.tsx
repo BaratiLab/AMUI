@@ -73,7 +73,7 @@ const App: FC = () => {
         <Navbar />
         <Routes>
           <Route path="" element={<ProcessMapAccordion />} />
-          <Route path="/chart" element={<ProcessMapChart data={data} />} />
+          <Route path="/chart" element={<ProcessMapChart />} />
           <Route path="/view_stl" element={<ViewSTL />} />
           <Route path="/process_map" element={<ProcessMap />} />
           <Route path="/worksheet" element={<Worksheet />} />

@@ -17,7 +17,13 @@ import { Status } from "enums";
 // Types
 import { MeltPoolRecord } from "./_types";
 export interface EagarTsaiInitialState extends AsyncThunkInitialState {
-  data: [];
+  data: {
+    depths: number[][];
+    lengths: number[][];
+    widths: number[][];
+    powers: number[];
+    velocities: number[];
+  };
   response: {
     count: null | number;
     next: null | string;
@@ -34,7 +40,13 @@ const initialState: EagarTsaiInitialState = {
     previous: null,
     results: [],
   },
-  data: [],
+  data: {
+    depths: [[]],
+    lengths: [[]],
+    widths: [[]],
+    powers: [],
+    velocities: [],
+  },
   status: Status.Idle,
   error: null,
 };
