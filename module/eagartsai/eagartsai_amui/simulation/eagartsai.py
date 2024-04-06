@@ -672,9 +672,9 @@ def run_sample(bc = 'flux',
         widths.append(w)
         # lengths.append(l)
         depths.append(d)
-
-
+        lengths.append(l)
         depth.append(d)
+
         if save:
             if output_folder is not None:
                 
@@ -685,9 +685,6 @@ def run_sample(bc = 'flux',
             
             np.save(os.path.join(output_folder, 'meltpool_timestep_{}.npy'.format(i)), test.theta)
             np.savetxt(os.path.join(output_folder, 'times.txt'),times)
-            np.savetxt(os.path.join(output_folder, 'widths_output.txt'),widths_text)
-            np.savetxt(os.path.join(output_folder, 'lengths_output.txt'),lengths_text)
-            np.savetxt(os.path.join(output_folder, 'depths_output.txt'),depths_text)
             np.savetxt(os.path.join(output_folder, 'widths.txt'),widths)
             np.savetxt(os.path.join(output_folder, 'lengths.txt'),lengths)
             np.savetxt(os.path.join(output_folder, 'depths.txt'),depths)
