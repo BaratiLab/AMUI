@@ -160,8 +160,12 @@ class EagarTsai(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request):
-        print("called a")
-        ds = load_dataset("baratilab/Eagar-Tsai", streaming="true", split="Ti64")
+        ds = load_dataset(
+            "baratilab/Eagar-Tsai",
+            "process_maps",
+            split="m_Ti64_p_0_480_20_v_0.0_2.9_0.1",
+            streaming="true",
+        )
         dimensions = {}
         for data in ds:
             dimensions = data

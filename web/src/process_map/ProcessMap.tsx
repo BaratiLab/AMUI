@@ -65,9 +65,6 @@ const legendFormatter = (value: string) => {
   }
 };
 
-// hatch_spacing = 0.000025
-// layer_thickness = 0.000025
-
 const aspectRatios = (dimensions: number[][], processParameter: number) =>
   dimensions.map((row) =>
     row.map((column) => ((processParameter * 1e-6)/(column + 1e-10))**2)
@@ -86,6 +83,7 @@ const ProcessMap: FC<Props> = ({
   const [hatchSpacing, setHatchSpacing] = useState(25); // in microns
   const [layerThickness, setLayerThickness] = useState(25);
   const [xDomain, setXDomain] = useState<number[] | undefined>(undefined);
+  const [yDomain, setYDomain] = useState<number[] | undefined>(undefined);
 
   useEffect(() => {
     // Fetches Eagar Tsai data on load.
@@ -121,6 +119,53 @@ const ProcessMap: FC<Props> = ({
         )
       );
 
+      console.log("depths", depths)
+      console.log("widths", widths)
+
+    // keyhole_criterion = width/depth
+    // balling_criterion = length/width
+    // print("Keyhole Criterion: {:.05}".format(keyhole_criterion))
+    // print("Balling Criterion: {:.05}".format(balling_criterion))
+
+    // print("Aspect Ratio (h/w): {:.05}".format(aspect_ratio_hw))
+    // print("Aspect Ratio (l/d): {:.05}".format(aspect_ratio_ld))
+    // print(f'Total LoF Criterion: {aspect_ratio_hw+aspect_ratio_ld}')
+    // print(f'LoF Condition Met?: {"Yes" if not (aspect_ratio_hw+aspect_ratio_ld) < 1 else "No"}')
+    // print(f'Keyhole Condition Met?: {"Yes" if not keyhole_criterion > 1.5 else "No"}')
+    // print(f'Balling Condition Met?: {"Yes" if balling_criterion > 2.3 else "No"}')
+    // return aspect_ratio_hw+aspect_ratio_ld > 1, keyhole_criterion < 1.5, balling_criterion > 2.3 # True -> LoF, False -> Desirable
+
+      const balling = lengths.map(
+        (row, rowIndex) => row.map((column, columnIndex) =>
+          column / widths[rowIndex][columnIndex]
+        )
+      )
+
+      const ballingClassification = balling.map(
+        (row) => row.map((column) => column > 2.3 ? 1 : 0)
+      )
+
+      console.log("balling", balling)
+      console.log("balling classification", ballingClassification)
+
+      const keyhole = widths.map(
+        (row, rowIndex) => row.map((column, columnIndex) =>{
+          const criteria = column / Math.abs(depths[rowIndex][columnIndex])
+          return isNaN(criteria) ? Infinity : criteria
+        }
+        )
+      )
+
+      console.log("keyhole", keyhole)
+
+      const keyholeClassification = keyhole.map(
+        // (row) => row.map((column) => column <= 1.5 ? 1 : 0)
+        (row) => row.map((column) => column <= 2.25 ? 1 : 0)
+      )
+
+      console.log("keyholeClassification", keyholeClassification)
+
+
       // lof = np.where(lof < 1, 0, 1)
       const lackOfFusionClassification = lackOfFusion.map(
         // 0 for ideal 
@@ -131,13 +176,36 @@ const ProcessMap: FC<Props> = ({
       velocities.forEach((velocity, velocityIndex) => {
         let lackOfFusionPowerStartValue: number | undefined = undefined;
         let lackOfFusionPowerEndValue = 0;
+
+        let keyholePowerStartValue: number | undefined = undefined;
+        let keyholePowerEndValue = 0;
+
+        let ballingPowerStartValue: number | undefined = undefined;
+        let ballingPowerEndValue = 0;
+
         powers.forEach((power, powerIndex) => {
-          const classification = lackOfFusionClassification[powerIndex][velocityIndex];
-          if (lackOfFusionPowerStartValue === undefined && classification === 1) {
+          const lof = lackOfFusionClassification[powerIndex][velocityIndex];
+          const keyhole = keyholeClassification[powerIndex][velocityIndex];
+          const balling = ballingClassification[powerIndex][velocityIndex];
+          if (lackOfFusionPowerStartValue === undefined && lof === 1) {
             lackOfFusionPowerStartValue = power;
           }
-          if (classification === 1) {
+          if (lof === 1) {
             lackOfFusionPowerEndValue = power;
+          }
+
+          if (keyholePowerStartValue === undefined && keyhole === 1) {
+            keyholePowerStartValue = power;
+          }
+          if (keyhole === 1) {
+            keyholePowerEndValue = power;
+          }
+
+          if (ballingPowerStartValue === undefined && balling === 1) {
+            ballingPowerStartValue = power;
+          }
+          if (balling === 1) {
+            ballingPowerEndValue = power;
           }
         });
 
@@ -147,9 +215,21 @@ const ProcessMap: FC<Props> = ({
           lackOfFusionPowerStartValue = 0
         }
 
+        let ballingRange = [ballingPowerStartValue, ballingPowerEndValue]
+        if (ballingPowerStartValue === undefined && ballingPowerEndValue === 0) {
+          ballingRange = undefined
+        }
+
+        let keyholeRange = [keyholePowerStartValue, keyholePowerEndValue]
+        if (keyholePowerStartValue === undefined && keyholePowerEndValue === 0) {
+          keyholeRange = undefined
+        }
+
         newData.push({
           velocity,
-          lackOfFusion: [lackOfFusionPowerStartValue, lackOfFusionPowerEndValue]
+          lackOfFusion: [lackOfFusionPowerStartValue, lackOfFusionPowerEndValue],
+          keyhole: keyholeRange,
+          balling: ballingRange,
         });
       });
 
@@ -159,6 +239,7 @@ const ProcessMap: FC<Props> = ({
       });
 
       setXDomain([0, velocities[velocities.length - 1]])
+      setYDomain([0, powers[powers.length - 1]])
 
       setData(newData);
     }
@@ -212,7 +293,7 @@ const ProcessMap: FC<Props> = ({
         <XAxis dataKey="velocity" type="number" domain={xDomain}>
           <Label position="bottom" value="Velocity (mm/s)" />
         </XAxis>
-        <YAxis dataKey="power" type="number">
+        <YAxis dataKey="power" type="number" domain={yDomain}>
           <Label angle={-90} position="insideLeft" value="Power (W)" />
         </YAxis>
         <Legend formatter={legendFormatter} verticalAlign="top" />
@@ -221,9 +302,10 @@ const ProcessMap: FC<Props> = ({
         <Scatter name="Desirable" data={d} fill="#82ca9d" />
         <Scatter name="LOF" data={lof} fill="#f9849d" /> */}
 
-        <Area dataKey="keyhole" fill="#8884D8" stroke="#8884D8" />
-        <Area dataKey="desirable" stroke="#82CA9D" fill="#82CA9D" />
-        <Area dataKey="lackOfFusion" stroke="#F9849D" fill="#F9849D" />
+        <Area type="step" dataKey="keyhole" fill="red" stroke="red" />
+        <Area type="step" dataKey="balling" fill="orange" stroke="orange" />
+        <Area type="step" dataKey="desirable" stroke="green" fill="green" />
+        <Area type="step" dataKey="lackOfFusion" stroke="yellow" fill="yellow" />
         {children}
       </ComposedChart>
     </>
