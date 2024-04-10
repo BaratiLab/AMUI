@@ -589,7 +589,7 @@ class EagarTsai():
                 depth = 0
             else:
                 depth = np.min(depths)
-                print("Depth: " + str(-1*depth*1e6))
+                # print("Depth: " + str(-1*depth*1e6))
             # breakpoint()
             if calc_length and calc_width:
                 return prop_w, prop_l, depth
@@ -650,6 +650,7 @@ def run_sample(bc = 'flux',
     widths = []
     lengths = []
     depths = []
+    thetas = []
     default_time = 1500e-6
     if default_time*V > 800e-6: # Length of domain (default)
         time = 800e-6/V
@@ -669,11 +670,12 @@ def run_sample(bc = 'flux',
         # width = 
         # breakpoint()
         w,l, d = test.meltpool(calc_width = True, calc_length = True)
-        widths.append(w)
+        widths.append(float(w))
         # lengths.append(l)
-        depths.append(d)
-        lengths.append(l)
+        depths.append(float(d))
+        lengths.append(float(l))
         depth.append(d)
+        thetas.append(test.theta)
 
         if save:
             if output_folder is not None:
@@ -691,7 +693,7 @@ def run_sample(bc = 'flux',
             if show:
                 test.plot_video()
 
-    return test
+    return test, widths, depths, lengths, times, thetas
 
 
 def run_from_data(data_dict, absorp = 0.5, resolution  = 5e-6):

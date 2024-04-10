@@ -64,7 +64,7 @@ const SpecificationCardsGrid: FC = () => {
         layer_thickness_min: machine.layer_thickness_min_microns,
       }),
     );
-    dispatch(setProcessMapConfigurationSection(Section.ParameterSelection));
+    dispatch(setProcessMapConfigurationSection(Section.Material));
   };
 
   // JSX

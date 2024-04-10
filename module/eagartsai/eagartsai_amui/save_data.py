@@ -55,8 +55,11 @@ data_dict['melt T'] = 1424+273 # Melt Temperature in K
 data_dict['beam D'] = 100e-6 # Beam Diameter in m
 resolution = 5e-6 # Mesh Resolution of simulation -> lower is more accurate at the cost of computational time
 absorptivity = 0.4
-for P in [100, 200, 300, 400, 500]:
-    for V in [0.1, 0.3, 0.5, 0.7, 0.9]:
+
+# for P in [100, 200, 300, 400, 500]:
+#     for V in [0.1, 0.3, 0.5, 0.7, 0.9]:
+for P in [100, 200]:
+    for V in [0.1, 0.3]:
 
         data_dict['P'] = P # Power in W
         data_dict['V'] = V # Laser Velocity in m/s

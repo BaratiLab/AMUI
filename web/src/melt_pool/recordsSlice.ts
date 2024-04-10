@@ -5,6 +5,7 @@
 
 // Node Modules
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AsyncThunkInitialState } from "types";
 
 // API
 import { getRecords } from "./_api";
@@ -13,7 +14,16 @@ import { getRecords } from "./_api";
 import { Status } from "enums";
 
 // Types
-import { MeltPoolFilterset, RecordsSliceInitialState } from "./_types";
+import { MeltPoolFilterset, MeltPoolRecord } from "./_types";
+export interface RecordsSliceInitialState extends AsyncThunkInitialState {
+  data: [];
+  response: {
+    count: null | number;
+    next: null | string;
+    previous: null | string;
+    results: MeltPoolRecord[];
+  };
+}
 
 // Constants
 const initialState: RecordsSliceInitialState = {
