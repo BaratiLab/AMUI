@@ -19,6 +19,10 @@ export interface ConfigurationSliceInitialState {
   spot_size_min: number | null;
   layer_thickness_max: number | null;
   layer_thickness_min: number | null;
+
+  // Process Map
+  hatchSpacing: number;
+  layerThickness: number;
 }
 
 export interface ProcessMapPoints {

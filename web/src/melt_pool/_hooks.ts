@@ -7,7 +7,10 @@
 import { useCallback } from "react";
 
 // Actions
-import { fetchProcessParameters, ProcessParametersInitialState } from "melt_pool/processParametersSlice";
+import {
+  fetchProcessParameters,
+  ProcessParametersInitialState,
+} from "melt_pool/processParametersSlice";
 import { fetchRecords, RecordsSliceInitialState } from "melt_pool/recordsSlice";
 
 // Enums
@@ -33,24 +36,21 @@ type UseProcessParameters = [
  * @description Hook to manage melt pool process parameters by material store.
  * @returns [state, getProcessParameters]
  */
-export const useProcessParameters =
-  (): UseProcessParameters => {
-    const dispatch = useAppDispatch();
-    const state = useAppSelector(
-      (state) => state.meltPoolProcessParameters,
-    );
+export const useProcessParameters = (): UseProcessParameters => {
+  const dispatch = useAppDispatch();
+  const state = useAppSelector((state) => state.meltPoolProcessParameters);
 
-    const getProcessParameters = useCallback(
-      (material: string) => {
-        if (state.status !== Status.Loading) {
-          dispatch(fetchProcessParameters(material));
-        }
-      },
-      [dispatch, state.status],
-    );
+  const getProcessParameters = useCallback(
+    (material: string) => {
+      if (state.status !== Status.Loading) {
+        dispatch(fetchProcessParameters(material));
+      }
+    },
+    [dispatch, state.status],
+  );
 
-    return [state, getProcessParameters];
-  };
+  return [state, getProcessParameters];
+};
 
 /**
  * @description Hook to manage melt pool records store.

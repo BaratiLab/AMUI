@@ -31,12 +31,8 @@ const RecordsForm: FC = () => {
   const dispatch = useAppDispatch();
   const [material, setMaterial] = useState<"" | HTMLSelectElement>("");
   const state = useAppSelector((state) => state.materialMetals);
-  const [
-    {
-      status: processParametersStatus,
-    },
-    getProcessParameters,
-  ] = useProcessParameters();
+  const [{ status: processParametersStatus }, getProcessParameters] =
+    useProcessParameters();
 
   useEffect(() => {
     // Changes section to process parameter selection once material is selected.

@@ -8,7 +8,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box,
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -21,20 +20,8 @@ import { setProcessMapConfigurationSection } from "process_map/configurationSlic
 import SpecificationAlert from "machine/SpecificationAlert";
 import SpecificationCardsGrid from "machine/SpecificationCardsGrid";
 import MaterialForm from "material/MaterialForm";
-import RecordsForm from "melt_pool/RecordsForm";
-import Chart from "process_map/Chart";
-import Table from "melt_pool/Table";
-
-// Constants
-const COLUMN_NAMES = [
-  "id",
-  "power",
-  "velocity",
-  "material",
-  "process",
-  "sub_process",
-  "hatch_spacing",
-];
+import ProcessMap from "process_map/ProcessMap";
+import ProcessParameters from "process_map/ProcessParameters";
 
 // Enums
 import { Status } from "enums";
@@ -43,7 +30,6 @@ import { Section } from "process_map/_enums";
 // Hooks
 import { useAppDispatch, useAppSelector } from "hooks";
 import { useSpecifications } from "machine/_hooks";
-import { useRecords } from "melt_pool/_hooks";
 
 // Types
 import { MachineSpecification } from "machine/_types";
@@ -58,7 +44,6 @@ const ProcessMapAccordion: FC = () => {
   const [
     { data: machineSpecificationsData, status: machineSpecificationsStatus },
   ] = useSpecifications();
-  const [{ data: recordsData, status: recordsStatus }] = useRecords();
 
   useEffect(() => {
     // Sets machine to state from redux store.
@@ -91,14 +76,6 @@ const ProcessMapAccordion: FC = () => {
     <SpecificationAlert specification={machine} />
   );
 
-  const chartJSX = recordsStatus === Status.Succeeded && (
-    <Chart data={recordsData} />
-  );
-
-  const tableJSX = recordsStatus === Status.Succeeded && (
-    <Table colNames={COLUMN_NAMES} rows={recordsData} />
-  );
-
   return (
     <>
       {machineConfigurationJSX}
@@ -109,9 +86,7 @@ const ProcessMapAccordion: FC = () => {
         onChange={handleSetProccessMapSection(Section.Machine)}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography sx={{ width: "33%", flexShrink: 0 }}>
-            Machine Specifications
-          </Typography>
+          <Typography sx={{ width: "33%", flexShrink: 0 }}>Machine</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <SpecificationCardsGrid />
@@ -124,18 +99,15 @@ const ProcessMapAccordion: FC = () => {
         onChange={handleSetProccessMapSection(Section.Material)}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography sx={{ width: "33%", flexShrink: 0 }}>
-            Material 
-          </Typography>
+          <Typography sx={{ width: "33%", flexShrink: 0 }}>Material</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <MaterialForm />
         </AccordionDetails>
       </Accordion>
 
-
       {/* Parameter Selection */}
-      <Accordion
+      {/* <Accordion
         expanded={
           processMapConfigurationState.section === Section.ParameterSelection
         }
@@ -143,34 +115,29 @@ const ProcessMapAccordion: FC = () => {
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography sx={{ width: "33%", flexShrink: 0 }}>
-            Parameter Selection
+            Parameter Range
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <RecordsForm />
         </AccordionDetails>
-      </Accordion>
-      <Box display="flex" justifyContent="center" alignItems="center">
-        {chartJSX}
-      </Box>
-      <Box display="flex" justifyContent="center" alignItems="center">
-        {tableJSX}
-      </Box>
+      </Accordion> */}
 
       {/* Process Map */}
-      {/* <Accordion
+      <Accordion
         expanded={processMapConfigurationState.section === Section.ProcessMap}
         onChange={handleSetProccessMapSection(Section.ProcessMap)}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography sx={{ width: '33%', flexShrink: 0 }}>
-            Example Process Map
+          <Typography sx={{ width: "33%", flexShrink: 0 }}>
+            Process Map
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          Process Map form
+          <ProcessMap />
+          <ProcessParameters />
         </AccordionDetails>
-      </Accordion> */}
+      </Accordion>
     </>
   );
 };

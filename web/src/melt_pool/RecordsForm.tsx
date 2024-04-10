@@ -6,10 +6,17 @@
 // Node Modules
 import { FC, FormEvent, useEffect, useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { Box, Checkbox, FormControl, Slider, FormControlLabel, Typography } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  FormControl,
+  Slider,
+  FormControlLabel,
+  Typography,
+} from "@mui/material";
 
 // Actions
-import { fetchEagarTsai } from "melt_pool/eagarTsaiSlice"
+import { fetchEagarTsai } from "melt_pool/eagarTsaiSlice";
 
 // Enums
 import { Status } from "enums";
@@ -42,7 +49,7 @@ const REQUEST: MeltPoolFilterset = {
 const boundsFromRequest = (request: MeltPoolFilterset) => ({
   power: [request.power_min, request.power_max],
   velocity: [request.velocity_min, request.velocity_max],
-  hatch_spacing: [request.hatch_spacing_min, request.hatch_spacing_max]
+  hatch_spacing: [request.hatch_spacing_min, request.hatch_spacing_max],
 });
 
 // const createStartEndMarks = (start: number, end: number) => ([
@@ -62,18 +69,14 @@ const RecordsForm: FC = () => {
   const [showDatapoints, setShowDatapoints] = useState(false);
   const [bounds, setBounds] = useState(boundsFromRequest(REQUEST));
   const [request, setRequest] = useState(REQUEST);
-  const [
-    {
-      data: processParametersData,
-      status: processParametersStatus,
-    }
-  ] = useProcessParameters();
+  const [{ data: processParametersData, status: processParametersStatus }] =
+    useProcessParameters();
   const [{ status: recordsStatus }, getRecords] = useRecords();
   const processMapConfiguration = useAppSelector(
     (state) => state.processMapConfiguration,
   );
 
-  console.log(request)
+  console.log(request);
 
   useEffect(() => {
     // Sets initial process parameter range slider values.
@@ -92,43 +95,60 @@ const RecordsForm: FC = () => {
       };
 
       if (power_marks.length > 1) {
-        request.power_min = power_marks[0].value
-        request.power_max = power_marks[1].value
+        request.power_min = power_marks[0].value;
+        request.power_max = power_marks[1].value;
       }
 
       if (velocity_marks.length > 1) {
-        request.velocity_min = velocity_marks[0].value
-        request.velocity_max = velocity_marks[1].value
+        request.velocity_min = velocity_marks[0].value;
+        request.velocity_max = velocity_marks[1].value;
       }
 
       setRequest((prevState) => ({
         ...prevState,
         ...request,
-      }))
+      }));
     }
-  }, [
-    processMapConfiguration,
-    processParametersData,
-    processParametersStatus,
-  ]);
+  }, [processMapConfiguration, processParametersData, processParametersStatus]);
 
   useEffect(() => {
     // Updates bounds of slider bars
     if (showDatapoints && processParametersStatus === Status.Succeeded) {
-      const {power_marks, velocity_marks, hatch_spacing_marks} = processParametersData;
+      const { power_marks, velocity_marks, hatch_spacing_marks } =
+        processParametersData;
       setBounds({
-        power: [power_marks[0].value, power_marks[power_marks.length-1].value],
-        velocity: [velocity_marks[0].value, velocity_marks[velocity_marks.length-1].value],
-        hatch_spacing: [hatch_spacing_marks[0].value, hatch_spacing_marks[hatch_spacing_marks.length-1].value]
+        power: [
+          power_marks[0].value,
+          power_marks[power_marks.length - 1].value,
+        ],
+        velocity: [
+          velocity_marks[0].value,
+          velocity_marks[velocity_marks.length - 1].value,
+        ],
+        hatch_spacing: [
+          hatch_spacing_marks[0].value,
+          hatch_spacing_marks[hatch_spacing_marks.length - 1].value,
+        ],
       });
     } else {
       setBounds({
-        power: [processMapConfiguration.power_min, processMapConfiguration.power_max],
-        velocity: [processMapConfiguration.velocity_min, processMapConfiguration.velocity_max],
-        hatch_spacing: [REQUEST.hatch_spacing_min, REQUEST.hatch_spacing_max]
+        power: [
+          processMapConfiguration.power_min,
+          processMapConfiguration.power_max,
+        ],
+        velocity: [
+          processMapConfiguration.velocity_min,
+          processMapConfiguration.velocity_max,
+        ],
+        hatch_spacing: [REQUEST.hatch_spacing_min, REQUEST.hatch_spacing_max],
       });
     }
-  }, [showDatapoints, processParametersData, processParametersStatus, processMapConfiguration])
+  }, [
+    showDatapoints,
+    processParametersData,
+    processParametersStatus,
+    processMapConfiguration,
+  ]);
 
   // Callbacks
 
@@ -137,12 +157,12 @@ const RecordsForm: FC = () => {
    * @param e Event
    * @param newValue number | number[]
    * @param activeThumb number
-   * @returns 
+   * @returns
    */
   const handleRangeSliderChange = (
     e: Event,
     newValue: number | number[],
-    activeThumb: number
+    activeThumb: number,
   ) => {
     const formElement = e.target as HTMLFormElement;
     const name = formElement?.name as "power" | "velocity" | "hatch_spacing";
@@ -160,7 +180,7 @@ const RecordsForm: FC = () => {
         setRequest((prevState) => ({
           ...prevState,
           [`${name}_min`]: clamped,
-          [`${name}_max`]: clamped + minRange
+          [`${name}_max`]: clamped + minRange,
         }));
       } else {
         // Right Thumb
@@ -219,13 +239,9 @@ const RecordsForm: FC = () => {
               marks={!showDatapoints || processParametersData.power_marks}
               step={showDatapoints ? null : MIN_RANGE.power}
             />
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="body2">
-                {bounds.power[0] || 0} W
-              </Typography>
-              <Typography variant="body2">
-                {bounds.power[1]} W 
-              </Typography>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography variant="body2">{bounds.power[0] || 0} W</Typography>
+              <Typography variant="body2">{bounds.power[1]} W</Typography>
             </Box>
           </FormControl>
 
@@ -243,13 +259,11 @@ const RecordsForm: FC = () => {
               marks={!showDatapoints || processParametersData.velocity_marks}
               step={showDatapoints ? null : MIN_RANGE.velocity}
             />
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Typography variant="body2">
                 {bounds.velocity[0] || 0} m/s
               </Typography>
-              <Typography variant="body2">
-                {bounds.velocity[1]} m/s
-              </Typography>
+              <Typography variant="body2">{bounds.velocity[1]} m/s</Typography>
             </Box>
           </FormControl>
 
@@ -264,10 +278,12 @@ const RecordsForm: FC = () => {
               onChange={handleRangeSliderChange}
               min={bounds.hatch_spacing[0]}
               max={bounds.hatch_spacing[1]}
-              marks={!showDatapoints || processParametersData.hatch_spacing_marks}
+              marks={
+                !showDatapoints || processParametersData.hatch_spacing_marks
+              }
               step={showDatapoints ? null : MIN_RANGE.hatch_spacing}
             />
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Typography variant="body2">
                 {bounds.hatch_spacing[0] || 0} µm
               </Typography>

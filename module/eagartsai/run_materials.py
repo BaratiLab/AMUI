@@ -274,10 +274,10 @@ process_map_data = {
 
 process_map_name = f"m_{material}_p_{power_start}_{power_stop}_{power_step}_v_{velocity_start}_{velocity_stop}_{velocity_step}_a_{absorptivity}"
 
-Dataset.from_dict(process_map_data).push_to_hub(
-    "baratilab/Eagar-Tsai",
-    config_name = "process_maps",
-    split = process_map_name,
-    commit_message = process_map_name
-)
+# Dataset.from_dict(process_map_data).push_to_hub(
+#     "baratilab/Eagar-Tsai",
+#     config_name = "process_maps",
+#     split = process_map_name,
+#     commit_message = process_map_name
+# )
 

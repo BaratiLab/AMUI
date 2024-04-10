@@ -18,6 +18,7 @@ const initialState: ConfigurationSliceInitialState = {
   section: Section.Machine,
 
   // Machine
+  // TODO: Deprecate
   machine_id: null,
   power_max: 0,
   power_min: 0,
@@ -27,6 +28,10 @@ const initialState: ConfigurationSliceInitialState = {
   spot_size_min: null,
   layer_thickness_max: null,
   layer_thickness_min: null,
+
+  // Process Map
+  hatchSpacing: 25, // In microns
+  layerThickness: 25, // in microns
 };
 
 /**
@@ -53,6 +58,12 @@ export const slice = createSlice({
     setProcessMapConfigurationSection: (state, action) => {
       state.section = action.payload;
     },
+    setProcessMapHatchSpacing: (state, action) => {
+      state.hatchSpacing = action.payload;
+    },
+    setProcessMapLayerThickness: (state, action) => {
+      state.layerThickness = action.payload;
+    },
   },
 });
 
@@ -61,6 +72,8 @@ export const {
   setProcessMapConfiguration,
   setProcessMapConfigurationSection,
   setProcessMapConfigurationMachine,
+  setProcessMapHatchSpacing,
+  setProcessMapLayerThickness,
 } = slice.actions;
 
 export default slice.reducer;
