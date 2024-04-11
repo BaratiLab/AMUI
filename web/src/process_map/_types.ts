@@ -23,6 +23,8 @@ export interface ConfigurationSliceInitialState {
   // Process Map
   hatchSpacing: number;
   layerThickness: number;
+
+  nominalProcessParameters: ProcessParameters[];
 }
 
 export interface ProcessMapPoints {
@@ -31,4 +33,14 @@ export interface ProcessMapPoints {
   desirable?: number | [number, number];
   lackOfFusion?: number | [number, number];
   power?: number;
+}
+
+export interface ProcessParameters extends PowerVelocity {
+  hatchSpacing: number;
+  layerThickness: number;
+}
+
+export interface PowerVelocity {
+  power: number;
+  velocity: number;
 }
