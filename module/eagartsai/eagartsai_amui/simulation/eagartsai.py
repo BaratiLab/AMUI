@@ -253,6 +253,7 @@ class EagarTsai():
                 alpha = phi - np.pi/2
                 
             ddim =  np.array(ddim)
+            
             dx =  ddim[np.where(ddim > -1)[0][0]]
             sol = EdgeSolution(dt, alpha, dx, self.T0, params)
             # print("max theta", np.max(sol.theta))
@@ -267,6 +268,7 @@ class EagarTsai():
         if corner: 
             self.state = 'corner'
             side = -1
+            
             ddim = np.array(ddim)
             dx = ddim[np.where(ddim > -1)[0][0]]
             dy = ddim[np.where(ddim > -1)[0][1]]
@@ -690,10 +692,71 @@ def run_sample(bc = 'flux',
             np.savetxt(os.path.join(output_folder, 'widths.txt'),widths)
             np.savetxt(os.path.join(output_folder, 'lengths.txt'),lengths)
             np.savetxt(os.path.join(output_folder, 'depths.txt'),depths)
+            np.savetxt(os.path.join(output_folder, 'xs.txt'), test.xs)
+            np.savetxt(os.path.join(output_folder, 'ys.txt'), test.ys)
+            np.savetxt(os.path.join(output_folder, 'zs.txt'), test.zs)
             if show:
                 test.plot_video()
 
     return test, widths, depths, lengths, times, thetas
+
+
+
+def run_baseline_sample(bc = 'flux', 
+               V = 0.4, # Velocity [m/s]
+               absorp = 1, # Absorptivity
+               cp = 561.5,  # Specific Heat [J/kgK]
+               k = 7.2, # Thermal Conductivity [W/mK]
+               beamD = 50e-6,  # Beam Diameter [m]
+               rho = 4470.5, # Density [kg/m^3]
+               P = 280, # Power [W]
+               melt_T= 1649, # Melting Temperature [K]
+               save = False, 
+               resolution = 5e-6, # Resolution [m]
+               bounds = {'x': [0, 1000e-6], 'y': [-300e-6, 300e-6], 'z': [-400e-6, 0]}, output_folder = None, show = False
+               ):
+    
+    test = EagarTsai(resolution,
+                      bc = bc, 
+                      V = V, 
+                      absorp = absorp, 
+                      cp = cp, 
+                      k = k, 
+                      beamD = beamD, 
+                      rho = rho,
+                      P = P, 
+                      melt_T= melt_T,
+                      bounds = bounds) 
+    #test = EagarTsai(5e-6)
+    times = []
+    thetas = []
+    default_time = 1000e-6
+    
+
+    test.forward(default_time, 0, V = V, P = P)
+    times.append(test.time)
+    # width = 
+    # breakpoint()
+    thetas.append(test.theta)
+
+    if save:
+        if output_folder is not None:
+            
+            os.makedirs(output_folder, exist_ok = True)
+        else:
+            output_folder = 'output'
+            os.makedirs(output_folder, exist_ok = True)
+        
+        np.save(os.path.join(output_folder, 'meltpool.npy'), test.theta)
+        np.savetxt(os.path.join(output_folder, 'times.txt'),times)
+        np.savetxt(os.path.join(output_folder, 'xs.txt'), test.xs)
+        np.savetxt(os.path.join(output_folder, 'ys.txt'), test.ys)
+        np.savetxt(os.path.join(output_folder, 'zs.txt'), test.zs)
+        if show:
+            test.plot_video()
+
+    return test, times, thetas
+
 
 
 def run_from_data(data_dict, absorp = 0.5, resolution  = 5e-6):
