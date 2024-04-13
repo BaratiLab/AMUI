@@ -15,6 +15,16 @@ export interface MeltPoolFilterset {
   hatch_spacing_max: number;
 }
 
+export interface MeltPoolInferenceProcessParameters {
+  material: string;
+  power_min: number;
+  power_max: number;
+  power_step: number;
+  velocity_min: number;
+  velocity_max: number;
+  velocity_step: number;
+}
+
 // Response
 interface Mark {
   value: number;

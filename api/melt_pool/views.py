@@ -132,23 +132,25 @@ class Inference(APIView):
         with open('./melt_pool/material_mapping.pkl', 'rb') as f:
             material_mapping = pickle.load(f)
 
-        material = material_mapping[request.query_params.get('mat')]
-        min_p = int(request.query_params.get('minp'))
-        power = int(request.query_params.get('maxp'))
-        velocity = int(request.query_params.get('minv'))
-        max_v = int(request.query_params.get('maxv'))
+        material = material_mapping[request.query_params.get('material')]
+        min_power = int(request.query_params.get('power_min'))
+        max_power = int(request.query_params.get('power_max'))
+        min_velocity = int(request.query_params.get('velocity_min'))
+        max_velocity = int(request.query_params.get('velocity_max'))
 
-        p_step, v_step = 10, 0.1
+        power_step = int(request.query_params.get('power_step'))
+        velocity_step = float(request.query_params.get('velocity_step'))
+
         preds = []
-        while power >= min_p:
+        while max_power >= min_power:
             temp = []
-            v = velocity
-            while v <= max_v:
-                features = np.array([[power, v, *material]])
+            v = min_velocity
+            while v <= max_velocity:
+                features = np.array([[max_power, v, *material]])
                 temp.append(model.predict(features)[0])
-                v += v_step
+                v += velocity_step
             preds.append(temp)
-            power -= p_step
+            max_power -= power_step
 
         return Response({'prediction': preds})
 

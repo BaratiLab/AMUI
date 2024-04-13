@@ -7,12 +7,13 @@
 import queryString from "query-string";
 
 // Types
-import { MeltPoolFilterset } from "./_types";
+import {
+  MeltPoolFilterset,
+  MeltPoolInferenceProcessParameters,
+} from "./_types";
 
 // Request
 import { request } from "common/request";
-
-// export const getEagarTsai = async ()
 
 /**
  * @description API route to retrieve melt pool records.
@@ -54,6 +55,24 @@ export const getProcessParameters = async (material: string) => {
 export const getEagarTsai = async () => {
   try {
     const response = await request("melt_pool/eagar_tsai/");
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/**
+ * @description API route to retrieve MeltPoolNet Inference 
+ * @returns
+ */
+export const getInference = async (
+  processParameters: MeltPoolInferenceProcessParameters
+) => {
+  try {
+    const response = await request(
+      `melt_pool/inference/?${queryString.stringify(processParameters)}`,
+    );
     const data = await response.json();
     return data;
   } catch (error) {

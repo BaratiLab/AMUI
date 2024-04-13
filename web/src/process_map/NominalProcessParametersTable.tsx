@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 
 // Hooks 
-import { useAppDispatch, useAppSelector } from 'hooks';
+import { useAppSelector } from 'hooks';
 
 // Types
 import { ProcessParameters } from './_types';
@@ -44,7 +44,6 @@ function getComparator<Key extends keyof any>(
   a: { [key in Key]: number | string },
   b: { [key in Key]: number | string },
 ) => number {
-  console.log(orderBy, order)
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
@@ -85,7 +84,6 @@ const headCells: readonly HeadCell[] = [
 ];
 
 export default function EnhancedTable() {
-  const dispatch = useAppDispatch();
   const [order, setOrder] = useState<Order>('desc');
   const [orderBy, setOrderBy] = useState<keyof ProcessParameters>('velocity');
   const [page, setPage] = useState(0);
@@ -101,14 +99,16 @@ export default function EnhancedTable() {
     setOrderBy(property);
   };
 
-  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+  const handleChangeRowsPerPage = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setRowsPerPage(parseInt(value, 10));
     setPage(0);
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows: number = useMemo(() => )
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - nominalProcessParameters.length) : 0;
+  const emptyRows: number = useMemo(() => Math.max(
+    0, (1 + page) * rowsPerPage - nominalProcessParameters.length
+  ), [page, rowsPerPage, nominalProcessParameters])
 
   const visibleRows: ProcessParameters[] = useMemo(
     () => {
