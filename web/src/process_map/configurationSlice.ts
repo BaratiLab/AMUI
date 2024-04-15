@@ -15,8 +15,8 @@ import { ConfigurationSliceInitialState } from "./_types";
 // Constants
 const initialState: ConfigurationSliceInitialState = {
   // Section
-  // section: Section.Machine,
-  section: Section.ProcessMap,
+  section: Section.Machine,
+  // section: Section.ProcessMap,
 
   // Machine
   // TODO: Deprecate

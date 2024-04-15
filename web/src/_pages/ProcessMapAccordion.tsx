@@ -8,11 +8,9 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box,
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { ResponsiveContainer } from "recharts";
 import { FC, useEffect, useState } from "react";
 
 // Actions

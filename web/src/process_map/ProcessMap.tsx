@@ -4,7 +4,6 @@
  */
 
 // Node Modules
-import { Box, LinearProgress } from "@mui/material";
 import {
   arrayOf,
   node,
@@ -25,7 +24,6 @@ import {
 } from "recharts";
 
 // Actions
-import { fetchEagarTsai } from "melt_pool/eagarTsaiSlice";
 import { setProcessMapNominalProcessParameters } from "./configurationSlice";
 
 // Constants
@@ -85,11 +83,17 @@ const ProcessMap: FC<Props> = ({
   const [data, setData] = useState<ProcessMapPoints[]>([]);
   const [xDomain, setXDomain] = useState<number[] | undefined>(undefined);
   const [yDomain, setYDomain] = useState<number[] | undefined>(undefined);
+  const [opacity, setOpacity] = useState(0.1); // Initial opacity value
 
   useEffect(() => {
-    // Fetches Eagar Tsai data on load.
-    dispatch(fetchEagarTsai());
-  }, [dispatch]);
+    const interval = setInterval(() => {
+      // Calculate opacity based on sine wave function
+      const newOpacity = Math.sin(Date.now() / 500) * 0.45 + 0.55; // Adjust values for desired range
+      setOpacity(newOpacity);
+    }, 50); // Adjust interval for smoother animation
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, []); // Empty dependency array to run effect only once
 
   useEffect(() => {
     if (state.status === Status.Succeeded) {
@@ -139,81 +143,75 @@ const ProcessMap: FC<Props> = ({
     }
   }, [state, hatchSpacing, layerThickness]);
 
-  // JSX
-  const loadingJSX = state.status === Status.Loading && (
-    <Box>
-      <LinearProgress />
-    </Box>
-  );
-
   return (
-    <>
-      {loadingJSX}
-      <ComposedChart data={data} height={height} margin={margin} width={width}>
-        <CartesianGrid fill="green" fillOpacity={0.5} strokeDasharray="3 3" />
-        <Area
-          type="step"
-          strokeOpacity={1}
-          fillOpacity={0.5}
-          dataKey="balling"
-          fill="purple"
-          stroke="purple"
-        />
-        <Area
-          type="step"
-          strokeOpacity={1}
-          fillOpacity={0.5}
-          dataKey="keyhole"
-          fill="red"
-          stroke="red"
-        />
-        <Area
-          type="step"
-          strokeOpacity={1}
-          fillOpacity={0.5}
-          dataKey="lackOfFusion"
-          stroke="blue"
-          fill="blue"
-        />
-        <Area
-          type="step"
-          strokeOpacity={1}
-          fillOpacity={0.5}
-          dataKey="nominal"
-          stroke="green"
-          fill="green"
-        />
-        <XAxis
-          dataKey="velocity"
-          domain={xDomain}
-          ticks={state.data.velocities}
-          type="number"
-        >
-          <Label position="bottom" value="Velocity (mm/s)" />
-        </XAxis>
-        <YAxis
-          dataKey="power"
-          domain={yDomain}
-          type="number"
-          ticks={state.data.powers}
-        >
-          <Label angle={-90} position="insideLeft" value="Power (W)" />
-        </YAxis>
-        <Legend
-          formatter={legendFormatter}
-          iconType="square"
-          verticalAlign="bottom"
-          wrapperStyle={{
-            bottom: "20px",
-            left: "35px",
-          }}
-        />
-        {/* <Scatter name="Keyhole" data={kh} fill="#8884d8" />
-        <Scatter name="Desirable" data={d} fill="#82ca9d" />
-        <Scatter name="LOF" data={lof} fill="#f9849d" /> */}
-        {children}
-      </ComposedChart>
-    </>
+    <ComposedChart data={data} height={height} margin={margin} width={width}>
+      <CartesianGrid
+        fill={state.status === Status.Loading ? "gray" : "green"}
+        fillOpacity={state.status === Status.Loading ? opacity : 0.5}
+        strokeDasharray="3 3"
+      />
+      <Area
+        type="step"
+        strokeOpacity={1}
+        fillOpacity={0.5}
+        dataKey="balling"
+        fill="purple"
+        stroke="purple"
+      />
+      <Area
+        type="step"
+        strokeOpacity={1}
+        fillOpacity={0.5}
+        dataKey="keyhole"
+        fill="red"
+        stroke="red"
+      />
+      <Area
+        type="step"
+        strokeOpacity={1}
+        fillOpacity={0.5}
+        dataKey="lackOfFusion"
+        stroke="blue"
+        fill="blue"
+      />
+      <Area
+        type="step"
+        strokeOpacity={1}
+        fillOpacity={0.5}
+        dataKey="nominal"
+        stroke="green"
+        fill="green"
+      />
+      <XAxis
+        dataKey="velocity"
+        domain={xDomain}
+        ticks={state.data.velocities}
+        type="number"
+      >
+        <Label position="bottom" value="Velocity (mm/s)" />
+      </XAxis>
+      <YAxis
+        dataKey="power"
+        domain={yDomain}
+        type="number"
+        ticks={state.data.powers}
+      >
+        <Label angle={-90} position="insideLeft" value="Power (W)" />
+      </YAxis>
+      <Legend
+        formatter={legendFormatter}
+        iconType="square"
+        verticalAlign="bottom"
+        wrapperStyle={{
+          bottom: "20px",
+          left: "35px",
+        }}
+      />
+      {/* <Scatter name="Keyhole" data={kh} fill="#8884d8" />
+      <Scatter name="Desirable" data={d} fill="#82ca9d" />
+      <Scatter name="LOF" data={lof} fill="#f9849d" /> */}
+      {children}
+    </ComposedChart>
   );
 };
 

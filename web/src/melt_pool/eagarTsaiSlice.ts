@@ -43,8 +43,8 @@ const initialState: EagarTsaiInitialState = {
  */
 export const fetchEagarTsai = createAsyncThunk(
   "meltPool/fetchEagarTsai",
-  async () => {
-    const response = await getEagarTsai();
+  async (material: string) => {
+    const response = await getEagarTsai(material);
     return response;
   },
 );

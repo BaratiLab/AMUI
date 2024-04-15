@@ -158,6 +158,7 @@ export const classifyProcessMap = (
   threshold = {
     balling: 2.3,
     keyhole: 2.25,
+    // keyhole: 5,
     lackOfFusion: 1,
   },
 ): ProcessMapClassification => {
