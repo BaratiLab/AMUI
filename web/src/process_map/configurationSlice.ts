@@ -69,7 +69,7 @@ export const slice = createSlice({
     },
     setProcessMapNominalProcessParameters: (state, action) => {
       state.nominalProcessParameters = action.payload;
-    }
+    },
   },
 });
 

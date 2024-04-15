@@ -55,7 +55,7 @@ export const getProcessParameters = async (material: string) => {
 export const getEagarTsai = async (material: string) => {
   try {
     const response = await request(
-      `melt_pool/eagar_tsai/?material=${material}`
+      `melt_pool/eagar_tsai/?material=${material}`,
     );
     const data = await response.json();
     return data;
@@ -65,11 +65,11 @@ export const getEagarTsai = async (material: string) => {
 };
 
 /**
- * @description API route to retrieve MeltPoolNet Inference 
+ * @description API route to retrieve MeltPoolNet Inference
  * @returns
  */
 export const getInference = async (
-  processParameters: MeltPoolInferenceProcessParameters
+  processParameters: MeltPoolInferenceProcessParameters,
 ) => {
   try {
     const response = await request(

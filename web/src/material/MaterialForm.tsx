@@ -21,15 +21,15 @@ import { fetchEagarTsai } from "melt_pool/eagarTsaiSlice";
 
 // Constants
 const OMITTED_MATERIALS = [
-'Al-C-Co-Fe-Mn-Ni',
-'Cu10Sn',
-'IN738LC',
-'MS1-',
-'Ti-45Al',
-'Ti6242',
-'Tungsten',
-'WE43',
-]
+  "Al-C-Co-Fe-Mn-Ni",
+  "Cu10Sn",
+  "IN738LC",
+  "MS1-",
+  "Ti-45Al",
+  "Ti6242",
+  "Tungsten",
+  "WE43",
+];
 
 // Enums
 import { Status } from "enums";

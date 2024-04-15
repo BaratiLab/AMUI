@@ -117,11 +117,13 @@ const ProcessMapAccordion: FC = () => {
             Process Map
           </Typography>
         </AccordionSummary>
-        <AccordionDetails sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}>
+        <AccordionDetails
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
           <ProcessMap />
           <NominalProcessParametersTable />
           <ProcessParameters />

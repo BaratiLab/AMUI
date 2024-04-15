@@ -17,12 +17,12 @@ import { Status } from "enums";
 // Types
 import { MeltPoolInferenceProcessParameters } from "./_types";
 export interface InferenceInitialState extends AsyncThunkInitialState {
-  data: { };
+  data: number[][];
 }
 
 // Constants
 const initialState: InferenceInitialState = {
-  data: { },
+  data: [],
   status: Status.Idle,
   error: null,
 };

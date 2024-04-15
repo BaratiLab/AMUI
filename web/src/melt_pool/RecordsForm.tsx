@@ -16,13 +16,13 @@ import {
 } from "@mui/material";
 
 // Actions
-import { fetchEagarTsai } from "melt_pool/eagarTsaiSlice";
+// import { fetchEagarTsai } from "melt_pool/eagarTsaiSlice";
 
 // Enums
 import { Status } from "enums";
 
 // Hooks
-import { useAppDispatch, useAppSelector } from "hooks";
+import { useAppSelector } from "hooks";
 import { useProcessParameters, useRecords } from "melt_pool/_hooks";
 
 // Types
@@ -65,7 +65,7 @@ const boundsFromRequest = (request: MeltPoolFilterset) => ({
 
 const RecordsForm: FC = () => {
   // Hooks
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const [showDatapoints, setShowDatapoints] = useState(false);
   const [bounds, setBounds] = useState(boundsFromRequest(REQUEST));
   const [request, setRequest] = useState(REQUEST);
@@ -203,7 +203,7 @@ const RecordsForm: FC = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await getRecords(request);
-    await dispatch(fetchEagarTsai());
+    // await dispatch(fetchEagarTsai());
   };
 
   return (

@@ -213,8 +213,8 @@ export const classificationToPowerVelocity = (
   const processParameters: PowerVelocity[] = [];
   classification.forEach((row, rowIndex) => {
     row.forEach((column, columnIndex) => {
-      const power = powers[rowIndex]
-      const velocity = velocities[columnIndex]
+      const power = powers[rowIndex];
+      const velocity = velocities[columnIndex];
       if (column && power !== 0 && velocity !== 0) {
         // Finds values matching classification and not at 0 power or velocity.
         processParameters.push({ velocity, power });

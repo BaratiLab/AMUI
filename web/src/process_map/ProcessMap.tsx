@@ -113,7 +113,9 @@ const ProcessMap: FC<Props> = ({
       for (const [key, value] of Object.entries(processMapClassification)) {
         if (key === "nominal") {
           const powerVelocity = classificationToPowerVelocity(
-            velocities, powers, value
+            velocities,
+            powers,
+            value,
           );
           const nominalParameters = powerVelocity.map(
             ({ power, velocity }) => ({
@@ -121,7 +123,7 @@ const ProcessMap: FC<Props> = ({
               velocity,
               hatchSpacing,
               layerThickness,
-            })
+            }),
           );
           dispatch(setProcessMapNominalProcessParameters(nominalParameters));
         } else {
@@ -141,7 +143,7 @@ const ProcessMap: FC<Props> = ({
 
       setData(newData);
     }
-  }, [state, hatchSpacing, layerThickness]);
+  }, [dispatch, state, hatchSpacing, layerThickness]);
 
   return (
     <ComposedChart data={data} height={height} margin={margin} width={width}>
