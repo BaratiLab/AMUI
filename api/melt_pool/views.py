@@ -57,29 +57,55 @@ class Inference(APIView):
 
     permission_classes = (AllowAny,)
 
+    def calc_abs_coeff1(self, min_abs, P, T1, rho, Cp, Vs, r0):
+        T0 = 293
+        numerator = min_abs * P
+        denominator = (T1 - T0) * np.pi * rho * Cp * Vs * (r0**2)
+        return 0.7 * (1 - np.exp(-0.6 * numerator / denominator))
+
+    def calc_abs_coeff2(self, k, T1, W, rho, Cp, V, P):
+        T0 = 293
+        numerator = (np.pi * k * (T1 - T0) * W) + (np.e * np.pi * rho * Cp * (T1 - T0) * V * (W**2) / 8)
+        denominator = P
+        return numerator / denominator
+
     def get(self, request):
         with open('./melt_pool/rf.pt', 'rb') as f:
             model = pickle.load(f)
         with open('./melt_pool/material_mapping.pkl', 'rb') as f:
             material_mapping = pickle.load(f)
 
-        material = material_mapping[request.query_params.get('mat')]
+        material = request.query_params.get('mat')
         min_p = int(request.query_params.get('minp'))
-        power = int(request.query_params.get('maxp'))
-        velocity = int(request.query_params.get('minv'))
+        max_p = int(request.query_params.get('maxp'))
+        min_v = int(request.query_params.get('minv'))
         max_v = int(request.query_params.get('maxv'))
+        r0 = int(request.query_params.get('r0'))  # TODO: r0 is beam radius
+        W = int(request.query_params.get('W'))  # TODO: W is meltpool width
 
-        p_step, v_step = 10, 0.1
+        p_step = int(request.query_params.get('pstep')) if request.query_params.get('pstep') else 10
+        v_step = float(request.query_params.get('vstep')) if request.query_params.get('vstep') else 0.1
+
+        composition = material_mapping[material]['composition']
+        min_abs = material_mapping[material]['min_absorptivity']
+        T1 = material_mapping[material]['melting_point']
+        rho = material_mapping[material]['density']
+        Cp = material_mapping[material]['specific_heat']
+        k = material_mapping[material]['thermal_conductivity']
+
         preds = []
-        while power >= min_p:
+        p = max_p
+        while p >= min_p:
             temp = []
-            v = velocity
+            v = min_v
             while v <= max_v:
-                features = np.array([[power, v, *material]])
+                abs_coeff1 = self.calc_abs_coeff1(min_abs, p, T1, rho, Cp, v, r0)
+                abs_coeff2 = self.calc_abs_coeff2(k, T1, W, rho, Cp, v, p)
+                features = np.array([[p, v, abs_coeff1, abs_coeff2, *composition]])
                 temp.append(model.predict(features)[0])
                 v += v_step
             preds.append(temp)
-            power -= p_step
+            p -= p_step
 
         return Response({'prediction': preds})
 
