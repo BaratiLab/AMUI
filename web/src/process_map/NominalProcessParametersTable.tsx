@@ -37,7 +37,7 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 
 type Order = "asc" | "desc";
 
-function getComparator<Key extends keyof string>(
+function getComparator<Key extends keyof ProcessParameters>(
   order: Order,
   orderBy: Key,
 ): (
@@ -114,7 +114,7 @@ export default function EnhancedTable() {
     [page, rowsPerPage, nominalProcessParameters],
   );
 
-  const visibleRows: ProcessParameters[] = useMemo(() => {
+  const visibleRows: Array<ProcessParameters> = useMemo(() => {
     const sortedNominalProcessParameters = nominalProcessParameters
       .toSorted(getComparator(order, orderBy))
       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
