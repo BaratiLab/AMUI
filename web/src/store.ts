@@ -11,8 +11,9 @@ import themeReducer from "common/themeSlice";
 import specificationsReducer from "machine/specificationsSlice";
 import metalsReducer from "material/metalsSlice";
 import eagarTsaiSliceReducer from "melt_pool/eagarTsaiSlice";
-import recordsReducer from "melt_pool/recordsSlice";
+import inferenceSliceReducer from "melt_pool/inferenceSlice";
 import processParametersReducer from "melt_pool/processParametersSlice";
+import recordsReducer from "melt_pool/recordsSlice";
 import configurationReducer from "process_map/configurationSlice";
 
 const store = configureStore({
@@ -23,6 +24,7 @@ const store = configureStore({
     materialMetals: metalsReducer,
     // Melt Pool
     meltPoolEagarTsai: eagarTsaiSliceReducer,
+    meltPoolInference: inferenceSliceReducer,
     meltPoolProcessParameters: processParametersReducer,
     meltPoolRecords: recordsReducer,
     // Process Map

@@ -20,6 +20,7 @@ import { setProcessMapConfigurationSection } from "process_map/configurationSlic
 import SpecificationAlert from "machine/SpecificationAlert";
 import SpecificationCardsGrid from "machine/SpecificationCardsGrid";
 import MaterialForm from "material/MaterialForm";
+import NominalProcessParametersTable from "process_map/NominalProcessParametersTable";
 import ProcessMap from "process_map/ProcessMap";
 import ProcessParameters from "process_map/ProcessParameters";
 
@@ -106,23 +107,6 @@ const ProcessMapAccordion: FC = () => {
         </AccordionDetails>
       </Accordion>
 
-      {/* Parameter Selection */}
-      {/* <Accordion
-        expanded={
-          processMapConfigurationState.section === Section.ParameterSelection
-        }
-        onChange={handleSetProccessMapSection(Section.ParameterSelection)}
-      >
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography sx={{ width: "33%", flexShrink: 0 }}>
-            Parameter Range
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <RecordsForm />
-        </AccordionDetails>
-      </Accordion> */}
-
       {/* Process Map */}
       <Accordion
         expanded={processMapConfigurationState.section === Section.ProcessMap}
@@ -133,8 +117,15 @@ const ProcessMapAccordion: FC = () => {
             Process Map
           </Typography>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
           <ProcessMap />
+          <NominalProcessParametersTable />
           <ProcessParameters />
         </AccordionDetails>
       </Accordion>

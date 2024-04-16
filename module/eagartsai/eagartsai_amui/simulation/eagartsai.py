@@ -313,6 +313,7 @@ class EagarTsai():
             #     
             sol = Solution(dt, self.T0, phi, params)
             sol.generate()
+            print(np.where(np.isnan(sol.theta)))
             # print('POWER', self.P, P)
                 # self.store_idx.update({(dt, phi): len(self.store)})
                 # self.store.append(sol)
@@ -709,7 +710,7 @@ def run_baseline_sample(bc = 'flux',
                k = 7.2, # Thermal Conductivity [W/mK]
                beamD = 50e-6,  # Beam Diameter [m]
                rho = 4470.5, # Density [kg/m^3]
-               P = 280, # Power [W]
+               P = 1, # Power [W]
                melt_T= 1649, # Melting Temperature [K]
                save = False, 
                resolution = 5e-6, # Resolution [m]
@@ -728,16 +729,16 @@ def run_baseline_sample(bc = 'flux',
                       melt_T= melt_T,
                       bounds = bounds) 
     #test = EagarTsai(5e-6)
-    times = []
-    thetas = []
+    # times = []
+    # thetas = []
     default_time = 1000e-6
     
 
     test.forward(default_time, 0, V = V, P = P)
-    times.append(test.time)
+    times = test.time
     # width = 
     # breakpoint()
-    thetas.append(test.theta)
+    thetas = test.theta
 
     if save:
         if output_folder is not None:

@@ -16,6 +16,7 @@ import { ConfigurationSliceInitialState } from "./_types";
 const initialState: ConfigurationSliceInitialState = {
   // Section
   section: Section.Machine,
+  // section: Section.ProcessMap,
 
   // Machine
   // TODO: Deprecate
@@ -32,6 +33,8 @@ const initialState: ConfigurationSliceInitialState = {
   // Process Map
   hatchSpacing: 25, // In microns
   layerThickness: 25, // in microns
+
+  nominalProcessParameters: [],
 };
 
 /**
@@ -64,6 +67,9 @@ export const slice = createSlice({
     setProcessMapLayerThickness: (state, action) => {
       state.layerThickness = action.payload;
     },
+    setProcessMapNominalProcessParameters: (state, action) => {
+      state.nominalProcessParameters = action.payload;
+    },
   },
 });
 
@@ -74,6 +80,7 @@ export const {
   setProcessMapConfigurationMachine,
   setProcessMapHatchSpacing,
   setProcessMapLayerThickness,
+  setProcessMapNominalProcessParameters,
 } = slice.actions;
 
 export default slice.reducer;

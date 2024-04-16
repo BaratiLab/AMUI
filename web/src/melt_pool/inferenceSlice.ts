@@ -1,6 +1,6 @@
 /**
- * eagarTsaiSlice.ts
- * Redux toolkit slice for handling Eagar-Tsai melt pool approximation request.
+ * inferenceSlice.ts
+ * Redux toolkit slice for handling MeltpoolNet process parameter inference.
  * https://redux.js.org/tutorials/essentials/part-5-async-logic
  */
 
@@ -9,31 +9,20 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { AsyncThunkInitialState } from "types";
 
 // API
-import { getEagarTsai } from "./_api";
+import { getInference } from "./_api";
 
 // Enums
 import { Status } from "enums";
 
 // Types
-export interface EagarTsaiInitialState extends AsyncThunkInitialState {
-  data: {
-    depths: number[][];
-    lengths: number[][];
-    widths: number[][];
-    powers: number[];
-    velocities: number[];
-  };
+import { MeltPoolInferenceProcessParameters } from "./_types";
+export interface InferenceInitialState extends AsyncThunkInitialState {
+  data: number[][];
 }
 
 // Constants
-const initialState: EagarTsaiInitialState = {
-  data: {
-    depths: [[]],
-    lengths: [[]],
-    widths: [[]],
-    powers: [],
-    velocities: [],
-  },
+const initialState: InferenceInitialState = {
+  data: [],
   status: Status.Idle,
   error: null,
 };
@@ -41,10 +30,10 @@ const initialState: EagarTsaiInitialState = {
 /**
  * @description Retrieves available melt pool process parameters.
  */
-export const fetchEagarTsai = createAsyncThunk(
-  "meltPool/fetchEagarTsai",
-  async (material: string) => {
-    const response = await getEagarTsai(material);
+export const fetchInference = createAsyncThunk(
+  "meltPool/fetchInference",
+  async (processParameters: MeltPoolInferenceProcessParameters) => {
+    const response = await getInference(processParameters);
     return response;
   },
 );
@@ -53,24 +42,24 @@ export const fetchEagarTsai = createAsyncThunk(
  * @description Slice component for handling redux logic.
  */
 export const slice = createSlice({
-  name: "meltPoolEagarTsai",
+  name: "meltPoolInference",
   initialState,
   reducers: {
-    setEagarTsai: (state, action) => {
-      const { eagarTsai } = action.payload;
-      state.data = eagarTsai;
+    setInference: (state, action) => {
+      const { inference } = action.payload;
+      state.data = inference;
     },
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchEagarTsai.pending, (state) => {
+      .addCase(fetchInference.pending, (state) => {
         state.status = Status.Loading;
       })
-      .addCase(fetchEagarTsai.fulfilled, (state, action) => {
+      .addCase(fetchInference.fulfilled, (state, action) => {
         state.status = Status.Succeeded;
         state.data = action.payload;
       })
-      .addCase(fetchEagarTsai.rejected, (state, action) => {
+      .addCase(fetchInference.rejected, (state, action) => {
         state.status = Status.Failed;
         // Probably needed for immutable behavior.
         state.data = { ...initialState.data };
@@ -80,6 +69,6 @@ export const slice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setEagarTsai } = slice.actions;
+export const { setInference } = slice.actions;
 
 export default slice.reducer;

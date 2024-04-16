@@ -4,6 +4,7 @@
  */
 
 // Types
+import { PowerVelocity } from "./_types";
 interface ProcessMapArea {
   [key: string]: number | (undefined | number)[] | undefined;
   velocity: number;
@@ -157,6 +158,7 @@ export const classifyProcessMap = (
   threshold = {
     balling: 2.3,
     keyhole: 2.25,
+    // keyhole: 5,
     lackOfFusion: 1,
   },
 ): ProcessMapClassification => {
@@ -194,4 +196,30 @@ export const classifyProcessMap = (
     lackOfFusion,
     nominal,
   };
+};
+
+/**
+ * @description Provides the power and velocity associated with classification.
+ * @param velocities Order 1D array of velocity values
+ * @param powers Order 1D array of power values
+ * @param classification 2D array of process map classification.
+ * @returns [{velocity, power}, ...]
+ */
+export const classificationToPowerVelocity = (
+  velocities: number[],
+  powers: number[],
+  classification: number[][],
+): PowerVelocity[] => {
+  const processParameters: PowerVelocity[] = [];
+  classification.forEach((row, rowIndex) => {
+    row.forEach((column, columnIndex) => {
+      const power = powers[rowIndex];
+      const velocity = velocities[columnIndex];
+      if (column && power !== 0 && velocity !== 0) {
+        // Finds values matching classification and not at 0 power or velocity.
+        processParameters.push({ velocity, power });
+      }
+    });
+  });
+  return processParameters;
 };

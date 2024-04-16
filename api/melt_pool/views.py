@@ -132,23 +132,25 @@ class Inference(APIView):
         with open('./melt_pool/material_mapping.pkl', 'rb') as f:
             material_mapping = pickle.load(f)
 
-        material = material_mapping[request.query_params.get('mat')]
-        min_p = int(request.query_params.get('minp'))
-        power = int(request.query_params.get('maxp'))
-        velocity = int(request.query_params.get('minv'))
-        max_v = int(request.query_params.get('maxv'))
+        material = material_mapping[request.query_params.get('material')]
+        min_power = int(request.query_params.get('power_min'))
+        max_power = int(request.query_params.get('power_max'))
+        min_velocity = int(request.query_params.get('velocity_min'))
+        max_velocity = int(request.query_params.get('velocity_max'))
 
-        p_step, v_step = 10, 0.1
+        power_step = int(request.query_params.get('power_step'))
+        velocity_step = float(request.query_params.get('velocity_step'))
+
         preds = []
-        while power >= min_p:
+        while max_power >= min_power:
             temp = []
-            v = velocity
-            while v <= max_v:
-                features = np.array([[power, v, *material]])
+            v = min_velocity
+            while v <= max_velocity:
+                features = np.array([[max_power, v, *material]])
                 temp.append(model.predict(features)[0])
-                v += v_step
+                v += velocity_step
             preds.append(temp)
-            power -= p_step
+            max_power -= power_step
 
         return Response({'prediction': preds})
 
@@ -159,13 +161,51 @@ class EagarTsai(APIView):
 
     permission_classes = (AllowAny,)
 
+    def replace_special_characters(self, text):
+        """
+        Replace special characters "-", ".", " ", and "/" with an empty string.
+
+        Args:
+        text (str): The input text.
+
+        Returns:
+        str: The text with special characters replaced.
+        """
+
+        if (text is not None):
+            special_characters = ["-", ".", " ", "/"]
+            for char in special_characters:
+                text = text.replace(char, "")
+        return text
+
     def get(self, request):
+        material = request.query_params.get('material')
+        material_name = self.replace_special_characters(material)
+
         ds = load_dataset(
             "baratilab/Eagar-Tsai",
             "process_maps",
-            split="m_Ti64_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_Ti64_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_IN625_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_AlSi10Mg_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_CMSX4_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_HastelloyX_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_IN625_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_IN718_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_Invar36_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_K403superalloy_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_SS174PH_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_SS304_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_SS304L_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_SS316L_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_Ti49Al2Cr2Nb_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_Ti6Al4V_p_0_480_20_v_0.0_2.9_0.1",
+            # split="m_TiCInconel718_p_0_480_20_v_0.0_2.9_0.1",
+
+            split=f"m_{material_name}_p_0_480_20_v_0.0_2.9_0.1",
             streaming="true",
         )
+
         dimensions = {}
         for data in ds:
             dimensions = data
