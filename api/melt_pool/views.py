@@ -126,32 +126,103 @@ class Inference(APIView):
 
     permission_classes = (AllowAny,)
 
+    def calc_abs_coeff1(self, min_abs, P, T1, rho, Cp, Vs, r0):
+        T0 = 293
+        numerator = min_abs * P
+        denominator = (T1 - T0) * np.pi * rho * Cp * Vs * (r0**2) + 1e-16
+        return 0.7 * (1 - np.exp(-0.6 * numerator / denominator))
+
+    def calc_abs_coeff2(self, k, T1, W, rho, Cp, V, P):
+        T0 = 293
+        numerator = (np.pi * k * (T1 - T0) * W) + (np.e * np.pi * rho * Cp * (T1 - T0) * V * (W**2) / 8)
+        denominator = P + 1e-16
+        return numerator / denominator
+
+    def convert_to_dict(self, Ws):
+        Ps = [
+            0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 
+            260, 280, 300, 320, 340, 360, 380, 400, 420, 440, 460, 480
+        ]
+        Vs = [
+            0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 
+            1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 
+            2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9
+        ]
+        W_dict = {}
+        for i in range(25):
+            p = Ps[i]
+            W_dict[p] = {}
+            for j in range(30):
+                v = Vs[j]
+                W_dict[p][v] = Ws[i][j]
+
+        return W_dict        
+    
+    def replace_special_characters(self, text):
+        """
+        Replace special characters "-", ".", " ", and "/" with an empty string.
+
+        Args:
+        text (str): The input text.
+
+        Returns:
+        str: The text with special characters replaced.
+        """
+
+        if (text is not None):
+            special_characters = ["-", ".", " ", "/"]
+            for char in special_characters:
+                text = text.replace(char, "")
+        return text
+    
     def get(self, request):
         with open('./melt_pool/rf.pt', 'rb') as f:
             model = pickle.load(f)
         with open('./melt_pool/material_mapping.pkl', 'rb') as f:
             material_mapping = pickle.load(f)
 
-        material = material_mapping[request.query_params.get('material')]
-        min_power = int(request.query_params.get('power_min'))
-        max_power = int(request.query_params.get('power_max'))
-        min_velocity = int(request.query_params.get('velocity_min'))
-        max_velocity = int(request.query_params.get('velocity_max'))
+        material = request.query_params.get('mat')
+        min_p = float(request.query_params.get('minp'))
+        max_p = float(request.query_params.get('maxp'))
+        min_v = float(request.query_params.get('minv'))
+        max_v = float(request.query_params.get('maxv'))
+        # r0 = int(request.query_params.get('r0'))  # TODO: r0 is beam radius
+        r0 = 100e-6
+        # W = int(request.query_params.get('W'))  # TODO: W is meltpool width
+        Ws = self.convert_to_dict(
+            next(iter(load_dataset(
+                "baratilab/Eagar-Tsai",
+                "process_maps",
+                split=f"m_{self.replace_special_characters(material)}_p_0_480_20_v_0.0_2.9_0.1"
+            )))['widths']
+        )
 
-        power_step = int(request.query_params.get('power_step'))
-        velocity_step = float(request.query_params.get('velocity_step'))
+        p_step = float(request.query_params.get('pstep')) if request.query_params.get('pstep') else 10
+        v_step = float(request.query_params.get('vstep')) if request.query_params.get('vstep') else 0.1
+
+        composition = material_mapping[material]['composition']
+        min_abs = material_mapping[material]['min_absorptivity']
+        T1 = material_mapping[material]['melting_point']
+        rho = material_mapping[material]['density']
+        Cp = material_mapping[material]['specific_heat']
+        k = material_mapping[material]['thermal_conductivity']
 
         preds = []
-        while max_power >= min_power:
+        p = max_p
+        while p >= min_p:
             temp = []
-            v = min_velocity
-            while v <= max_velocity:
-                features = np.array([[max_power, v, *material]])
+            v = min_v
+            while v <= max_v:
+                W = Ws.get(p, {}).get(v, 0.0001)
+                abs_coeff1 = self.calc_abs_coeff1(min_abs, p, T1, rho, Cp, v, r0)
+                abs_coeff2 = self.calc_abs_coeff2(k, T1, W, rho, Cp, v, p)
+                features = np.array([[p, v, abs_coeff1, abs_coeff2, *composition]])
                 temp.append(model.predict(features)[0])
-                v += velocity_step
+                v += v_step
             preds.append(temp)
-            max_power -= power_step
+            p -= p_step
 
+        # {0: 'LOF', 1: 'balling', 2: 'desirable', 3: 'keyhole'}
         return Response({'prediction': preds})
 
 class EagarTsai(APIView):
