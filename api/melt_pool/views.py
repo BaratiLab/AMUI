@@ -181,13 +181,13 @@ class Inference(APIView):
         with open('./melt_pool/material_mapping.pkl', 'rb') as f:
             material_mapping = pickle.load(f)
 
-        material = request.query_params.get('mat')
-        min_p = float(request.query_params.get('minp'))
-        max_p = float(request.query_params.get('maxp'))
-        min_v = float(request.query_params.get('minv'))
-        max_v = float(request.query_params.get('maxv'))
+        material = request.query_params.get('material')
+        min_p = float(request.query_params.get('power_min'))
+        max_p = float(request.query_params.get('power_max'))
+        min_v = float(request.query_params.get('velocity_min'))
+        max_v = float(request.query_params.get('velocity_max'))
         # r0 = int(request.query_params.get('r0'))  # TODO: r0 is beam radius
-        r0 = 100e-6
+        r0 = 50e-6
         # W = int(request.query_params.get('W'))  # TODO: W is meltpool width
         Ws = self.convert_to_dict(
             next(iter(load_dataset(
@@ -197,8 +197,8 @@ class Inference(APIView):
             )))['widths']
         )
 
-        p_step = float(request.query_params.get('pstep')) if request.query_params.get('pstep') else 10
-        v_step = float(request.query_params.get('vstep')) if request.query_params.get('vstep') else 0.1
+        p_step = float(request.query_params.get('power_step')) if request.query_params.get('power_step') else 10
+        v_step = float(request.query_params.get('velocity_step')) if request.query_params.get('velocity_step') else 0.1
 
         composition = material_mapping[material]['composition']
         min_abs = material_mapping[material]['min_absorptivity']
@@ -208,11 +208,11 @@ class Inference(APIView):
         k = material_mapping[material]['thermal_conductivity']
 
         preds = []
-        p = max_p
-        while p >= min_p:
+        p = min_p
+        while p <= max_p:
             temp = []
             v = min_v
-            while v <= max_v:
+            while v - max_v < 1e-8:
                 W = Ws.get(p, {}).get(v, 0.0001)
                 abs_coeff1 = self.calc_abs_coeff1(min_abs, p, T1, rho, Cp, v, r0)
                 abs_coeff2 = self.calc_abs_coeff2(k, T1, W, rho, Cp, v, p)
@@ -220,7 +220,7 @@ class Inference(APIView):
                 temp.append(model.predict(features)[0])
                 v += v_step
             preds.append(temp)
-            p -= p_step
+            p += p_step
 
         # {0: 'LOF', 1: 'balling', 2: 'desirable', 3: 'keyhole'}
         return Response({'prediction': preds})

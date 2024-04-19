@@ -18,6 +18,7 @@ import {
 import { setProcessMapConfigurationSection } from "process_map/configurationSlice";
 import { fetchMetals } from "material/metalsSlice";
 import { fetchEagarTsai } from "melt_pool/eagarTsaiSlice";
+import { fetchInference } from "melt_pool/inferenceSlice";
 
 // Constants
 const OMITTED_MATERIALS = [
@@ -44,6 +45,7 @@ const RecordsForm: FC = () => {
   const dispatch = useAppDispatch();
   const [material, setMaterial] = useState<"" | HTMLSelectElement>("");
   const state = useAppSelector((state) => state.materialMetals);
+  const inferenceState = useAppSelector((state) => state.meltPoolInference);
   // const [{ status: processParametersStatus }, getProcessParameters] =
   //   useProcessParameters();
 
@@ -53,6 +55,10 @@ const RecordsForm: FC = () => {
   //     dispatch(setProcessMapConfigurationSection(Section.ParameterSelection));
   //   }
   // }, [dispatch, processParametersStatus]);
+
+  useEffect(() => {
+    console.log(inferenceState)
+  }, [inferenceState]);
 
   useEffect(() => {
     // Retreives available metals from materials app.
@@ -70,6 +76,15 @@ const RecordsForm: FC = () => {
       // Retrieves process parameters by the selected material.
       // getProcessParameters(value);
       dispatch(fetchEagarTsai(value));
+      dispatch(fetchInference({
+        material: value,
+        power_min: 0,
+        power_max: 480,
+        power_step: 20,
+        velocity_min: 0,
+        velocity_max: 2.9,
+        velocity_step: 0.1,
+      }));
     }
 
     dispatch(setProcessMapConfigurationSection(Section.ProcessMap));

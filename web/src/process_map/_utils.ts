@@ -223,3 +223,33 @@ export const classificationToPowerVelocity = (
   });
   return processParameters;
 };
+
+export const predictionToClassification = (
+  prediction: number[][], value: number
+): boolean[][] => prediction.map((row) => row.map((column) => column === value));
+
+export const predictionToScatter = (
+  velocities: number[],
+  powers: number[],
+  classifications: boolean[][],
+  key: string,
+): ProcessMapArea[] => {
+  const data: ProcessMapArea[] = [];
+
+  velocities.forEach((velocity, velocityIndex) => {
+    // Determines the y (power) start and end values for area within x (velocity)
+    powers.forEach((power, powerIndex) => {
+      const classification = classifications[powerIndex][velocityIndex];
+      if (classification) {
+        data.push({
+          velocity,
+          power,
+          // key: `${key}${powerIndex}${velocityIndex}`,
+        });
+      }
+    });
+
+  });
+
+  return data;
+};

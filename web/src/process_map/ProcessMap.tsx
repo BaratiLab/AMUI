@@ -12,13 +12,14 @@ import {
   // shape
 } from "prop-types";
 import { FC, ReactNode, useEffect, useState } from "react";
+import { FormControlLabel , Checkbox } from "@mui/material";
 import {
   Area,
   CartesianGrid,
   ComposedChart,
   Label,
   Legend,
-  // Scatter,
+  Scatter,
   XAxis,
   YAxis,
 } from "recharts";
@@ -56,6 +57,8 @@ import {
   classificationToPowerVelocity,
   classifyProcessMap,
   generateProcessMap,
+  predictionToClassification,
+  predictionToScatter
 } from "./_utils";
 
 const legendFormatter = (value: string) => {
@@ -77,10 +80,21 @@ const ProcessMap: FC<Props> = ({
   // Hooks
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.meltPoolEagarTsai);
+  const { 
+    data: inferenceData,
+    status: inferenceStatus,
+  } = useAppSelector((state) => state.meltPoolInference)
   const { hatchSpacing, layerThickness } = useAppSelector(
     (state) => state.processMapConfiguration,
   );
   const [data, setData] = useState<ProcessMapPoints[]>([]);
+  const [inferenceProcessMap, setInferenceProcessMap] = useState({
+    lackOfFusion: [],
+    balling: [],
+    keyhole: [],
+    nominal: [],
+  });
+  const [showInference, setShowInference] = useState(false);
   const [xDomain, setXDomain] = useState<number[] | undefined>(undefined);
   const [yDomain, setYDomain] = useState<number[] | undefined>(undefined);
   const [opacity, setOpacity] = useState(0.1); // Initial opacity value
@@ -94,6 +108,25 @@ const ProcessMap: FC<Props> = ({
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []); // Empty dependency array to run effect only once
+
+  useEffect(() => {
+    if (inferenceStatus === Status.Succeeded) {
+      // {0: 'LOF', 1: 'balling', 2: 'desirable', 3: 'keyhole'}
+      const newData = [];
+      const { powers, velocities } = state.data;
+      const lofClassifications = predictionToClassification(inferenceData.prediction, 0);
+      const nominalClassifications = predictionToClassification(inferenceData.prediction, 2);
+      const ballingClassifications = predictionToClassification(inferenceData.prediction, 1);
+      const keyholeClassifications = predictionToClassification(inferenceData.prediction, 3);
+      console.log(nominalClassifications)
+      setInferenceProcessMap({
+        lackOfFusion: predictionToScatter(velocities, powers, lofClassifications, "lackOfFusion"),
+        balling: predictionToScatter(velocities, powers, ballingClassifications, "balling"),
+        keyhole: predictionToScatter(velocities, powers, keyholeClassifications, "keyhole"),
+        nominal: predictionToScatter(velocities, powers, nominalClassifications, "nominal")
+      });
+    }
+  }, [state.data.powers, state.data.velocities, inferenceData.prediction, inferenceStatus]);
 
   useEffect(() => {
     if (state.status === Status.Succeeded) {
@@ -146,74 +179,99 @@ const ProcessMap: FC<Props> = ({
   }, [dispatch, state, hatchSpacing, layerThickness]);
 
   return (
-    <ComposedChart data={data} height={height} margin={margin} width={width}>
-      <CartesianGrid
-        fill={state.status === Status.Loading ? "gray" : "green"}
-        fillOpacity={state.status === Status.Loading ? opacity : 0.5}
-        strokeDasharray="3 3"
+    <>
+      <FormControlLabel
+        control={
+          <Checkbox
+            disabled={inferenceStatus !== Status.Succeeded}
+            onChange={() => setShowInference((prevState) => !prevState)}
+          />
+        }
+        label="Display Machine Learning Inference"
       />
-      <Area
-        type="step"
-        strokeOpacity={1}
-        fillOpacity={0.5}
-        dataKey="balling"
-        fill="purple"
-        stroke="purple"
-      />
-      <Area
-        type="step"
-        strokeOpacity={1}
-        fillOpacity={0.5}
-        dataKey="keyhole"
-        fill="red"
-        stroke="red"
-      />
-      <Area
-        type="step"
-        strokeOpacity={1}
-        fillOpacity={0.5}
-        dataKey="lackOfFusion"
-        stroke="blue"
-        fill="blue"
-      />
-      <Area
-        type="step"
-        strokeOpacity={1}
-        fillOpacity={0.5}
-        dataKey="nominal"
-        stroke="green"
-        fill="green"
-      />
-      <XAxis
-        dataKey="velocity"
-        domain={xDomain}
-        ticks={state.data.velocities}
-        type="number"
+      <ComposedChart
+        data={data}
+        height={height}
+        margin={margin}
+        width={width}
       >
-        <Label position="bottom" value="Velocity (mm/s)" />
-      </XAxis>
-      <YAxis
-        dataKey="power"
-        domain={yDomain}
-        type="number"
-        ticks={state.data.powers}
-      >
-        <Label angle={-90} position="insideLeft" value="Power (W)" />
-      </YAxis>
-      <Legend
-        formatter={legendFormatter}
-        iconType="square"
-        verticalAlign="bottom"
-        wrapperStyle={{
-          bottom: "20px",
-          left: "35px",
-        }}
-      />
-      {/* <Scatter name="Keyhole" data={kh} fill="#8884d8" />
-      <Scatter name="Desirable" data={d} fill="#82ca9d" />
-      <Scatter name="LOF" data={lof} fill="#f9849d" /> */}
-      {children}
-    </ComposedChart>
+        <CartesianGrid
+          fill={state.status === Status.Loading ? "gray" : "green"}
+          // fill={state.status === Status.Loading ? "gray" : "white"}
+          fillOpacity={state.status === Status.Loading ? opacity : 0.5}
+          strokeDasharray="3 3"
+        />
+        <Area
+          type={showInference ? "basis" : "step"}
+          strokeOpacity={1}
+          fillOpacity={0.5}
+          dataKey="balling"
+          fill="purple"
+          stroke="purple"
+        />
+        <Area
+          type={showInference ? "basis" : "step"}
+          strokeOpacity={1}
+          fillOpacity={0.5}
+          dataKey="keyhole"
+          fill="red"
+          stroke="red"
+        />
+        <Area
+          type={showInference ? "basis" : "step"}
+          strokeOpacity={1}
+          fillOpacity={0.5}
+          dataKey="lackOfFusion"
+          stroke="blue"
+          fill="blue"
+        />
+        <Area
+          type={showInference ? "basis" : "step"}
+          strokeOpacity={1}
+          fillOpacity={0.5}
+          dataKey="nominal"
+          stroke="green"
+          fill="green"
+        />
+        <Legend
+          formatter={legendFormatter}
+          iconType="square"
+          verticalAlign="bottom"
+          wrapperStyle={{
+            bottom: "20px",
+            left: "35px",
+          }}
+        />
+        {showInference && (
+          <>
+            <Scatter dataKey="nominal" name="nominal" data={inferenceProcessMap.nominal} fill="green"/>
+            <Scatter dataKey="lackOfFusion" name="lackOfFusion" data={inferenceProcessMap.lackOfFusion} fill="blue"/>
+            <Scatter dataKey="keyhole" name="keyhole" data={inferenceProcessMap.keyhole} fill="red"/>
+            <Scatter dataKey="balling" name="balling" data={inferenceProcessMap.balling} fill="purple"/>
+          </>
+        )}
+        <XAxis
+          dataKey="velocity"
+          domain={xDomain}
+          ticks={state.data.velocities}
+          type="number"
+        >
+          <Label position="bottom" value="Velocity (mm/s)" />
+        </XAxis>
+        <YAxis
+          dataKey="power"
+          domain={yDomain}
+          type="number"
+          ticks={state.data.powers}
+        >
+          <Label angle={-90} position="insideLeft" value="Power (W)" />
+        </YAxis>
+        {/* <Scatter name="Keyhole" data={kh} fill="#8884d8" />
+        <Scatter name="Desirable" data={d} fill="#82ca9d" />
+        <Scatter name="LOF" data={lof} fill="#f9849d" /> */}
+        {children}
+      </ComposedChart>
+    </>
   );
 };
 
