@@ -132,12 +132,6 @@ class Inference(APIView):
         denominator = (T1 - T0) * np.pi * rho * Cp * Vs * (r0**2) + 1e-16
         return 0.7 * (1 - np.exp(-0.6 * numerator / denominator))
 
-    def calc_abs_coeff2(self, k, T1, W, rho, Cp, V, P):
-        T0 = 293
-        numerator = (np.pi * k * (T1 - T0) * W) + (np.e * np.pi * rho * Cp * (T1 - T0) * V * (W**2) / 8)
-        denominator = P + 1e-16
-        return numerator / denominator
-
     def convert_to_dict(self, Ws):
         Ps = [
             0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 
@@ -176,54 +170,60 @@ class Inference(APIView):
         return text
     
     def get(self, request):
-        with open('./melt_pool/rf.pt', 'rb') as f:
-            model = pickle.load(f)
+        with open('./melt_pool/depth_model.pt', 'rb') as f:
+            depth_model = pickle.load(f)
+        with open('./melt_pool/width_model.pt', 'rb') as f:
+            width_model = pickle.load(f)
+        with open('./melt_pool/length_model.pt', 'rb') as f:
+            length_model = pickle.load(f)
         with open('./melt_pool/material_mapping.pkl', 'rb') as f:
             material_mapping = pickle.load(f)
 
-        material = request.query_params.get('mat')
-        min_p = float(request.query_params.get('minp'))
-        max_p = float(request.query_params.get('maxp'))
-        min_v = float(request.query_params.get('minv'))
-        max_v = float(request.query_params.get('maxv'))
+        material = request.query_params.get('material')
+        min_p = float(request.query_params.get('power_min'))
+        max_p = float(request.query_params.get('power_max'))
+        min_v = float(request.query_params.get('velocity_min'))
+        max_v = float(request.query_params.get('velocity_max'))
         # r0 = int(request.query_params.get('r0'))  # TODO: r0 is beam radius
-        r0 = 100e-6
-        # W = int(request.query_params.get('W'))  # TODO: W is meltpool width
-        Ws = self.convert_to_dict(
-            next(iter(load_dataset(
-                "baratilab/Eagar-Tsai",
-                "process_maps",
-                split=f"m_{self.replace_special_characters(material)}_p_0_480_20_v_0.0_2.9_0.1"
-            )))['widths']
-        )
+        r0 = 50e-6
 
-        p_step = float(request.query_params.get('pstep')) if request.query_params.get('pstep') else 10
-        v_step = float(request.query_params.get('vstep')) if request.query_params.get('vstep') else 0.1
+        p_step = float(request.query_params.get('power_step')) if request.query_params.get('power_step') else 10
+        v_step = float(request.query_params.get('velocity_step')) if request.query_params.get('velocity_step') else 0.1
 
-        composition = material_mapping[material]['composition']
         min_abs = material_mapping[material]['min_absorptivity']
         T1 = material_mapping[material]['melting_point']
         rho = material_mapping[material]['density']
         Cp = material_mapping[material]['specific_heat']
         k = material_mapping[material]['thermal_conductivity']
 
-        preds = []
-        p = max_p
-        while p >= min_p:
-            temp = []
+        power_array = []
+        velocity_array = []
+        depth_array = []
+        width_array = []
+        length_array = []
+
+        p = min_p
+        while p <= max_p:
+            power_array.append(p)
+            temp_depth = []
+            temp_width = []
+            temp_length = []
             v = min_v
             while v <= max_v:
-                W = Ws.get(p, {}).get(v, 0.0001)
+                velocity_array.append(v)
                 abs_coeff1 = self.calc_abs_coeff1(min_abs, p, T1, rho, Cp, v, r0)
-                abs_coeff2 = self.calc_abs_coeff2(k, T1, W, rho, Cp, v, p)
-                features = np.array([[p, v, abs_coeff1, abs_coeff2, *composition]])
-                temp.append(model.predict(features)[0])
-                v += v_step
-            preds.append(temp)
-            p -= p_step
+                features = np.array([[p, v, rho, Cp, k, T1, abs_coeff1]])
+                temp_depth.append(depth_model.predict(features)[0])
+                temp_width.append(width_model.predict(features)[0])
+                temp_length.append(length_model.predict(features)[0])
+                v = round(v + v_step, 1)
+            depth_array.append(temp_depth)
+            width_array.append(temp_width)
+            length_array.append(temp_length)
+            p += p_step
 
         # {0: 'LOF', 1: 'balling', 2: 'desirable', 3: 'keyhole'}
-        return Response({'prediction': preds})
+        return Response({'depths': depth_array, 'widths': width_array, 'lengths': length_array, 'power': power_array, 'velocity': velocity_array})
 
 class EagarTsai(APIView):
     """
