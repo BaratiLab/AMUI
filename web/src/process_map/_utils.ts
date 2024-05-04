@@ -5,7 +5,7 @@
 
 // Types
 import { PowerVelocity } from "./_types";
-interface ProcessMapArea {
+export interface ProcessMapArea {
   [key: string]: number | (undefined | number)[] | undefined;
   velocity: number;
 }
@@ -225,14 +225,16 @@ export const classificationToPowerVelocity = (
 };
 
 export const predictionToClassification = (
-  prediction: number[][], value: number
-): boolean[][] => prediction.map((row) => row.map((column) => column === value));
+  prediction: number[][],
+  value: number,
+): boolean[][] =>
+  prediction.map((row) => row.map((column) => column === value));
 
 export const predictionToScatter = (
   velocities: number[],
   powers: number[],
   classifications: boolean[][],
-  key: string,
+  // key: string,
 ): ProcessMapArea[] => {
   const data: ProcessMapArea[] = [];
 
@@ -248,7 +250,6 @@ export const predictionToScatter = (
         });
       }
     });
-
   });
 
   return data;

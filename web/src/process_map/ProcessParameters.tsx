@@ -44,8 +44,13 @@ const ProcessParameters: FC = () => {
 
   return (
     <>
-      <FormControl fullWidth variant="standard" sx={{ marginTop: "30px" }}>
-        <Typography>Hatch Spacing</Typography>
+      <FormControl
+        sx={{
+          alignItems: "center",
+          paddingBottom: "125px",
+        }}
+        variant="standard"
+      >
         <Slider
           // disabled={processParametersStatus === Status.Idle}
           disableSwap
@@ -53,14 +58,21 @@ const ProcessParameters: FC = () => {
           value={hatchSpacing}
           valueLabelDisplay="auto"
           onChange={handleSliderChange}
+          orientation="vertical"
           min={0}
           max={100}
           marks={true}
           step={10}
         />
+        <Typography paddingTop="10px">{"Hatch Spacing (μm)"}</Typography>
       </FormControl>
-      <FormControl fullWidth variant="standard" sx={{ marginTop: "30px" }}>
-        <Typography>Layer Thickness</Typography>
+      <FormControl
+        sx={{
+          alignItems: "center",
+          paddingBottom: "125px",
+        }}
+        variant="standard"
+      >
         <Slider
           // disabled={processParametersStatus === Status.Idle}
           disableSwap
@@ -68,11 +80,13 @@ const ProcessParameters: FC = () => {
           value={layerThickness}
           valueLabelDisplay="auto"
           onChange={handleSliderChange}
+          orientation="vertical"
           min={0}
           max={100}
           marks={true}
           step={10}
         />
+        <Typography paddingTop="10px">{"Layer Thickness (μm)"}</Typography>
       </FormControl>
     </>
   );

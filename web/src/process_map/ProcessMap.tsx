@@ -12,7 +12,7 @@ import {
   // shape
 } from "prop-types";
 import { FC, ReactNode, useEffect, useState } from "react";
-import { FormControlLabel , Checkbox } from "@mui/material";
+import { Box, Checkbox, FormControlLabel } from "@mui/material";
 import {
   Area,
   CartesianGrid,
@@ -58,18 +58,25 @@ import {
   classifyProcessMap,
   generateProcessMap,
   predictionToClassification,
-  predictionToScatter
+  predictionToScatter,
+  ProcessMapArea
 } from "./_utils";
 
-const legendFormatter = (value: string) => {
-  switch (value) {
-    case "lackOfFusion":
-      return "Lack of Fusion";
-    default:
-      // Capitalize rest
-      return value[0].toUpperCase() + value.slice(1);
-  }
-};
+interface Inference {
+  [key: string]: ProcessMapArea[]
+}
+
+// const legendFormatter = (value: string) => {
+//   if (value !== undefined) {
+//     switch (value) {
+//       case "lackOfFusion":
+//         return "Lack of Fusion";
+//       default:
+//         // Capitalize rest
+//         return value[0].toUpperCase() + value.slice(1);
+//     }
+//   }
+// };
 
 const ProcessMap: FC<Props> = ({
   children,
@@ -80,15 +87,14 @@ const ProcessMap: FC<Props> = ({
   // Hooks
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.meltPoolEagarTsai);
-  const { 
-    data: inferenceData,
-    status: inferenceStatus,
-  } = useAppSelector((state) => state.meltPoolInference)
+  const { data: inferenceData, status: inferenceStatus } = useAppSelector(
+    (state) => state.meltPoolInference,
+  );
   const { hatchSpacing, layerThickness } = useAppSelector(
     (state) => state.processMapConfiguration,
   );
   const [data, setData] = useState<ProcessMapPoints[]>([]);
-  const [inferenceProcessMap, setInferenceProcessMap] = useState({
+  const [inferenceProcessMap, setInferenceProcessMap] = useState<Inference>({
     lackOfFusion: [],
     balling: [],
     keyhole: [],
@@ -112,21 +118,56 @@ const ProcessMap: FC<Props> = ({
   useEffect(() => {
     if (inferenceStatus === Status.Succeeded) {
       // {0: 'LOF', 1: 'balling', 2: 'desirable', 3: 'keyhole'}
-      const newData = [];
+      // const newData = [];
       const { powers, velocities } = state.data;
-      const lofClassifications = predictionToClassification(inferenceData.prediction, 0);
-      const nominalClassifications = predictionToClassification(inferenceData.prediction, 2);
-      const ballingClassifications = predictionToClassification(inferenceData.prediction, 1);
-      const keyholeClassifications = predictionToClassification(inferenceData.prediction, 3);
-      console.log(nominalClassifications)
+      const lofClassifications = predictionToClassification(
+        inferenceData.prediction,
+        0,
+      );
+      const nominalClassifications = predictionToClassification(
+        inferenceData.prediction,
+        2,
+      );
+      const ballingClassifications = predictionToClassification(
+        inferenceData.prediction,
+        1,
+      );
+      const keyholeClassifications = predictionToClassification(
+        inferenceData.prediction,
+        3,
+      );
       setInferenceProcessMap({
-        lackOfFusion: predictionToScatter(velocities, powers, lofClassifications, "lackOfFusion"),
-        balling: predictionToScatter(velocities, powers, ballingClassifications, "balling"),
-        keyhole: predictionToScatter(velocities, powers, keyholeClassifications, "keyhole"),
-        nominal: predictionToScatter(velocities, powers, nominalClassifications, "nominal")
+        lackOfFusion: predictionToScatter(
+          velocities,
+          powers,
+          lofClassifications,
+          // "lackOfFusion",
+        ),
+        balling: predictionToScatter(
+          velocities,
+          powers,
+          ballingClassifications,
+          // "balling",
+        ),
+        keyhole: predictionToScatter(
+          velocities,
+          powers,
+          keyholeClassifications,
+          // "keyhole",
+        ),
+        nominal: predictionToScatter(
+          velocities,
+          powers,
+          nominalClassifications,
+          // "nominal",
+        ),
       });
     }
-  }, [state.data.powers, state.data.velocities, inferenceData.prediction, inferenceStatus]);
+  }, [
+    state.data,
+    inferenceData.prediction,
+    inferenceStatus,
+  ]);
 
   useEffect(() => {
     if (state.status === Status.Succeeded) {
@@ -178,23 +219,146 @@ const ProcessMap: FC<Props> = ({
     }
   }, [dispatch, state, hatchSpacing, layerThickness]);
 
-  return (
-    <>
-      <FormControlLabel
-        control={
-          <Checkbox
-            disabled={inferenceStatus !== Status.Succeeded}
-            onChange={() => setShowInference((prevState) => !prevState)}
-          />
-        }
-        label="Display Machine Learning Inference"
-      />
-      <ComposedChart
-        data={data}
-        height={height}
-        margin={margin}
-        width={width}
+  // JSX
+  const renderLegendJSX = () => (
+    <ul
+      className="recharts-default-legend"
+      style={{
+        padding: 0,
+        margin: 0,
+        textAlign: "center",
+      }}
+    >
+      <li
+        className="recharts-legend-item legend-item-0"
+        style={{ display: "inline-block", marginRight: "10px" }}
+        key="nominal"
       >
+        <svg
+          className="recharts-surface"
+          width="14"
+          height="14"
+          viewBox="0 0 32 32"
+          style={{
+            display: "inline-block",
+            verticalAlign: "middle",
+            marginRight: "4px",
+          }}
+        >
+          <title></title>
+          <desc></desc>
+          <path
+            fill="green"
+            cx="16"
+            cy="16"
+            className="recharts-symbols"
+            transform="translate(16, 16)"
+            d="M-16,-16h32v32h-32Z"
+          ></path>
+        </svg>
+        <span className="recharts-legend-item-text" style={{ color: "green" }}>
+          Nominal
+        </span>
+      </li>
+      <li
+        className="recharts-legend-item legend-item-1"
+        style={{ display: "inline-block", marginRight: "10px" }}
+        key="keyhole"
+      >
+        <svg
+          className="recharts-surface"
+          width="14"
+          height="14"
+          viewBox="0 0 32 32"
+          style={{
+            display: "inline-block",
+            verticalAlign: "middle",
+            marginRight: "4px",
+          }}
+        >
+          <title></title>
+          <desc></desc>
+          <path
+            fill="red"
+            cx="16"
+            cy="16"
+            className="recharts-symbols"
+            transform="translate(16, 16)"
+            d="M-16,-16h32v32h-32Z"
+          ></path>
+        </svg>
+        <span className="recharts-legend-item-text" style={{ color: "red" }}>
+          Keyhole
+        </span>
+      </li>
+      <li
+        className="recharts-legend-item legend-item-2"
+        style={{ display: "inline-block", marginRight: "10px" }}
+        key="lackOfFusion"
+      >
+        <svg
+          className="recharts-surface"
+          width="14"
+          height="14"
+          viewBox="0 0 32 32"
+          style={{
+            display: "inline-block",
+            verticalAlign: "middle",
+            marginRight: "4px",
+          }}
+        >
+          <title></title>
+          <desc></desc>
+          <path
+            fill="blue"
+            cx="16"
+            cy="16"
+            className="recharts-symbols"
+            transform="translate(16, 16)"
+            d="M-16,-16h32v32h-32Z"
+          ></path>
+        </svg>
+        <span className="recharts-legend-item-text" style={{ color: "blue" }}>
+          Lack of Fusion
+        </span>
+      </li>
+      <li
+        className="recharts-legend-item legend-item-3"
+        style={{ display: "inline-block", marginRight: "10px" }}
+        key="balling"
+      >
+        <svg
+          className="recharts-surface"
+          width="14"
+          height="14"
+          viewBox="0 0 32 32"
+          style={{
+            display: "inline-block",
+            verticalAlign: "middle",
+            marginRight: "4px",
+          }}
+        >
+          <title></title>
+          <desc></desc>
+          <path
+            fill="purple"
+            cx="16"
+            cy="16"
+            className="recharts-symbols"
+            transform="translate(16, 16)"
+            d="M-16,-16h32v32h-32Z"
+          ></path>
+        </svg>
+        <span className="recharts-legend-item-text" style={{ color: "purple" }}>
+          Balling
+        </span>
+      </li>
+    </ul>
+  );
+
+  return (
+    <Box>
+      <ComposedChart data={data} height={height} margin={margin} width={width}>
         <CartesianGrid
           fill={state.status === Status.Loading ? "gray" : "green"}
           // fill={state.status === Status.Loading ? "gray" : "white"}
@@ -233,8 +397,17 @@ const ProcessMap: FC<Props> = ({
           stroke="green"
           fill="green"
         />
-        <Legend
+        {/* <Legend
           formatter={legendFormatter}
+          iconType="square"
+          verticalAlign="bottom"
+          wrapperStyle={{
+            bottom: "20px",
+            left: "35px",
+          }}
+        /> */}
+        <Legend
+          content={renderLegendJSX}
           iconType="square"
           verticalAlign="bottom"
           wrapperStyle={{
@@ -244,10 +417,10 @@ const ProcessMap: FC<Props> = ({
         />
         {showInference && (
           <>
-            <Scatter dataKey="nominal" name="nominal" data={inferenceProcessMap.nominal} fill="green"/>
-            <Scatter dataKey="lackOfFusion" name="lackOfFusion" data={inferenceProcessMap.lackOfFusion} fill="blue"/>
-            <Scatter dataKey="keyhole" name="keyhole" data={inferenceProcessMap.keyhole} fill="red"/>
-            <Scatter dataKey="balling" name="balling" data={inferenceProcessMap.balling} fill="purple"/>
+            <Scatter data={inferenceProcessMap.nominal} fill="green" />
+            <Scatter data={inferenceProcessMap.lackOfFusion} fill="blue" />
+            <Scatter data={inferenceProcessMap.keyhole} fill="red" />
+            <Scatter data={inferenceProcessMap.balling} fill="purple" />
           </>
         )}
         <XAxis
@@ -271,7 +444,20 @@ const ProcessMap: FC<Props> = ({
         <Scatter name="LOF" data={lof} fill="#f9849d" /> */}
         {children}
       </ComposedChart>
-    </>
+      <FormControlLabel
+        control={
+          <Checkbox
+            disabled={inferenceStatus !== Status.Succeeded}
+            onChange={() => setShowInference((prevState) => !prevState)}
+          />
+        }
+        label="Display Machine Learning Inference"
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      />
+    </Box>
   );
 };
 

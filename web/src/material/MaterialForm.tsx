@@ -57,7 +57,7 @@ const RecordsForm: FC = () => {
   // }, [dispatch, processParametersStatus]);
 
   useEffect(() => {
-    console.log(inferenceState)
+    console.log(inferenceState);
   }, [inferenceState]);
 
   useEffect(() => {
@@ -76,15 +76,17 @@ const RecordsForm: FC = () => {
       // Retrieves process parameters by the selected material.
       // getProcessParameters(value);
       dispatch(fetchEagarTsai(value));
-      dispatch(fetchInference({
-        material: value,
-        power_min: 0,
-        power_max: 480,
-        power_step: 20,
-        velocity_min: 0,
-        velocity_max: 2.9,
-        velocity_step: 0.1,
-      }));
+      dispatch(
+        fetchInference({
+          material: value,
+          power_min: 0,
+          power_max: 480,
+          power_step: 20,
+          velocity_min: 0,
+          velocity_max: 2.9,
+          velocity_step: 0.1,
+        }),
+      );
     }
 
     dispatch(setProcessMapConfigurationSection(Section.ProcessMap));
