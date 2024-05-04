@@ -8,6 +8,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -124,9 +125,11 @@ const ProcessMapAccordion: FC = () => {
             alignItems: "center",
           }}
         >
-          <ProcessMap />
+          <Box display="flex" sx={{ gap: "50px" }}>
+            <ProcessMap />
+            <ProcessParameters />
+          </Box>
           <NominalProcessParametersTable />
-          <ProcessParameters />
         </AccordionDetails>
       </Accordion>
     </>
