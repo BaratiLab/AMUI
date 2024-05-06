@@ -14,6 +14,7 @@ import eagarTsaiSliceReducer from "melt_pool/eagarTsaiSlice";
 import inferenceSliceReducer from "melt_pool/inferenceSlice";
 import processParametersReducer from "melt_pool/processParametersSlice";
 import recordsReducer from "melt_pool/recordsSlice";
+import simulationSliceReducer from "surrogate/simulationSlice";
 import configurationReducer from "process_map/configurationSlice";
 
 const store = configureStore({
@@ -27,6 +28,8 @@ const store = configureStore({
     meltPoolInference: inferenceSliceReducer,
     meltPoolProcessParameters: processParametersReducer,
     meltPoolRecords: recordsReducer,
+    // Surrogate
+    surrogate: simulationSliceReducer,
     // Process Map
     processMapConfiguration: configurationReducer,
     // Theme

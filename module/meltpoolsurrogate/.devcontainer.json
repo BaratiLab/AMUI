@@ -1,0 +1,7 @@
+{
+  "name": "amui-module-meltpoolsurrogate",
+  "service": "module-meltpoolsurrogate",
+  "workspaceFolder": "/home/meltpoolsurrogate",
+  "dockerComposeFile": "../../docker-compose.yml",
+  "shutdownAction": "stopCompose"
+}
