@@ -16,6 +16,7 @@ import { useAppSelector } from "hooks";
 // Pages
 import Navbar from "_pages/_Navbar";
 import ProcessMapAccordion from "_pages/ProcessMapAccordion";
+import Surrogate from "_pages/Surrogate"
 import ViewSTL from "_pages/ViewSTL";
 import Worksheet from "_pages/Worksheet";
 
@@ -42,6 +43,7 @@ const App: FC = () => {
           <Route path="" element={<ProcessMapAccordion />} />
           <Route path="/view_stl" element={<ViewSTL />} />
           <Route path="/worksheet" element={<Worksheet />} />
+          <Route path="/surrogate" element={<Surrogate />} />
         </Routes>
       </Container>
     </ThemeProvider>
