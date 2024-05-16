@@ -79,6 +79,9 @@ Perform these commands inside a terminal not attached to Docker container.
     - Host name/address: `host.docker.internal`
     - Username: `postgres`
     - Password: check `POSTGRES_PASSWORD` in `.env`
+- Docker
+  - [Delete Docker Images](https://stackoverflow.com/a/44785784/10521456): `docker rmi -f $(docker images -aq)`
+  - [Enter Docker Container](https://stackoverflow.com/a/26496854/10521456): `docker exec -it [container-id] bash`
 
 ## Troubleshooting
 - [Need `sudo` on Docker in Ubuntu](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo)
