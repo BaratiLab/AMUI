@@ -4,12 +4,12 @@ services:
   api:
     container_name: amui-api
     build:
-      context: ./api
+      context: ./services/api
       dockerfile: Dockerfile
     env_file:
       - .env
     volumes:
-      - ./api:/home/api
+      - ./services/api:/home/api
 
       # Links bundle to templates folder.
       - bundle:/home/api/static
@@ -24,7 +24,7 @@ services:
   web:
     container_name: amui-web
     build:
-      context: ./web
+      context: ./services/web
       dockerfile: Dockerfile
     environment:
       - API_DOMAIN=${API_DOMAIN}
@@ -32,7 +32,7 @@ services:
       # https://stackoverflow.com/a/65265986/10521456
       - CHOKIDAR_USEPOLLING=true
     volumes:
-      - ./web:/home/web
+      - ./services/web:/home/web
 
       # Creates a separate volume for node_modules otherwise next.js won't start
       - web_node_modules:/home/web/node_modules
@@ -68,23 +68,23 @@ services:
   meltpoolnet:
     container_name: amui-module-meltpoolnet
     build:
-      context: ./module/meltpoolnet
+      context: ./services/module/meltpoolnet
       dockerfile: Dockerfile
     tty: true
 
   module-eagartsai:
     container_name: amui-module-eagartsai
     volumes:
-      - ./module/eagartsai:/home/eagartsai
+      - ./services/module/eagartsai:/home/eagartsai
     build:
-      context: ./module/eagartsai
+      context: ./services/module/eagartsai
       dockerfile: Dockerfile
     tty: true
 
   module-example:
     container_name: amui-module-example
     build:
-      context: ./module/example
+      context: ./services/module/example
       dockerfile: Dockerfile
     tty: true
 

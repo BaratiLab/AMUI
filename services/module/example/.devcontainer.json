@@ -2,6 +2,6 @@
   "name": "amui-module-example",
   "service": "module-example",
   "workspaceFolder": "/home/example",
-  "dockerComposeFile": "../../docker-compose.yml",
+  "dockerComposeFile": "../../../docker-compose.yml",
   "shutdownAction": "stopCompose"
 }
