@@ -19,6 +19,7 @@
     "@mui/material": "^5.15.4",
     "@reduxjs/toolkit": "^2.1.0",
     "@types/three": "^0.160.0",
+    "axios": "^1.7.0",
     "csv-loader": "^3.0.5",
     "prop-types": "^15.8.1",
     "query-string": "^8.2.0",

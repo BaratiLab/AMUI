@@ -15,14 +15,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 # from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import include, path
 from django.views.generic import TemplateView
+
+from api import views
 
 urlpatterns = [
     path("", include("melt_pool.urls")),
     path("", include("machine.urls")),
     path("", include("surrogate.urls")),
+    path("", include("slicer.urls")),
+    path("api/csrf-token/", views.get_csrf_token),
     path("", TemplateView.as_view(template_name="index.html"), {"resource": ""}),
     path("<path:resource>", TemplateView.as_view(template_name="index.html")),
     # path('admin/', admin.site.urls),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
