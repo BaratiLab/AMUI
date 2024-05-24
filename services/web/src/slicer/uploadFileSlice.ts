@@ -21,22 +21,19 @@ import { Status } from "enums";
 export interface RecordsSliceInitialState extends AsyncThunkInitialState {
   // data: [];
   response: {
-    // count: null | number;
-    // next: null | string;
-    // previous: null | string;
-    // results: MeltPoolRecord[];
+    id: null | number;
+    file: null | string;
+    uploaded_at: null | string;
   };
 }
 
 // Constants
 const initialState: RecordsSliceInitialState = {
   response: {
-    // count: null,
-    // next: null,
-    // previous: null,
-    // results: [],
+    id: null,
+    file: null,
+    uploaded_at: null,
   },
-  // data: [],
   status: Status.Idle,
   error: null,
 };
@@ -71,23 +68,17 @@ export const slice = createSlice({
       .addCase(fetchUploadFile.fulfilled, (state, action) => {
         state.status = Status.Succeeded;
         state.response = action.payload;
-        // state.data = action.payload.results;
       })
       .addCase(fetchUploadFile.rejected, (state, action) => {
         state.status = Status.Failed;
         state.response = {
-          // count: null,
-          // next: null,
-          // previous: null,
-          // results: [],
+          id: null,
+          file: null,
+          uploaded_at: null,
         };
-        // state.data = [];
         state.error = action.error.message;
       });
   },
 });
-
-// Action creators are generated for each case reducer function
-// export const { setRecords } = slice.actions;
 
 export default slice.reducer;

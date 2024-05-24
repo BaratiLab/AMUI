@@ -33,8 +33,8 @@ const store = configureStore({
     // Process Map
     processMapConfiguration: configurationReducer,
     // Slicer
-    stlToGCode: stlToGCodeReducer,
-    uploadFile: uploadFileReducer,
+    slicerSTLToGCode: stlToGCodeReducer,
+    slicerUploadFile: uploadFileReducer,
     // Surrogate
     surrogate: simulationSliceReducer,
     // Theme

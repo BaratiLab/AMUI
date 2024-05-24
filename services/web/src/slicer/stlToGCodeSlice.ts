@@ -16,32 +16,24 @@ import { Status } from "enums";
 // Types
 // import { MeltPoolFilterset, MeltPoolRecord } from "./_types";
 export interface RecordsSliceInitialState extends AsyncThunkInitialState {
-  // data: [];
   response: {
-    // count: null | number;
-    // next: null | string;
-    // previous: null | string;
-    // results: MeltPoolRecord[];
+    file: string | null;
   };
 }
 
 // Constants
 const initialState: RecordsSliceInitialState = {
   response: {
-    // count: null,
-    // next: null,
-    // previous: null,
-    // results: [],
+    file: null,
   },
-  // data: [],
   status: Status.Idle,
   error: null,
 };
 
 export const fetchSTLToGCode = createAsyncThunk(
   "slicer/fetchSTLToGCode",
-  async () => {
-    const response = await postSTLToGcode();
+  async (file: string) => {
+    const response = await postSTLToGcode(file);
     return response;
   },
 );
@@ -49,16 +41,7 @@ export const fetchSTLToGCode = createAsyncThunk(
 export const slice = createSlice({
   name: "slicerSTLToGCode",
   initialState,
-  reducers: {
-    // setRecords: (state, action) => {
-    //   // Can't set `state = action.payload` directly as it won't update.
-    //   state.response.count = action.payload.count;
-    //   state.response.next = action.payload.next;
-    //   state.response.previous = action.payload;
-    //   state.response.results = action.payload.results;
-    //   state.data = action.payload.results;
-    // },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(fetchSTLToGCode.pending, (state) => {
@@ -67,17 +50,12 @@ export const slice = createSlice({
       .addCase(fetchSTLToGCode.fulfilled, (state, action) => {
         state.status = Status.Succeeded;
         state.response = action.payload;
-        // state.data = action.payload.results;
       })
       .addCase(fetchSTLToGCode.rejected, (state, action) => {
         state.status = Status.Failed;
         state.response = {
-          // count: null,
-          // next: null,
-          // previous: null,
-          // results: [],
+          file: null
         };
-        // state.data = [];
         state.error = action.error.message;
       });
   },

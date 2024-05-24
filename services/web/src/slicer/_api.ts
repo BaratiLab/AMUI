@@ -19,11 +19,11 @@ import { request } from "common/request";
  * @description API route to convert STL file to GCode.
  * @returns
  */
-export const postSTLToGcode = async () => {
+export const postSTLToGcode = async (file: string) => {
   try {
     // const stringifiedFilterset = filterset && queryString.stringify(filterset);
     // const response = await request(`melt_pool/records/?${stringifiedFilterset || ""}`,);
-    const response = await request('slicer/stl_to_gcode/', "POST");
+    const response = await request('slicer/stl_to_gcode/', "POST", { file });
     const data = await response.json();
     return data;
   } catch (error) {

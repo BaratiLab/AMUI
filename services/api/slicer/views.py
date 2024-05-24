@@ -16,19 +16,11 @@ class SlicerSTLToGCode(APIView):
     permission_classes = (AllowAny, )
 
     def post(self, request):
-        response = subprocess.run(["prusa-slicer", "--gcode", "./static/stl/cube.stl"])
-        print(response)
-        return Response({'message': str(response)}, status=status.HTTP_201_CREATED)
-
-# from django.shortcuts import render
-# from rest_framework.response import Response
-# from rest_framework.decorators import  api_view
-
-# @api_view(['POST'])
-# def stl_to_gcode(request):
-#     if request.method == 'POST':
-#         response = subprocess.run(["ls"])
-#         return Response(response)
+        print(request.data)
+        file = request.data.get("file")
+        subprocess.run(["prusa-slicer", "--gcode", f".{file}"])
+        gcode_file = file[:-3] + "gcode"
+        return Response({'file': str(gcode_file)}, status=status.HTTP_201_CREATED)
 
 class UploadFile(APIView):
     parser_classes = (MultiPartParser, FormParser)

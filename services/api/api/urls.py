@@ -28,9 +28,8 @@ urlpatterns = [
     path("", include("surrogate.urls")),
     path("", include("slicer.urls")),
     path("api/csrf-token/", views.get_csrf_token),
+    static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)[0],
     path("", TemplateView.as_view(template_name="index.html"), {"resource": ""}),
     path("<path:resource>", TemplateView.as_view(template_name="index.html")),
     # path('admin/', admin.site.urls),
 ]
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
