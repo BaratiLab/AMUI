@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # Apps
     "machine",
     "melt_pool",
+    "slicer",
 ]
 
 MIDDLEWARE = [
@@ -154,3 +155,6 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "PAGE_SIZE": 100,
 }
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
