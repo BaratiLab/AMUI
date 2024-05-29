@@ -26,6 +26,16 @@ class UploadFile(APIView):
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = (AllowAny, )
 
+    def get(self, request, *args, **kwargs):
+        # Query the database for the last 10 uploaded files
+        latest_files = UploadedFile.objects.order_by('-uploaded_at')[:10]
+        
+        # Serialize the files
+        file_serializer = UploadedFileSerializer(latest_files, many=True)
+        
+        # Return the serialized data
+        return Response(file_serializer.data, status=status.HTTP_200_OK)
+
     def post(self, request, *args, **kwargs):
         file_serializer = UploadedFileSerializer(data=request.data)
         if file_serializer.is_valid():

@@ -5,7 +5,6 @@
 
 // Node Modules
 import styled from '@emotion/styled'
-import { Slider } from "@mui/material";
 import { string } from "prop-types";
 import { FC, ChangeEvent, useState } from 'react';
 
@@ -14,8 +13,7 @@ import { fetchSTLToGCode } from 'slicer/stlToGCodeSlice';
 import { fetchUploadFile } from 'slicer/uploadFileSlice';
 
 // Components
-import { GCodeViewer } from './GCodeViewer';
-// import PrintPreview from 'common/PrintPreview';
+import GCodeLayerViewer from 'slicer/GCodeLayerViewer';
 
 // Enums
 import { Status } from 'enums';
@@ -26,14 +24,6 @@ import { useAppDispatch, useAppSelector } from 'hooks';
 // Styled Components
 export const StyledUploadedGCodeViewer = styled.div``;
 export const StyledUpload = styled.div``;
-export const StyledViewer = styled.div`
-  display: flex;
-
-  .slider-overrides {
-    // Changes height from 100% to unset to allow slider work with flex.
-    height: unset;
-  }
-`
 
 export interface Props {
   className?: string;
@@ -45,8 +35,6 @@ const UploadedGCodeViewer: FC<Props> = ({ className }) => {
   const state = useAppSelector((state) => state.slicerUploadFile);
   const { response, status } = useAppSelector((state) => state.slicerSTLToGCode);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [layer, setLayer] = useState(1);
-  const [maxLayerIndex, setMaxLayerIndex] = useState<null | number>(null);
 
   // Callbacks
   const handleClick = () => {
@@ -69,29 +57,11 @@ const UploadedGCodeViewer: FC<Props> = ({ className }) => {
     }
   };
 
-  const handleSliderChange = (e: Event, newValue: number | number[]) => {
-    const formElement = e.target as HTMLFormElement;
-    const name = formElement?.name as "layer";
-
-    if (Array.isArray(newValue)) {
-      return;
-    }
-
-    switch (name) {
-      case "layer":
-        setLayer(newValue);
-    }
-  };
-
   // JSX
   const uploadSuccessJSX = state.status === Status.Succeeded && (
     <div>
       <p>Upload Succeeded: {state.response.file}</p>
       <button onClick={handleClick}>Slice</button>
-      {/* <PrintPreview
-        stlUrl={state.response.file as string}
-        gcodeUrl={response.file ? response.file : undefined}
-      /> */}
     </div>
   );
 
@@ -102,32 +72,7 @@ const UploadedGCodeViewer: FC<Props> = ({ className }) => {
         <button onClick={handleUpload}>Upload</button>
         {uploadSuccessJSX}
       </StyledUpload>
-      <StyledViewer>
-        <GCodeViewer
-          orbitControls
-          showAxes
-          style={{
-            width: '500px',
-            height: '500px'
-          }}
-          url={status === Status.Succeeded ? response.file : undefined}
-          layer = {layer}
-          onLayersLoaded ={(layers) => setMaxLayerIndex(layers - 1)}
-        />
-        <Slider
-          className="slider-overrides"
-          disabled={maxLayerIndex === null}
-          disableSwap
-          name="layer"
-          value={layer}
-          valueLabelDisplay="auto"
-          onChange={handleSliderChange}
-          orientation="vertical"
-          min={0}
-          max={maxLayerIndex as number}
-          step={1}
-        />
-      </StyledViewer>
+      <GCodeLayerViewer status={status} url={response.file} />
     </StyledUploadedGCodeViewer>
   );
 };
