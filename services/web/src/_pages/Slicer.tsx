@@ -8,10 +8,12 @@ import { FC } from 'react';
 
 // Components
 import UploadedGCodeViewer from "slicer/UploadedGCodeViewer";
+import Chart from "slicer/HighchartsScatterPlot";
 
 const Slicer: FC = () => (
   <div>
     <UploadedGCodeViewer />
+    <Chart />
   </div>
 );
 

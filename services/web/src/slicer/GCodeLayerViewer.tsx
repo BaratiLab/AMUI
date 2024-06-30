@@ -5,7 +5,7 @@
 
 // Node Modules
 import styled from '@emotion/styled'
-import { Slider } from "@mui/material";
+import { Slider, Button, Typography } from "@mui/material";
 import { CSSProperties, FC, useState } from 'react';
 
 // Components
@@ -22,9 +22,12 @@ export const StyledGCodeLayerViewer = styled.div`
   padding: 25px;
   width: fit-content;
 
-  .slider-overrides {
-    // Changes height from 100% to unset to allow slider work with flex.
-    height: unset;
+  .slider-container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 150px;
   }
 `
 // Types
@@ -37,14 +40,16 @@ interface Props {
 const GCodeLayerViewer: FC<Props> = ({
   status = Status.Idle,
   style = {
-    width: '500px',
-    height: '500px'
+    width: '750px',
+    height: '750px'
   },
   url = "",
 }) => {
   // Hooks
+  const [layers, setLayers] = useState([]);
   const [layerIndex, setLayerIndex] = useState(0);
   const [maxLayerIndex, setMaxLayerIndex] = useState<null | number>(null);
+  const [showSingleLayer, setShowSingleLayer] = useState(false);
 
   // Callbacks
   const handleSliderChange = (e: Event, newValue: number | number[]) => {
@@ -61,6 +66,13 @@ const GCodeLayerViewer: FC<Props> = ({
     }
   };
 
+  const handleLayersLoaded = (layers: object[][]) => {
+    setLayers(layers);
+    setMaxLayerIndex(layers.length - 1);
+  };
+
+  console.log(layers)
+
   return (
     <StyledGCodeLayerViewer>
       <GCodeViewer
@@ -68,22 +80,31 @@ const GCodeLayerViewer: FC<Props> = ({
         showAxes
         style={style}
         url={status === Status.Succeeded ? url as string : ""}
-        layer = {layerIndex}
-        onLayersLoaded ={(layers) => setMaxLayerIndex(layers - 1)}
+        layer = {showSingleLayer ? layerIndex : null}
+        onLayersLoaded ={handleLayersLoaded}
       />
-      <Slider
-        className="slider-overrides"
-        disabled={maxLayerIndex === null}
-        disableSwap
-        name="layerIndex"
-        value={layerIndex}
-        valueLabelDisplay="auto"
-        onChange={handleSliderChange}
-        orientation="vertical"
-        min={0}
-        max={maxLayerIndex as number}
-        step={1}
-      />
+      <div className="slider-container">
+        <Typography>
+          {showSingleLayer ? `Layer: ${layerIndex + 1}` : 'All Layers'}
+        </Typography>
+        <Slider
+          disabled={maxLayerIndex === null || !showSingleLayer}
+          disableSwap
+          name="layerIndex"
+          value={layerIndex}
+          valueLabelDisplay="auto"
+          onChange={handleSliderChange}
+          orientation="vertical"
+          min={0}
+          max={maxLayerIndex as number}
+          step={1}
+        />
+        <Button onClick={() => setShowSingleLayer((prevState) => !prevState)}>
+          <Typography>
+            {showSingleLayer ? 'Show All' : 'Show Single'}
+          </Typography>
+        </Button>
+      </div>
     </StyledGCodeLayerViewer>
   );
 };
