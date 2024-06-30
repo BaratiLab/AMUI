@@ -15,6 +15,9 @@ import inferenceSliceReducer from "melt_pool/inferenceSlice";
 import processParametersReducer from "melt_pool/processParametersSlice";
 import recordsReducer from "melt_pool/recordsSlice";
 import simulationSliceReducer from "surrogate/simulationSlice";
+import stlToGCodeReducer from "slicer/stlToGCodeSlice";
+import uploadFileReducer from "slicer/uploadFileSlice";
+import uploadAndSliceReducer from "slicer/uploadAndSliceSlice";
 import configurationReducer from "process_map/configurationSlice";
 
 const store = configureStore({
@@ -28,10 +31,14 @@ const store = configureStore({
     meltPoolInference: inferenceSliceReducer,
     meltPoolProcessParameters: processParametersReducer,
     meltPoolRecords: recordsReducer,
-    // Surrogate
-    surrogate: simulationSliceReducer,
     // Process Map
     processMapConfiguration: configurationReducer,
+    // Slicer
+    slicerSTLToGCode: stlToGCodeReducer,
+    slicerUploadAndSlice: uploadAndSliceReducer,
+    slicerUploadFile: uploadFileReducer,
+    // Surrogate
+    surrogate: simulationSliceReducer,
     // Theme
     theme: themeReducer,
   },

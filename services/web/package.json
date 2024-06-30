@@ -17,9 +17,14 @@
     "@mui/icons-material": "^5.15.4",
     "@mui/lab": "^5.0.0-alpha.166",
     "@mui/material": "^5.15.4",
+    "@react-three/drei": "^9.105.6",
+    "@react-three/fiber": "^8.16.6",
     "@reduxjs/toolkit": "^2.1.0",
     "@types/three": "^0.160.0",
+    "axios": "^1.7.0",
     "csv-loader": "^3.0.5",
+    "highcharts": "^11.4.3",
+    "highcharts-react-official": "^3.2.1",
     "prop-types": "^15.8.1",
     "query-string": "^8.2.0",
     "react": "^18.2.0",
@@ -28,7 +33,8 @@
     "react-router-dom": "^6.21.1",
     "recharts": "^2.11.0",
     "redux": "^5.0.1",
-    "three": "^0.160.0"
+    "three": "^0.160.0",
+    "three-stdlib": "2.17.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.46",

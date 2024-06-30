@@ -161,7 +161,5 @@ cython_debug/
 
 .DS_Store
 *npy
-*png 
-*txt
 
 services/api/media/
