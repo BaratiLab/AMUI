@@ -52,8 +52,8 @@ const GCodeModel: React.FC<GCodeViewerContentProps> = (
       longitude: -Math.PI / 8,
       distance: 350
     },
-    layerColor = 'grey',
-    topLayerColor = 'hotpink',
+    layerColor = 'white',
+    topLayerColor = 'white',
     visible = 1,
     quality = 1,
     showAxes = false,
@@ -121,7 +121,7 @@ const GCodeModel: React.FC<GCodeViewerContentProps> = (
 
       console.log("pointsZLayers", pointsZLayers);
       setZLayers(pointsZLayers);
-      onLayersLoaded(pointsZLayers.length);
+      onLayersLoaded(pointsZLayers);
     }
 
     setGPointBatches([])

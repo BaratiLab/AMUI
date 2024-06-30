@@ -9,8 +9,9 @@ import { string } from "prop-types";
 import { FC, ChangeEvent, useState } from 'react';
 
 // Actions
-import { fetchSTLToGCode } from 'slicer/stlToGCodeSlice';
-import { fetchUploadFile } from 'slicer/uploadFileSlice';
+// import { fetchSTLToGCode } from 'slicer/stlToGCodeSlice';
+// import { fetchUploadFile } from 'slicer/uploadFileSlice';
+import { fetchUploadAndSlice } from 'slicer/uploadAndSliceSlice';
 
 // Components
 import GCodeLayerViewer from 'slicer/GCodeLayerViewer';
@@ -32,14 +33,13 @@ export interface Props {
 const UploadedGCodeViewer: FC<Props> = ({ className }) => {
   // Hooks
   const dispatch = useAppDispatch();
-  const state = useAppSelector((state) => state.slicerUploadFile);
-  const { response, status } = useAppSelector((state) => state.slicerSTLToGCode);
+  const { response, status } = useAppSelector((state) => state.slicerUploadAndSlice);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   // Callbacks
-  const handleClick = () => {
-    dispatch(fetchSTLToGCode(state.response.file as string));
-  };
+  // const handleClick = () => {
+  //   dispatch(fetchSTLToGCode(state.response.file as string));
+  // };
 
   // Handler for file input change
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -51,17 +51,17 @@ const UploadedGCodeViewer: FC<Props> = ({ className }) => {
   // Handler for button click
   const handleUpload = () => {
     if (selectedFile) {
-      dispatch(fetchUploadFile(selectedFile));
+      dispatch(fetchUploadAndSlice(selectedFile));
     } else {
       alert("Please select a file first.");
     }
   };
 
   // JSX
-  const uploadSuccessJSX = state.status === Status.Succeeded && (
+  const uploadSuccessJSX = status === Status.Succeeded && (
     <div>
-      <p>Upload Succeeded: {state.response.file}</p>
-      <button onClick={handleClick}>Slice</button>
+      <p>Upload and Slice Succeeded: {response.file}</p>
+      {/* <button onClick={handleClick}>Slice</button> */}
     </div>
   );
 
