@@ -57,3 +57,13 @@ export const postUploadAndSlice = async (file: File) => {
     console.log(error);
   }
 };
+
+export const getRecentGCodeFiles = async () => {
+  try {
+    const response = await axios.get('slicer/recent_gcode_files/')
+    const data = response.data;
+    return data
+  } catch (error) {
+    console.log(error);
+  }
+}

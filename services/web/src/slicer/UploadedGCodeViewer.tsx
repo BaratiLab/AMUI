@@ -6,12 +6,13 @@
 // Node Modules
 import styled from '@emotion/styled'
 import { string } from "prop-types";
-import { FC, ChangeEvent, useState } from 'react';
+import { FC, ChangeEvent, useEffect, useState } from 'react';
 
 // Actions
 // import { fetchSTLToGCode } from 'slicer/stlToGCodeSlice';
 // import { fetchUploadFile } from 'slicer/uploadFileSlice';
 import { fetchUploadAndSlice } from 'slicer/uploadAndSliceSlice';
+import { fetchRecentGCodeFiles } from 'slicer/recentGCodeFilesSlice';
 
 // Components
 import GCodeLayerViewer from 'slicer/GCodeLayerViewer';
@@ -34,12 +35,14 @@ const UploadedGCodeViewer: FC<Props> = ({ className }) => {
   // Hooks
   const dispatch = useAppDispatch();
   const { response, status } = useAppSelector((state) => state.slicerUploadAndSlice);
+  const { recentGCodeFilesResponse, recentGCodeFilesStatus } = useAppSelector((state) => state.recentGCodeFiles);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  // Callbacks
-  // const handleClick = () => {
-  //   dispatch(fetchSTLToGCode(state.response.file as string));
-  // };
+  console.log(recentGCodeFilesResponse, recentGCodeFilesStatus)
+
+  useEffect(() => {
+    dispatch(fetchRecentGCodeFiles());
+  }, [dispatch])
 
   // Handler for file input change
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {

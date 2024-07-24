@@ -22,7 +22,7 @@ import SpecificationAlert from "machine/SpecificationAlert";
 import SpecificationCardsGrid from "machine/SpecificationCardsGrid";
 import MaterialForm from "material/MaterialForm";
 import NominalProcessParametersTable from "process_map/NominalProcessParametersTable";
-import ProcessMap from "process_map/ProcessMap";
+import ProcessMap from "process_map/ProcessMapOld";
 import ProcessParameters from "process_map/ProcessParameters";
 
 // Enums

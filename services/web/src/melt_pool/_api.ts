@@ -65,6 +65,20 @@ export const getEagarTsai = async (material: string) => {
 };
 
 /**
+ * @description API route to retrieve flow3d data for process map
+ * @returns
+ */
+export const getFlow3D = async () => {
+  try {
+    const response = await request(`melt_pool/flow3d`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/**
  * @description API route to retrieve MeltPoolNet Inference
  * @returns
  */

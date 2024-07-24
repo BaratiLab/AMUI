@@ -128,11 +128,13 @@ export const generateProcessMap = (
   );
 
   // Balling
+  // length / width
   const balling = lengths.map((row, rowIndex) =>
     row.map((column, columnIndex) => column / widths[rowIndex][columnIndex]),
   );
 
   // Keyhole
+  // width / depth
   const keyhole = widths.map((row, rowIndex) =>
     row.map((column, columnIndex) => {
       const criteria = column / Math.abs(depths[rowIndex][columnIndex]);

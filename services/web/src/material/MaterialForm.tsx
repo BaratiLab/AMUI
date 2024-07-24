@@ -122,6 +122,9 @@ const RecordsForm: FC = () => {
           <MenuItem disabled value="">
             <em>Material</em>
           </MenuItem>
+          <MenuItem key="Ti-6Al-4V-Surrogate" value={"Ti-6Al-4V-Surrogate"}>
+            {"Ti-6Al-4V Surrogate"}
+          </MenuItem>
           {materialsJSX}
         </Select>
       </FormControl>

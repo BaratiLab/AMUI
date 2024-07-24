@@ -280,5 +280,22 @@ class EagarTsai(APIView):
         dimensions = {}
         for data in ds:
             dimensions = data
+            # if material == "Ti-6Al-4V":
+            #     with open("./melt_pool/ti64_surrogate.pkl", "rb") as f:
+            #         surrogate = pickle.load(f)              
+            #         dimensions = {
+            #             **dimensions,
+            #             **surrogate,
+            #         }
             
+        return Response(dimensions)
+
+class Flow3d(APIView):
+
+    permission_classes = (AllowAny, )
+
+    def get(self, request):
+        with open('./melt_pool/dimensions.pkl', 'rb') as f:
+            dimensions = pickle.load(f)
+
         return Response(dimensions)

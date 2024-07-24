@@ -6,6 +6,7 @@ urlpatterns = [
     path("slicer/stl_to_gcode/", views.SlicerSTLToGCode.as_view()),
     path("slicer/upload_and_slice/", views.UploadAndSlice.as_view()),
     path("slicer/upload_file/", views.UploadFile.as_view()),
+    path("slicer/recent_gcode_files/", views.RecentGCodeFiles.as_view())
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

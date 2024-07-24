@@ -11,6 +11,7 @@ urlpatterns = [
 
     path("melt_pool/inference/", views.Inference.as_view()),
     path("melt_pool/eagar_tsai/", views.EagarTsai.as_view()),
+    path("melt_pool/flow3d/", views.Flow3d.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
