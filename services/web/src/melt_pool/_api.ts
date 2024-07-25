@@ -33,6 +33,23 @@ export const getRecords = async (filterset?: MeltPoolFilterset) => {
 };
 
 /**
+ * @description API route to retrieve melt pool dimensions.
+ * @returns
+ */
+export const getDimensions = async () => {
+  try {
+    const response = await request(
+      // `melt_pool/dimensions/?${stringifiedFilterset || ""}`,
+      `melt_pool/dimensions/`,
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/**
  * @description API route to retrieve melt pool process parameters by material.
  * @returns
  */

@@ -4,20 +4,20 @@
  */
 
 // Node Modules
-import { Box } from "@mui/material";
-import { FC, useEffect } from 'react';
+import { Box, FormControl, Slider, Typography } from "@mui/material";
+import { FC, useEffect, useMemo, useState } from 'react';
 import styled from "styled-components";
 import ParentSize from "@visx/responsive/lib/components/ParentSize";
 
 // Actions
-import {} from "melt_pool/flow3dSlice";
+import {fetchDimensions} from "melt_pool/slice/dimensions";
 
 // Components
 // import ProcessMap from 'process_map/ProcessMap';
 import ProcessMapChart from "process_map/ProcessMapChart";
 
 // Hooks
-import { useAppDispatch } from "hooks";
+import { useAppDispatch, useAppSelector } from "hooks";
 
 // Styled Components
 const StyledProcessMap = styled(Box)`
@@ -37,6 +37,8 @@ const StyledProcessMapPage = styled(Box)`
 const StyledSlider = styled(Box)`
   background-color: green;
   grid-area: slider;
+  display: flex;
+  gap: 50px;
 `;
 
 const StyledFooter = styled(Box)`
@@ -44,18 +46,135 @@ const StyledFooter = styled(Box)`
   grid-area: footer;
 `;
 
-const ProcessMapPage: FC = ({ className }) => {
+interface Defects {
+  lackOfFusion: number;
+  balling: number;
+  keyholing: number;
+}
+
+interface DefectsMap {
+  [key: string]: Defects;
+}
+
+interface Props {
+  className?: string;
+}
+
+const ProcessMapPage: FC<Props> = ({ className }) => {
   // Hooks
   const dispatch = useAppDispatch();
+  const state = useAppSelector((state) => state.meltPoolDimensions);
+  const [hatchSpacing, setHatchSpacing] = useState(50);
+  const [layerThickness, setLayerThickness] = useState(30);
+
+  useEffect(() => {
+    dispatch(fetchDimensions());
+  }, [])
+
+  const processMap = useMemo(() => {
+    return state.data.dimensions.reduce(
+    (acc, dimension) => {
+      const length = dimension["lengths_avg"];
+      const width = dimension["widths_avg"];
+      const depth = dimension["depths_avg"];
+
+      const hatchSpacingWidth = (hatchSpacing/(width + 1e-10))**2
+      const layerThicknessDepth = (layerThickness/(depth + 1e-10))**2
+
+      const widthDepth = width / Math.abs(depth);
+      const key = `${dimension["power"]}-${dimension["velocity"]}`
+
+      return {
+        ...acc,
+        [key]: {
+          lackOfFusion: hatchSpacingWidth + layerThicknessDepth,
+          balling: length / width,
+          keyholing: isNaN(widthDepth) ? Infinity : widthDepth
+        }
+      }
+    }, {} as DefectsMap,
+  )}, [state.data.dimensions, hatchSpacing, layerThickness]);
+
+  // Callbacks
+  const handleSliderChange = (e: Event, newValue: number | number[]) => {
+    const formElement = e.target as HTMLFormElement;
+    const name = formElement?.name as "hatchSpacing" | "layerThickness";
+
+    if (Array.isArray(newValue)) {
+      return;
+    }
+
+    switch (name) {
+      case "hatchSpacing":
+        setHatchSpacing(newValue);
+        break;
+      case "layerThickness":
+        setLayerThickness(newValue);
+        break;
+    }
+  };
 
   return (
     <StyledProcessMapPage className={className}>
       <StyledProcessMap>
         <ParentSize>
-          {({ width, height }) => <ProcessMapChart width={width} height={height} />}
+          {({ width, height }) => (
+            <ProcessMapChart
+              width={width}
+              height={height}
+              domains={state.domains}
+              processMap={processMap}
+              meltPoolDimensions={state.data.dimensions}
+            />
+          )}
         </ParentSize>
       </StyledProcessMap>
-      <StyledSlider />
+      <StyledSlider>
+        <FormControl
+          sx={{
+            alignItems: "center",
+            paddingBottom: "125px",
+          }}
+          variant="standard"
+        >
+          <Slider
+            // disabled={processParametersStatus === Status.Idle}
+            disableSwap
+            name="hatchSpacing"
+            value={hatchSpacing}
+            valueLabelDisplay="auto"
+            onChange={handleSliderChange}
+            orientation="vertical"
+            min={0}
+            max={100}
+            marks={true}
+            step={10}
+          />
+          <Typography paddingTop="10px">{"Hatch Spacing (μm)"}</Typography>
+        </FormControl>
+        <FormControl
+          sx={{
+            alignItems: "center",
+            paddingBottom: "125px",
+          }}
+          variant="standard"
+        >
+          <Slider
+            // disabled={processParametersStatus === Status.Idle}
+            disableSwap
+            name="layerThickness"
+            value={layerThickness}
+            valueLabelDisplay="auto"
+            onChange={handleSliderChange}
+            orientation="vertical"
+            min={0}
+            max={100}
+            marks={true}
+            step={10}
+          />
+          <Typography paddingTop="10px">{"Layer Thickness (μm)"}</Typography>
+        </FormControl>
+      </StyledSlider>
       <StyledFooter />
     </StyledProcessMapPage>
   );

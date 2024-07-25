@@ -299,3 +299,27 @@ class Flow3d(APIView):
             dimensions = pickle.load(f)
 
         return Response(dimensions)
+
+class Dimensions(APIView):
+
+    permission_classes = (AllowAny, )
+
+    def get(self, request):
+        with open('./melt_pool/dimensions.pkl', 'rb') as f:
+            df = pickle.load(f)
+            dimensions = df[["power", "velocity", "beam_diameter", "depths_avg", "depths_std", "lengths_avg", "lengths_std", "widths_avg", "widths_std"]]
+            dimensions = dimensions.to_dict("records")
+            powers = sorted(df["power"].unique())
+            velocities = sorted(df["velocity"].unique())
+            depths_std = sorted(df["depths_std"].unique())
+            lengths_std = sorted(df["lengths_std"].unique())
+            widths_std = sorted(df["widths_std"].unique())
+
+        return Response({
+            "dimensions": dimensions,
+            "powers": powers,
+            "velocities": velocities,
+            "depths_std": depths_std,
+            "lengths_std": lengths_std,
+            "widths_std": widths_std,
+        })

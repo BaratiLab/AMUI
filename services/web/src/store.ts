@@ -14,6 +14,7 @@ import eagarTsaiSliceReducer from "melt_pool/eagarTsaiSlice";
 import inferenceSliceReducer from "melt_pool/inferenceSlice";
 import processParametersReducer from "melt_pool/processParametersSlice";
 import recordsReducer from "melt_pool/recordsSlice";
+import dimensionsReducer from "melt_pool/slice/dimensions";
 import simulationSliceReducer from "surrogate/simulationSlice";
 import recentGCodeFilesSliceReducer from "slicer/recentGCodeFilesSlice";
 import stlToGCodeReducer from "slicer/stlToGCodeSlice";
@@ -32,6 +33,7 @@ const store = configureStore({
     meltPoolInference: inferenceSliceReducer,
     meltPoolProcessParameters: processParametersReducer,
     meltPoolRecords: recordsReducer,
+    meltPoolDimensions: dimensionsReducer,
     // Process Map
     processMapConfiguration: configurationReducer,
     // Slicer

@@ -1,39 +1,50 @@
 /**
  * ProcessMapChart.tsx
  * Visx chart component for displaying process map data.
+ * https://airbnb.io/visx/dots
  */
 
 // Node Modules
 import { FC, useMemo, useState, useCallback, useRef } from 'react';
 import { Group } from '@visx/group';
 import { Circle } from '@visx/shape';
-import { GradientPinkRed } from '@visx/gradient';
+import { GradientSteelPurple } from '@visx/gradient';
 import { scaleLinear } from '@visx/scale';
-import genRandomNormalPoints, {
-  PointsRange,
-} from '@visx/mock-data/lib/generators/genRandomNormalPoints';
+import { PointsRange } from '@visx/mock-data/lib/generators/genRandomNormalPoints';
 import { withTooltip, Tooltip } from '@visx/tooltip';
 import { WithTooltipProvidedProps } from '@visx/tooltip/lib/enhancers/withTooltip';
 import { voronoi, VoronoiPolygon } from '@visx/voronoi';
 import { localPoint } from '@visx/event';
 
-const points: PointsRange[] = genRandomNormalPoints(600, /* seed= */ 0.5).filter((_, i) => i < 600);
+// Types
+import { MeltPoolDimension } from 'melt_pool/_types';
+interface Defects {
+  lackOfFusion: number;
+  balling: number;
+  keyholing: number;
+}
 
-const x = (d: PointsRange) => d[0];
-const y = (d: PointsRange) => d[1];
-
-export type DotsProps = {
+interface DefectsMap {
+  [key: string]: Defects;
+}
+interface Props {
   width: number;
   height: number;
+  meltPoolDimensions: MeltPoolDimension[];
+  processMap:DefectsMap;
+  domains: [number, number][];
   showControls?: boolean;
 };
 
 let tooltipTimeout: number;
 
-const ProcessMapChart: FC<DotsProps & WithTooltipProvidedProps<PointsRange>> = 
+const ProcessMapChart: FC<Props & WithTooltipProvidedProps<PointsRange>> = 
   ({
     width,
     height,
+    meltPoolDimensions,
+    processMap,
+    domains,
     showControls = true,
     hideTooltip,
     showTooltip,
@@ -43,38 +54,54 @@ const ProcessMapChart: FC<DotsProps & WithTooltipProvidedProps<PointsRange>> =
     tooltipTop,
   }) => {
     if (width < 10) return null;
+
+    // Hooks
     const [showVoronoi, setShowVoronoi] = useState(showControls);
     const svgRef = useRef<SVGSVGElement>(null);
+
     const xScale = useMemo(
       () =>
         scaleLinear<number>({
-          domain: [1.3, 2.2],
+          domain: domains[0],
           range: [0, width],
           clamp: true,
         }),
-      [width],
+      [width, domains],
     );
+
     const yScale = useMemo(
       () =>
         scaleLinear<number>({
-          domain: [0.75, 1.6],
+          domain: domains[1],
           range: [height, 0],
           clamp: true,
         }),
-      [height],
-    );
-    const voronoiLayout = useMemo(
-      () =>
-        voronoi<PointsRange>({
-          x: (d) => xScale(x(d)) ?? 0,
-          y: (d) => yScale(y(d)) ?? 0,
-          width,
-          height,
-        })(points),
-      [width, height, xScale, yScale],
+      [height, domains],
     );
 
-    // event handlers
+    const dimensionScale = useMemo(
+      () =>
+        scaleLinear<number>({
+          domain: domains[2],
+          range: [0, 10],
+          clamp: true,
+        }),
+      [domains],
+    );
+
+    const voronoiLayout = useMemo(
+      () => {
+        const points: PointsRange[] = meltPoolDimensions.map((d) => [d["velocity"], d["power"], 0])
+        return voronoi<PointsRange>({
+          x: (d) => xScale(d[0]) ?? 0,
+          y: (d) => yScale(d[1]) ?? 0,
+          width,
+          height,
+        })(points)
+      }, [width, height, xScale, yScale, meltPoolDimensions],
+    );
+
+    // Callbacks
     const handleMouseMove = useCallback(
       (event: React.MouseEvent | React.TouchEvent) => {
         if (tooltipTimeout) clearTimeout(tooltipTimeout);
@@ -87,8 +114,8 @@ const ProcessMapChart: FC<DotsProps & WithTooltipProvidedProps<PointsRange>> =
         const closest = voronoiLayout.find(point.x, point.y, neighborRadius);
         if (closest) {
           showTooltip({
-            tooltipLeft: xScale(x(closest.data)),
-            tooltipTop: yScale(y(closest.data)),
+            tooltipLeft: xScale(closest.data[0]),
+            tooltipTop: yScale(closest.data[1]),
             tooltipData: closest.data,
           });
         }
@@ -102,55 +129,78 @@ const ProcessMapChart: FC<DotsProps & WithTooltipProvidedProps<PointsRange>> =
       }, 300);
     }, [hideTooltip]);
 
+    // JSX
+    const pointsJSX = meltPoolDimensions.map((dimension, i) => {
+      const point = [dimension["velocity"], dimension["power"]]
+      return (
+        <Circle
+          key={`dimension-${dimension["power"]}-${dimension["velocity"]}`}
+          className="dot"
+          cx={xScale(point[0])}
+          cy={yScale(point[1])}
+          r={dimensionScale((dimension["depths_std"] + dimension["widths_std"] + dimension["lengths_std"])/3)}
+          fill={tooltipData === point ? 'white' : '#f6c431'}
+        />
+      )
+    });
+
+    const voronoiLayoutJSX = voronoiLayout
+      .polygons()
+      .map((polygon, i) => {
+        const key = `${polygon.data[1]}-${polygon.data[0]}`;
+
+        const keyholing = processMap[key]["keyholing"] <= 1.5;
+        const balling = processMap[key]["balling"] > 2.3;
+        const lackOfFusion = processMap[key]["lackOfFusion"] >= 1;
+
+        let fill = "green";
+        if (keyholing) {
+          fill = "red";
+        } else if (balling) {
+          fill = "purple";
+        } else if (lackOfFusion) {
+          fill = "blue";
+        }
+
+        return(
+          <VoronoiPolygon
+            key={`polygon-${i}`}
+            polygon={polygon}
+            fill={fill}
+            stroke="white"
+            strokeWidth={1}
+            strokeOpacity={0.2}
+            fillOpacity={tooltipData === polygon.data ? 0.5 : 0.25}
+          />
+      )});
+
     return (
       <div>
         <svg width={width} height={height} ref={svgRef}>
-          <GradientPinkRed id="dots-pink" />
+          <GradientSteelPurple id="gradient" />
           {/** capture all mouse events with a rect */}
           <rect
             width={width}
             height={height}
             rx={14}
-            fill="url(#dots-pink)"
+            fill="url(#gradient)"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             onTouchMove={handleMouseMove}
             onTouchEnd={handleMouseLeave}
           />
           <Group pointerEvents="none">
-            {points.map((point, i) => (
-              <Circle
-                key={`point-${point[0]}-${i}`}
-                className="dot"
-                cx={xScale(x(point))}
-                cy={yScale(y(point))}
-                r={i % 3 === 0 ? 2 : 3}
-                fill={tooltipData === point ? 'white' : '#f6c431'}
-              />
-            ))}
-            {showVoronoi &&
-              voronoiLayout
-                .polygons()
-                .map((polygon, i) => (
-                  <VoronoiPolygon
-                    key={`polygon-${i}`}
-                    polygon={polygon}
-                    fill="white"
-                    stroke="white"
-                    strokeWidth={1}
-                    strokeOpacity={0.2}
-                    fillOpacity={tooltipData === polygon.data ? 0.5 : 0}
-                  />
-                ))}
+            {pointsJSX}
+            {showVoronoi && voronoiLayoutJSX}
           </Group>
         </svg>
         {tooltipOpen && tooltipData && tooltipLeft != null && tooltipTop != null && (
           <Tooltip left={tooltipLeft + 10} top={tooltipTop + 10}>
             <div>
-              <strong>x:</strong> {x(tooltipData)}
+              <strong>Velocity:</strong> {tooltipData[0]} m/s
             </div>
             <div>
-              <strong>y:</strong> {y(tooltipData)}
+              <strong>Power:</strong> {tooltipData[1]} W
             </div>
           </Tooltip>
         )}
@@ -170,4 +220,4 @@ const ProcessMapChart: FC<DotsProps & WithTooltipProvidedProps<PointsRange>> =
     );
   }
 
-export default withTooltip<DotsProps, PointsRange>(ProcessMapChart);
+export default withTooltip<Props, PointsRange>(ProcessMapChart);
