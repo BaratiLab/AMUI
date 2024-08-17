@@ -27,6 +27,11 @@ interface Defects {
 interface DefectsMap {
   [key: string]: Defects;
 }
+
+interface DimensionsMap {
+  [key: string]: Dimension;
+}
+
 interface Props {
   width: number;
   height: number;
@@ -45,7 +50,7 @@ const ProcessMapChart: FC<Props & WithTooltipProvidedProps<PointsRange>> =
     meltPoolDimensions,
     processMap,
     domains,
-    showControls = true,
+    showControls = false,
     hideTooltip,
     showTooltip,
     tooltipOpen,
@@ -56,7 +61,7 @@ const ProcessMapChart: FC<Props & WithTooltipProvidedProps<PointsRange>> =
     if (width < 10) return null;
 
     // Hooks
-    const [showVoronoi, setShowVoronoi] = useState(showControls);
+    const [showVoronoi, setShowVoronoi] = useState(true);
     const svgRef = useRef<SVGSVGElement>(null);
 
     const xScale = useMemo(
@@ -99,6 +104,18 @@ const ProcessMapChart: FC<Props & WithTooltipProvidedProps<PointsRange>> =
           height,
         })(points)
       }, [width, height, xScale, yScale, meltPoolDimensions],
+    );
+
+    const dimensionsMap = useMemo(() =>
+      meltPoolDimensions.reduce(
+        (acc, dimension) => {
+          const key = `${dimension["power"]}-${dimension["velocity"]}`
+          return {
+            ...acc,
+            [key]: dimension 
+          }
+        }, {} as DimensionsMap
+      ), [meltPoolDimensions]
     );
 
     // Callbacks
@@ -150,7 +167,7 @@ const ProcessMapChart: FC<Props & WithTooltipProvidedProps<PointsRange>> =
         const key = `${polygon.data[1]}-${polygon.data[0]}`;
 
         const keyholing = processMap[key]["keyholing"] <= 1.5;
-        const balling = processMap[key]["balling"] > 2.3;
+        const balling = processMap[key]["balling"] > 3.7;
         const lackOfFusion = processMap[key]["lackOfFusion"] >= 1;
 
         let fill = "green";
@@ -201,6 +218,18 @@ const ProcessMapChart: FC<Props & WithTooltipProvidedProps<PointsRange>> =
             </div>
             <div>
               <strong>Power:</strong> {tooltipData[1]} W
+            </div>
+         <div>
+              <strong>Avg Depth:</strong>
+              {dimensionsMap[`${tooltipData[1]}-${tooltipData[0]}`]["depths_avg"]}
+            </div>
+            <div>
+              <strong>Avg Width:</strong>
+              {dimensionsMap[`${tooltipData[1]}-${tooltipData[0]}`]["widths_avg"]}
+            </div>
+            <div>
+              <strong>Avg Length:</strong>
+              {dimensionsMap[`${tooltipData[1]}-${tooltipData[0]}`]["lengths_avg"]}
             </div>
           </Tooltip>
         )}

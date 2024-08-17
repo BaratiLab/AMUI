@@ -280,13 +280,13 @@ class EagarTsai(APIView):
         dimensions = {}
         for data in ds:
             dimensions = data
-            # if material == "Ti-6Al-4V":
-            #     with open("./melt_pool/ti64_surrogate.pkl", "rb") as f:
-            #         surrogate = pickle.load(f)              
-            #         dimensions = {
-            #             **dimensions,
-            #             **surrogate,
-            #         }
+            if material == "Ti-6Al-4V":
+                with open("./melt_pool/ti64_surrogate.pkl", "rb") as f:
+                    surrogate = pickle.load(f)              
+                    dimensions = {
+                        **dimensions,
+                        **surrogate,
+                    }
             
         return Response(dimensions)
 

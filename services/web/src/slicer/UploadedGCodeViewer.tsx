@@ -4,7 +4,9 @@
  */
 
 // Node Modules
+import Button from '@mui/material/Button';
 import styled from '@emotion/styled'
+import SendIcon from '@mui/icons-material/Send';
 import { string } from "prop-types";
 import { FC, ChangeEvent, useEffect, useState } from 'react';
 
@@ -24,8 +26,22 @@ import { Status } from 'enums';
 import { useAppDispatch, useAppSelector } from 'hooks';
 
 // Styled Components
-export const StyledUploadedGCodeViewer = styled.div``;
-export const StyledUpload = styled.div``;
+export const StyledUploadedGCodeViewer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 20px;
+  align-items: center;
+}
+`;
+export const StyledUpload = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+`;
+export const StyledLabel = styled.label`
+  margin-left: 0;
+`;
 
 export interface Props {
   className?: string;
@@ -70,12 +86,24 @@ const UploadedGCodeViewer: FC<Props> = ({ className }) => {
 
   return (
     <StyledUploadedGCodeViewer className={className}>
-      <StyledUpload>
-        <input type="file" onChange={handleFileChange} />
-        <button onClick={handleUpload}>Upload</button>
-        {uploadSuccessJSX}
-      </StyledUpload>
       <GCodeLayerViewer status={status} url={response.file} />
+      <StyledUpload>
+        <input
+          id="file-input"
+          type="file"
+          style={{ display: 'none' }}
+          onChange={handleFileChange}
+        />
+        <StyledLabel htmlFor="file-input">
+          <Button variant="contained" component="span">
+            Select File
+          </Button>
+        </StyledLabel>
+        <Button onClick={handleUpload} variant="outlined" endIcon={<SendIcon />}>
+          Upload and Slice
+        </Button>
+      </StyledUpload>
+      {uploadSuccessJSX}
     </StyledUploadedGCodeViewer>
   );
 };

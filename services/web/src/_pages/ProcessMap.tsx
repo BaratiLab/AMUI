@@ -25,6 +25,7 @@ const StyledProcessMap = styled(Box)`
 `;
 
 const StyledProcessMapPage = styled(Box)`
+  padding: 25px;
   display: grid;
   grid:
     "map map map slider" minmax(100px, 200px)
@@ -35,14 +36,15 @@ const StyledProcessMapPage = styled(Box)`
 `;
 
 const StyledSlider = styled(Box)`
-  background-color: green;
+  // background-color: green;
+  margin-left: 25px;
   grid-area: slider;
   display: flex;
   gap: 50px;
 `;
 
 const StyledFooter = styled(Box)`
-  background-color: red;
+  // background-color: red;
   grid-area: footer;
 `;
 
@@ -81,13 +83,18 @@ const ProcessMapPage: FC<Props> = ({ className }) => {
       const hatchSpacingWidth = (hatchSpacing/(width + 1e-10))**2
       const layerThicknessDepth = (layerThickness/(depth + 1e-10))**2
 
-      const widthDepth = width / Math.abs(depth);
+      let widthDepth = width / Math.abs(depth);
+      // Filter out keyholes that don't have minimum resolution
+      if (width == depth || width / 20 < 2.6 || depth / 20 < 2.6) {
+        widthDepth = NaN;
+      }
+
       const key = `${dimension["power"]}-${dimension["velocity"]}`
 
       return {
         ...acc,
         [key]: {
-          lackOfFusion: hatchSpacingWidth + layerThicknessDepth,
+          lackOfFusion: hatchSpacingWidth**2 + layerThicknessDepth**2,
           balling: length / width,
           keyholing: isNaN(widthDepth) ? Infinity : widthDepth
         }
