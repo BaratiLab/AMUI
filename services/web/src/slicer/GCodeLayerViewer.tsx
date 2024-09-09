@@ -17,7 +17,7 @@ import { Status } from 'enums';
 // Styled Components
 export const StyledGCodeLayerViewer = styled.div`
   display: flex;
-  background-color: gray;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
   border-radius: 10px;
   padding: 25px;
   width: fit-content;
@@ -40,8 +40,8 @@ interface Props {
 const GCodeLayerViewer: FC<Props> = ({
   status = Status.Idle,
   style = {
-    width: '750px',
-    height: '750px'
+    width: '500px',
+    height: '500px'
   },
   url = "",
 }) => {

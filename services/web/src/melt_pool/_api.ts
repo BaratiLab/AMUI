@@ -33,6 +33,23 @@ export const getRecords = async (filterset?: MeltPoolFilterset) => {
 };
 
 /**
+ * @description API route to retrieve melt pool dimensions.
+ * @returns
+ */
+export const getDimensions = async () => {
+  try {
+    const response = await request(
+      // `melt_pool/dimensions/?${stringifiedFilterset || ""}`,
+      `melt_pool/dimensions/`,
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/**
  * @description API route to retrieve melt pool process parameters by material.
  * @returns
  */
@@ -57,6 +74,20 @@ export const getEagarTsai = async (material: string) => {
     const response = await request(
       `melt_pool/eagar_tsai/?material=${material}`,
     );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/**
+ * @description API route to retrieve flow3d data for process map
+ * @returns
+ */
+export const getFlow3D = async () => {
+  try {
+    const response = await request(`melt_pool/flow3d`);
     const data = await response.json();
     return data;
   } catch (error) {

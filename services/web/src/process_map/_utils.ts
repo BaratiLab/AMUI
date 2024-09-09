@@ -128,11 +128,13 @@ export const generateProcessMap = (
   );
 
   // Balling
+  // length / width
   const balling = lengths.map((row, rowIndex) =>
     row.map((column, columnIndex) => column / widths[rowIndex][columnIndex]),
   );
 
   // Keyhole
+  // width / depth
   const keyhole = widths.map((row, rowIndex) =>
     row.map((column, columnIndex) => {
       const criteria = column / Math.abs(depths[rowIndex][columnIndex]);
@@ -156,8 +158,9 @@ export const generateProcessMap = (
 export const classifyProcessMap = (
   processMap: ProcessMap,
   threshold = {
-    balling: 2.3,
-    keyhole: 2.25,
+    balling: 3.7,
+    keyhole: 1.5,
+    // keyhole: 2.25,
     // keyhole: 5,
     lackOfFusion: 1,
   },

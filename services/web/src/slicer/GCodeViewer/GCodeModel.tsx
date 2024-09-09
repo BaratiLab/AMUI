@@ -50,7 +50,7 @@ const GCodeModel: React.FC<GCodeViewerContentProps> = (
     cameraInitialPosition = {
       latitude: Math.PI / 8,
       longitude: -Math.PI / 8,
-      distance: 350
+      distance: 50
     },
     layerColor = 'white',
     topLayerColor = 'white',

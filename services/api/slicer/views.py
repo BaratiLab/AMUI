@@ -7,7 +7,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
+from slicer.models import UploadedFile
 from slicer.serializers import UploadedFileSerializer
+
+class RecentGCodeFiles(ListAPIView):
+    queryset = UploadedFile.objects.all().order_by("-uploaded_at")
+    serializer_class = UploadedFileSerializer
+    permission_classes = (AllowAny, )
 
 class SlicerSTLToGCode(APIView):
     """

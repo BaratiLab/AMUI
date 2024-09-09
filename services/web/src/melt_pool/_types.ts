@@ -93,3 +93,23 @@ export interface MeltPoolRecord {
   comments: string | null;
   unknown: number;
 }
+
+// Melt Pool Dimension
+export interface MeltPoolDimension {
+  power: number;
+  velocity: number;
+  beam_diameter: number;
+  depths_avg: number;
+  depths_std: number;
+  lengths_avg: number;
+  lengths_std: number;
+  widths_avg: number;
+  widths_std: number;
+}
+
+export interface MeltPoolDefect {
+  balling: boolean;
+  keyhole: boolean;
+  lackOfFusion: boolean;
+  nominal: boolean;
+}

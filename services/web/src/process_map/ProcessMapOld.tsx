@@ -1,10 +1,16 @@
 /**
- * ProcessMap.tsx
- * Process Map component
+ * ProcessMapOld.tsx
+ * Composed chart component for displaying process map
  */
 
 // Node Modules
-import { arrayOf, node, number, oneOfType } from "prop-types";
+import {
+  arrayOf,
+  node,
+  number,
+  oneOfType,
+  // shape
+} from "prop-types";
 import { FC, ReactNode, useEffect, useState } from "react";
 import { Box, Checkbox, FormControlLabel } from "@mui/material";
 import {
