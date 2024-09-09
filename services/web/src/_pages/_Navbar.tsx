@@ -4,11 +4,10 @@
  */
 
 // Node Modules
-import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
+import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import { Brightness4, Brightness7 } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import { FC, useCallback } from "react";
-import { Link } from "react-router-dom";
 
 // Actions
 import { toggleThemePalleteMode } from "common/themeSlice";
@@ -27,25 +26,15 @@ const Navbar: FC = () => {
   }, [dispatch]);
 
   return (
-    <AppBar position="static" color="secondary">
+    <AppBar 
+      position="fixed"
+      color="secondary"
+      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+    >
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-            <Button color="inherit">AMUI</Button>
-          </Link>
+        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+          AMUI
         </Typography>
-        {/* <Link to="/view_stl" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <Button color="inherit">View STL</Button>
-        </Link>
-        <Link to="/process_map" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <Button color="inherit">Process Map</Button>
-        </Link> */}
-        <Link
-          to="/worksheet"
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
-          <Button color="inherit">Process Worksheet</Button>
-        </Link>
         <IconButton sx={{ ml: 1 }} color="inherit" onClick={handleClick}>
           {theme.palette.mode === "dark" ? <Brightness7 /> : <Brightness4 />}
         </IconButton>
