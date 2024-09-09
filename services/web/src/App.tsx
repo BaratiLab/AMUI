@@ -4,7 +4,7 @@
  */
 
 // Node Modules
-import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { FC, useEffect, useMemo } from "react";
@@ -14,6 +14,7 @@ import { Route, Routes } from "react-router-dom";
 import { useAppSelector } from "hooks";
 
 // Pages
+import Drawer from "_pages/_Drawer";
 import Navbar from "_pages/_Navbar";
 import ProcessMap from "_pages/ProcessMap";
 import ProcessMapAccordion from "_pages/ProcessMapAccordion";
@@ -53,18 +54,21 @@ const App: FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Container>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
         <Navbar />
-        <Routes>
-          <Route path="" element={<ProcessMapAccordion />} />
-          <Route path="/process_map" element={<ProcessMap />} />
-          <Route path="/view_stl" element={<ViewSTL />} />
-          <Route path="/worksheet" element={<Worksheet />} />
-          <Route path="/surrogate" element={<Surrogate />} />
-          <Route path="/slicer" element={<Slicer />} />
-        </Routes>
-      </Container>
+        <Drawer />
+        <Box component="main" sx={{flexGrow: 1, p: 3}}>
+          <Routes>
+            <Route path="" element={<ProcessMapAccordion />} />
+            <Route path="/process_map" element={<ProcessMap />} />
+            <Route path="/view_stl" element={<ViewSTL />} />
+            <Route path="/worksheet" element={<Worksheet />} />
+            <Route path="/surrogate" element={<Surrogate />} />
+            <Route path="/slicer" element={<Slicer />} />
+          </Routes>
+        </Box>
+      </Box>
     </ThemeProvider>
   );
 };

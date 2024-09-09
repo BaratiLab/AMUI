@@ -33,8 +33,6 @@
     "@visx/voronoi": "^3.3.0",
     "axios": "^1.7.0",
     "csv-loader": "^3.0.5",
-    "highcharts": "^11.4.3",
-    "highcharts-react-official": "^3.2.1",
     "prop-types": "^15.8.1",
     "query-string": "^8.2.0",
     "react": "^18.2.0",
