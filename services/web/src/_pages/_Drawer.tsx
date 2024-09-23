@@ -4,8 +4,8 @@
  */
 
 // Node Modules
-import { FC } from 'react';
-import { useNavigate } from "react-router-dom";
+import { FC, ReactNode } from 'react';
+import { useLocation, useNavigate } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,40 +15,83 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+
+import {
+  Home,
+  Microwave,
+  Science,
+  StackedLineChart,
+} from '@mui/icons-material';
 
 const drawerWidth = 240;
 
 const topListItems = [
   {
-    text: "Machine",
-    link: "/machine",
+    text: "Overview",
+    icon: <Home />,
+    link: "/",
   },
   {
-    text: "Material",
+    text: "Profiles",
+    icon: <StackedLineChart />,
+    link: "/profile",
+  },
+];
+
+// For read only pages, general data about machines, materials, etc.
+const bottomListItems = [
+  {
+    text: "Materials",
+    icon: <Science />,
     link: "/material",
   },
   {
-    text: "Process Map",
-    link: "process_map",
+    text: "Machines",
+    icon: <Microwave />,
+    link: "/machine",
   },
-]
+];
 
-const _Drawer: FC = () => {
+interface LinkListItemProps {
+  linkListItem: {
+    text: string;
+    icon: ReactNode;
+    link: string;
+  }
+}
+
+const LinkListItem: FC<LinkListItemProps> = ({ linkListItem }) => {
   // Hooks
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // JSX
-  const topListItemsJSX = topListItems.map((listItem, index) => (
-    <ListItem key={listItem.link} disablePadding>
-      <ListItemButton onClick={() => navigate(listItem.link)}>
+  // TODO: Change main text and icon style to different color when selected
+  // instead of just greying out.
+  return (
+    <ListItem key={linkListItem.link} disablePadding>
+      <ListItemButton
+        onClick={() => navigate(linkListItem.link)}
+        selected={location.pathname === linkListItem.link}
+        disabled={location.pathname === linkListItem.link}
+      >
         <ListItemIcon>
-          {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+          <ListItemIcon>{linkListItem.icon}</ListItemIcon>
         </ListItemIcon>
-        <ListItemText primary={listItem.text} />
+        <ListItemText primary={linkListItem.text} />
       </ListItemButton>
     </ListItem>
+  )
+};
+
+const _Drawer: FC = () => {
+
+  // JSX
+  const topListItemsJSX = topListItems.map((listItem) => (
+    <LinkListItem linkListItem={listItem} />
+  ));
+
+  const bottomListItemsJSX = bottomListItems.map((listItem) => (
+    <LinkListItem linkListItem={listItem} />
   ));
 
   return (
@@ -64,18 +107,7 @@ const _Drawer: FC = () => {
       <Box sx={{ overflow: 'auto' }}>
         <List>{topListItemsJSX}</List>
         <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        <List>{bottomListItemsJSX}</List>
       </Box>
     </Drawer>
   );

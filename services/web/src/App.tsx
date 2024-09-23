@@ -21,7 +21,6 @@ import ProcessMapAccordion from "_pages/ProcessMapAccordion";
 import Slicer from "_pages/Slicer";
 import Surrogate from "_pages/Surrogate"
 import ViewSTL from "_pages/ViewSTL";
-import Worksheet from "_pages/Worksheet";
 
 const App: FC = () => {
   // Hooks
@@ -58,12 +57,11 @@ const App: FC = () => {
         <CssBaseline />
         <Navbar />
         <Drawer />
-        <Box component="main" sx={{flexGrow: 1, p: 3}}>
+        <Box component="main" sx={{flexGrow: 1, p: 3, marginTop: "64px"}}>
           <Routes>
             <Route path="" element={<ProcessMapAccordion />} />
             <Route path="/process_map" element={<ProcessMap />} />
             <Route path="/view_stl" element={<ViewSTL />} />
-            <Route path="/worksheet" element={<Worksheet />} />
             <Route path="/surrogate" element={<Surrogate />} />
             <Route path="/slicer" element={<Slicer />} />
           </Routes>
