@@ -7,12 +7,16 @@
 import { FC } from 'react';
 import { Typography } from '@mui/material';
 
+// Components
+import MachineSpecificationsTable from 'machine/SpecificationsTable';
+
 const Machines: FC = () => {
   return (
     <>
-      <Typography variant="h3">
+      <Typography variant="h3" sx={{"marginBottom": "10px"}}>
         Machines
       </Typography>
+      <MachineSpecificationsTable />
     </>
   );
 };

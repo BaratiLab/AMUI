@@ -1,6 +1,7 @@
 /**
  * SpecificationCardsGrid.tsx
  * Loads machine specification cards within a grid layout.
+ * Legacy
  */
 
 // Node Modules
