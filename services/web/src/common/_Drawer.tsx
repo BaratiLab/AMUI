@@ -1,6 +1,9 @@
 /**
  * _Drawer.tsx
  * Side drawer component for navigation.
+ * 
+ * TODO #116: Turn drawer component into mini variant drawer
+ * https://mui.com/material-ui/react-drawer/#mini-variant-drawer
  */
 
 // Node Modules
@@ -17,6 +20,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
 import {
+  Category,
   Home,
   Microwave,
   Science,
@@ -35,6 +39,11 @@ const topListItems = [
     text: "Profiles",
     icon: <StackedLineChart />,
     link: "/profile",
+  },
+  {
+    text: "Parts",
+    icon: <Category />,
+    link: "/part",
   },
 ];
 
@@ -65,7 +74,7 @@ const LinkListItem: FC<LinkListItemProps> = ({ linkListItem }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // TODO: Change main text and icon style to different color when selected
+  // TODO 117: Change main text and icon style to different color when selected
   // instead of just greying out.
   return (
     <ListItem key={linkListItem.link} disablePadding>

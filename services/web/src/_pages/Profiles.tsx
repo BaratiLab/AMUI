@@ -1,20 +1,20 @@
 /**
- * Machines.tsx
- * Page component for displaying supported machines in tabular form.
+ * Profiles.tsx
+ * Page component for viewing, creating, and editing profiles.
  */
 
 // Node Modules
 import { FC } from 'react';
 import { Typography } from '@mui/material';
 
-const Machines: FC = () => {
+const Profiles: FC = () => {
   return (
     <>
       <Typography variant="h3">
-        Machines
+        Profiles 
       </Typography>
     </>
   );
 };
 
-export default Machines;
+export default Profiles;

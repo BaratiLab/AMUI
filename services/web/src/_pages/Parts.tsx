@@ -1,20 +1,20 @@
 /**
- * Machines.tsx
- * Page component for displaying supported machines in tabular form.
+ * Parts.tsx
+ * Page component for viewing, slicing, and editing parts.
  */
 
 // Node Modules
 import { FC } from 'react';
 import { Typography } from '@mui/material';
 
-const Machines: FC = () => {
+const Parts: FC = () => {
   return (
     <>
       <Typography variant="h3">
-        Machines
+        Parts 
       </Typography>
     </>
   );
 };
 
-export default Machines;
+export default Parts;

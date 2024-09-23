@@ -13,9 +13,16 @@ import { Route, Routes } from "react-router-dom";
 // Hooks
 import { useAppSelector } from "hooks";
 
+// Common
+import Drawer from "common/_Drawer";
+import Navbar from "common/_Navbar";
+
 // Pages
-import Drawer from "_pages/_Drawer";
-import Navbar from "_pages/_Navbar";
+import Machines from "_pages/Machines";
+import Materials from "_pages/Materials";
+import Overview from "_pages/Overview";
+import Parts from "_pages/Parts";
+import Profiles from "_pages/Profiles";
 import ProcessMap from "_pages/ProcessMap";
 import ProcessMapAccordion from "_pages/ProcessMapAccordion";
 import Slicer from "_pages/Slicer";
@@ -59,8 +66,15 @@ const App: FC = () => {
         <Drawer />
         <Box component="main" sx={{flexGrow: 1, p: 3, marginTop: "64px"}}>
           <Routes>
-            <Route path="" element={<ProcessMapAccordion />} />
+            <Route path="" element={<Overview />} />
+            <Route path="/machine" element={<Machines />} />
+            <Route path="/material" element={<Materials />} />
+            <Route path="/part" element={<Parts />} />
+            <Route path="/profile" element={<Profiles />} />
+
+            {/* Legacy */}
             <Route path="/process_map" element={<ProcessMap />} />
+            <Route path="/process_map_accordion" element={<ProcessMapAccordion />} />
             <Route path="/view_stl" element={<ViewSTL />} />
             <Route path="/surrogate" element={<Surrogate />} />
             <Route path="/slicer" element={<Slicer />} />

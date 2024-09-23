@@ -1,20 +1,20 @@
 /**
- * Machines.tsx
- * Page component for displaying supported machines in tabular form.
+ * Overview.tsx
+ * Page component general dashboard overview 
  */
 
 // Node Modules
 import { FC } from 'react';
 import { Typography } from '@mui/material';
 
-const Machines: FC = () => {
+const Overview: FC = () => {
   return (
     <>
       <Typography variant="h3">
-        Machines
+        Overview 
       </Typography>
     </>
   );
 };
 
-export default Machines;
+export default Overview;
