@@ -9,6 +9,7 @@ import { configureStore } from "@reduxjs/toolkit";
 // Reducers
 import themeReducer from "common/themeSlice";
 import specificationsReducer from "machine/specificationsSlice";
+import materialListReducer from "material/materialListSlice";
 import metalsReducer from "material/metalsSlice";
 import eagarTsaiSliceReducer from "melt_pool/eagarTsaiSlice";
 import inferenceSliceReducer from "melt_pool/inferenceSlice";
@@ -28,6 +29,7 @@ const store = configureStore({
     machineSpecifications: specificationsReducer,
     // Materials
     materialMetals: metalsReducer,
+    materialList: materialListReducer,
     // Melt Pool
     meltPoolEagarTsai: eagarTsaiSliceReducer,
     meltPoolInference: inferenceSliceReducer,

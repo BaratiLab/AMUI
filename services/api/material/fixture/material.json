@@ -1,0 +1,32 @@
+[
+  {
+    "fields": {
+      "name": "Stainless Steel 316 L",
+      "flow_3d_name": "Stainless_Steel-Fe_316-Mills_data",
+      "uns_id": "S31603",
+      "density_g_cm_3": 7.2492,
+      "specific_heat_erg_g_K": 7260000,
+      "thermal_conductivity_erg_cm_s_K": 2895100,
+      "viscosity_g_cm_s": 0.08,
+      "solidus_temperature_K": 1674.15,
+      "liquidus_temperature_K": 1697.15
+    },
+    "model": "material.Material",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "name": "Ti-6Al-4V",
+      "flow_3d_name": "Titanium_Alloy-Ti_Al_V_IMI 318-Mills_data",
+      "uns_id": "R56400",
+      "density_g_cm_3": 4.42,
+      "specific_heat_erg_g_K": 5460000,
+      "thermal_conductivity_erg_cm_s_K": 700000,
+      "viscosity_g_cm_s": 0.0325,
+      "solidus_temperature_K": 1873.15,
+      "liquidus_temperature_K": 1923.15
+    },
+    "model": "material.Material",
+    "pk": 2
+  }
+]

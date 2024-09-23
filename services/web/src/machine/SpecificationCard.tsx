@@ -7,11 +7,7 @@
 import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
 import { Avatar, Typography } from "@mui/material";
 import styled from "@mui/styled-engine";
-import { func } from "prop-types";
 import { FC } from "react";
-
-// Prop Types
-import { machineSpecificationPropType } from "./_propTypes";
 
 // Styled Components
 const StyledCard = styled(Card)`
@@ -100,8 +96,3 @@ const SpecificationCard: FC<Props> = ({
 );
 
 export default SpecificationCard;
-
-SpecificationCard.propTypes = {
-  onClick: func,
-  specification: machineSpecificationPropType.isRequired,
-};
