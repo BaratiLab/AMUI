@@ -3,8 +3,8 @@
  * Functions for calling API routes for melt pool
  */
 
-// Request
-import { request } from "common/request";
+// Node Modules
+import axios from 'axios';
 
 /**
  * @description API route to retrieve machine specifications.
@@ -12,8 +12,8 @@ import { request } from "common/request";
  */
 export const getSpecifications = async () => {
   try {
-    const response = await request("machine/specifications/");
-    const data = await response.json();
+    const response = await axios.get("machine/specifications/");
+    const data = response.data;
     return data;
   } catch (error) {
     console.log(error);

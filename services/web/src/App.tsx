@@ -4,6 +4,7 @@
  */
 
 // Node Modules
+import { useAuth0 } from "@auth0/auth0-react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -31,6 +32,7 @@ import ViewSTL from "_pages/ViewSTL";
 
 const App: FC = () => {
   // Hooks
+  const { isAuthenticated } = useAuth0();
   const { mode } = useAppSelector((state) => state.theme);
 
   const theme = useMemo(
@@ -57,6 +59,7 @@ const App: FC = () => {
       });
   }, []);
 
+  console.log(`isauth ${isAuthenticated}`)
 
   return (
     <ThemeProvider theme={theme}>

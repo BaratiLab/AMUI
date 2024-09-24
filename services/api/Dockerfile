@@ -4,9 +4,17 @@ WORKDIR /home/api
 
 COPY requirements.txt ./
 
+ARG DJANGO_HOST
+
 RUN pip install -r requirements.txt
 RUN apt update
-RUN apt install -y locales prusa-slicer libcanberra-gtk-module libcanberra-gtk3-module
+RUN apt install -y locales \
+# Slicing
+  prusa-slicer libcanberra-gtk-module libcanberra-gtk3-module
+# SSL Certification
+  # mkcert
+
+# RUN mkcert -cert-file cert.pem -key-file key.pem ${DJANGO_HOST} 0.0.0.0
 
 # Sets locales for prusa-slicer
 # https://stackoverflow.com/a/28406007/10521456

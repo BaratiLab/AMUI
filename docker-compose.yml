@@ -1,9 +1,9 @@
-version: "3.9"
-
 services:
   api:
     container_name: amui-api
     build:
+      args:
+        - DJANGO_HOST=${DJANGO_HOST}
       context: ./services/api
       dockerfile: Dockerfile
     env_file:
@@ -13,13 +13,14 @@ services:
 
       # Links bundle to templates folder.
       - bundle:/home/api/static
-    ports:
-      - 8000:8000
+    # ports:
+    #   - 8000:8000
     tty: true
     depends_on:
       - sql
-      - web
     command: bash ./entrypoint.sh
+    networks:
+      - apinet
 
   web:
     container_name: amui-web
@@ -27,7 +28,11 @@ services:
       context: ./services/web
       dockerfile: Dockerfile
     environment:
+      # Selectively expose specific environment variables
       - API_DOMAIN=${API_DOMAIN}
+      - AUTH0_API_IDENTIFIER=${AUTH0_API_IDENTIFIER}
+      - AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}
+      - AUTH0_DOMAIN=${AUTH0_DOMAIN}
 
       # https://stackoverflow.com/a/65265986/10521456
       - CHOKIDAR_USEPOLLING=true
@@ -50,8 +55,10 @@ services:
       - sql_data:/var/lib/postgres/data/
     env_file:
       - .env
-    ports:
-      - 5432:5432
+    # ports:
+    #   - 5432:5432
+    networks:
+      - apinet
 
   pgadmin:
     container_name: amui-pgadmin
@@ -65,28 +72,45 @@ services:
     depends_on:
       - sql
 
-  meltpoolnet:
-    container_name: amui-module-meltpoolnet
+  nginx:
     build:
-      context: ./services/module/meltpoolnet
-      dockerfile: Dockerfile
-    tty: true
-
-  module-eagartsai:
-    container_name: amui-module-eagartsai
+      args:
+        - DJANGO_HOST=${DJANGO_HOST}
+      context: ./services/nginx
+    container_name: amui-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - api
+    networks:
+      - apinet
     volumes:
-      - ./services/module/eagartsai:/home/eagartsai
-    build:
-      context: ./services/module/eagartsai
-      dockerfile: Dockerfile
-    tty: true
+      - bundle:/home/api/static
+    restart: always
 
-  module-example:
-    container_name: amui-module-example
-    build:
-      context: ./services/module/example
-      dockerfile: Dockerfile
-    tty: true
+  # meltpoolnet:
+  #   container_name: amui-module-meltpoolnet
+  #   build:
+  #     context: ./services/module/meltpoolnet
+  #     dockerfile: Dockerfile
+  #   tty: true
+
+  # module-eagartsai:
+  #   container_name: amui-module-eagartsai
+  #   volumes:
+  #     - ./services/module/eagartsai:/home/eagartsai
+  #   build:
+  #     context: ./services/module/eagartsai
+  #     dockerfile: Dockerfile
+  #   tty: true
+
+  # module-example:
+  #   container_name: amui-module-example
+  #   build:
+  #     context: ./services/module/example
+  #     dockerfile: Dockerfile
+  #   tty: true
 
 volumes:
   bundle:
@@ -94,4 +118,6 @@ volumes:
   sql_data:
   web_node_modules:
 
-    
+networks:
+  apinet:
+    driver: bridge    
