@@ -38,7 +38,7 @@ const topListItems = [
   {
     text: "Profiles",
     icon: <StackedLineChart />,
-    link: "/profile",
+    link: "/build_profile",
   },
   {
     text: "Parts",

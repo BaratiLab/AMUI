@@ -17,6 +17,8 @@ import store from "store";
 
 const root = createRoot(document.getElementById("app-root") as Element);
 
+console.log(window.location.origin, process.env.AUTH0_API_IDENTIFIER)
+
 root.render(
   <Auth0Provider
     domain={process.env.AUTH0_DOMAIN as string}
@@ -24,7 +26,7 @@ root.render(
     authorizationParams={{
       redirect_uri: window.location.origin,
       audience: process.env.AUTH0_API_IDENTIFIER,
-      scope: "read:projects"
+      scope: "read:build_profile"
     }}
   >
     <Provider store={store}>

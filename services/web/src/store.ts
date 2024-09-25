@@ -7,6 +7,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 // Reducers
+import tokenReducer from "auth0/tokenSlice";
+import buildProfileFormReducer from 'build_profile/slice/form';
 import themeReducer from "common/themeSlice";
 import specificationsReducer from "machine/specificationsSlice";
 import materialListReducer from "material/materialListSlice";
@@ -25,6 +27,8 @@ import configurationReducer from "process_map/configurationSlice";
 
 const store = configureStore({
   reducer: {
+    // Build Profile
+    buildProfileForm: buildProfileFormReducer,
     // Machine
     machineSpecifications: specificationsReducer,
     // Materials
@@ -47,6 +51,8 @@ const store = configureStore({
     surrogate: simulationSliceReducer,
     // Theme
     theme: themeReducer,
+    // Token
+    token: tokenReducer,
   },
 });
 

@@ -12,6 +12,7 @@ import { FC, useEffect, useMemo } from "react";
 import { Route, Routes } from "react-router-dom";
 
 // Hooks
+import { useToken } from 'auth0/_hooks';
 import { useAppSelector } from "hooks";
 
 // Common
@@ -23,7 +24,7 @@ import Machines from "_pages/Machines";
 import Materials from "_pages/Materials";
 import Overview from "_pages/Overview";
 import Parts from "_pages/Parts";
-import Profiles from "_pages/Profiles";
+import BuildProfiles from "_pages/BuildProfiles";
 import ProcessMap from "_pages/ProcessMap";
 import ProcessMapAccordion from "_pages/ProcessMapAccordion";
 import Slicer from "_pages/Slicer";
@@ -32,6 +33,7 @@ import ViewSTL from "_pages/ViewSTL";
 
 const App: FC = () => {
   // Hooks
+  useToken(); // Retrieves Auth0 token and sets to redux store
   const { isAuthenticated } = useAuth0();
   const { mode } = useAppSelector((state) => state.theme);
 
@@ -63,24 +65,33 @@ const App: FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Box sx={{ display: "flex" }}>
-        <CssBaseline />
         <Navbar />
-        <Drawer />
+        {isAuthenticated && <Drawer />}
         <Box component="main" sx={{flexGrow: 1, p: 3, marginTop: "64px"}}>
           <Routes>
-            <Route path="" element={<Overview />} />
-            <Route path="/machine" element={<Machines />} />
-            <Route path="/material" element={<Materials />} />
-            <Route path="/part" element={<Parts />} />
-            <Route path="/profile" element={<Profiles />} />
+            {isAuthenticated ? (
+              <>
+                <Route path="" element={<Overview />} />
+                <Route path="/machine" element={<Machines />} />
+                <Route path="/material" element={<Materials />} />
+                <Route path="/part" element={<Parts />} />
+                <Route path="/build_profile" element={<BuildProfiles />} />
 
-            {/* Legacy */}
-            <Route path="/process_map" element={<ProcessMap />} />
-            <Route path="/process_map_accordion" element={<ProcessMapAccordion />} />
-            <Route path="/view_stl" element={<ViewSTL />} />
-            <Route path="/surrogate" element={<Surrogate />} />
-            <Route path="/slicer" element={<Slicer />} />
+                {/* Legacy */}
+                <Route path="/process_map" element={<ProcessMap />} />
+                <Route path="/process_map_accordion" element={<ProcessMapAccordion />} />
+                <Route path="/view_stl" element={<ViewSTL />} />
+                <Route path="/surrogate" element={<Surrogate />} />
+                <Route path="/slicer" element={<Slicer />} />
+              </>
+            ): (
+              <>
+                <Route path="" element={<p>Please login</p>} />
+                <Route path="/help" element={<p>help</p>} />
+              </>
+            )}
           </Routes>
         </Box>
       </Box>

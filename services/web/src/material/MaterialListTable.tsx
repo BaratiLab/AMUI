@@ -19,7 +19,6 @@ import { useMaterialList } from "material/_hooks";
 const MaterialListTable: FC = () => {
   // Hooks
   const [{ data, status }] = useMaterialList();
-  console.log(data)
 
   return (
     <TableContainer component={Paper}>
