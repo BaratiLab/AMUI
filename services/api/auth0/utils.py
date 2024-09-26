@@ -15,6 +15,7 @@ def jwt_decode_token(token):
     header = jwt.get_unverified_header(token)
     jwks = requests.get(f'https://{settings.AUTH0_DOMAIN}/.well-known/jwks.json').json()
     public_key = None
+
     for jwk in jwks['keys']:
         if jwk['kid'] == header['kid']:
             public_key = jwt.algorithms.RSAAlgorithm.from_jwk(json.dumps(jwk))

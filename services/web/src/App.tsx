@@ -8,12 +8,11 @@ import { useAuth0 } from "@auth0/auth0-react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { FC, useEffect, useMemo } from "react";
+import { FC, useMemo } from "react";
 import { Route, Routes } from "react-router-dom";
 
 // Hooks
-import { useToken } from 'auth0/_hooks';
-import { useAppSelector } from "hooks";
+import { useAppSelector, useCsrf, useToken } from "hooks";
 
 // Common
 import Drawer from "common/_Drawer";
@@ -24,6 +23,8 @@ import Machines from "_pages/Machines";
 import Materials from "_pages/Materials";
 import Overview from "_pages/Overview";
 import Parts from "_pages/Parts";
+import BuildProfile from "_pages/BuildProfile";
+import BuildProfileNew from "_pages/BuildProfileNew";
 import BuildProfiles from "_pages/BuildProfiles";
 import ProcessMap from "_pages/ProcessMap";
 import ProcessMapAccordion from "_pages/ProcessMapAccordion";
@@ -34,7 +35,12 @@ import ViewSTL from "_pages/ViewSTL";
 const App: FC = () => {
   // Hooks
   useToken(); // Retrieves Auth0 token and sets to redux store
+  useCsrf();  // Retrieves CSRF token for post requests to Django
+
+  // Firefox has a weird bug where you lose authentication on hard refresh.
+  // Does not appear on edge browser, seen on self signed certificate https.
   const { isAuthenticated } = useAuth0();
+
   const { mode } = useAppSelector((state) => state.theme);
 
   const theme = useMemo(
@@ -46,22 +52,6 @@ const App: FC = () => {
       }),
     [mode],
   );
-
-  const getCsrfToken = async () => {
-    const response = await fetch('/api/csrf-token/', {
-        credentials: 'include',
-    });
-    const data = await response.json();
-    return data.csrfToken;
-  };
-
-  useEffect(() => {
-      getCsrfToken().then(token => {
-          localStorage.setItem('csrfToken', token);
-      });
-  }, []);
-
-  console.log(`isauth ${isAuthenticated}`)
 
   return (
     <ThemeProvider theme={theme}>
@@ -78,6 +68,8 @@ const App: FC = () => {
                 <Route path="/material" element={<Materials />} />
                 <Route path="/part" element={<Parts />} />
                 <Route path="/build_profile" element={<BuildProfiles />} />
+                <Route path="/build_profile/:id" element={<BuildProfile />} />
+                <Route path="/build_profile/new" element={<BuildProfileNew />} />
 
                 {/* Legacy */}
                 <Route path="/process_map" element={<ProcessMap />} />

@@ -76,7 +76,7 @@ Perform these commands inside a terminal not attached to Docker container.
 
 ## Notes
 - [PGAdmin](localhost:5050)
-    - Host name/address: `host.docker.internal`
+    - Host name/address: `amui-sql`
     - Username: `postgres`
     - Password: check `POSTGRES_PASSWORD` in `.env`
 - Docker

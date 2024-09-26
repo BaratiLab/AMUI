@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,6 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [os.environ.get("DJANGO_HOST")]
 
+CSRF_TRUSTED_ORIGINS = [f"https://{os.environ.get('DJANGO_HOST')}"]
 
 # Application definition
 
@@ -44,7 +46,6 @@ INSTALLED_APPS = [
     "django_filters",
     "django_extensions",
     "rest_framework",
-    "rest_framework_simplejwt",
     # Apps
     "auth0",
     "build_profile",
@@ -160,8 +161,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        # 'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
     ),

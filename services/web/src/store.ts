@@ -7,7 +7,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 // Reducers
-import tokenReducer from "auth0/tokenSlice";
 import buildProfileFormReducer from 'build_profile/slice/form';
 import themeReducer from "common/themeSlice";
 import specificationsReducer from "machine/specificationsSlice";
@@ -51,8 +50,6 @@ const store = configureStore({
     surrogate: simulationSliceReducer,
     // Theme
     theme: themeReducer,
-    // Token
-    token: tokenReducer,
   },
 });
 

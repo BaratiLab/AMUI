@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from build_profile.models import build_profile
+from build_profile.models import BuildProfile
 
 class BuildProfileSerializer(serializers.ModelSerializer):
   class Meta:

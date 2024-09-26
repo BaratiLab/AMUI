@@ -17,8 +17,6 @@ import store from "store";
 
 const root = createRoot(document.getElementById("app-root") as Element);
 
-console.log(window.location.origin, process.env.AUTH0_API_IDENTIFIER)
-
 root.render(
   <Auth0Provider
     domain={process.env.AUTH0_DOMAIN as string}

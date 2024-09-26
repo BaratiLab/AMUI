@@ -7,7 +7,10 @@
 import axios from 'axios';
 
 // Types
-import type { BuildProfileListAPI } from './_types';
+import type {
+  BuildProfile,
+  BuildProfileListAPI,
+} from './_types';
 
 /**
  * @description API route to retrieve build profiles.
@@ -57,7 +60,7 @@ export const putBuildProfile = async (id: string, buildProfile) => {
   }
 };
 
-export const postBuildProfile = async (buildProfile) => {
+export const postBuildProfile = async (buildProfile: BuildProfile) => {
   try {
     const response = await axios.post('build_profile/',  buildProfile);
     return response.data;

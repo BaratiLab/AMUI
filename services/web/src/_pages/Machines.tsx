@@ -5,19 +5,19 @@
 
 // Node Modules
 import { FC } from 'react';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 // Components
 import MachineSpecificationsTable from 'machine/SpecificationsTable';
 
 const Machines: FC = () => {
   return (
-    <>
-      <Typography variant="h3" sx={{"marginBottom": "10px"}}>
-        Machines
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1em'}}>
+      <Typography component="h2" variant="h4">
+        Build Profiles
       </Typography>
       <MachineSpecificationsTable />
-    </>
+    </Box>
   );
 };
 
