@@ -3,27 +3,27 @@
  * Types for build profiles.
  */
 
-// Types
-import { AsyncThunkInitialState } from "types";
-
 export interface BuildProfile {
-  created_by: string;
-  created_on: string;
-  updated_on: string;
+  id?: number | null;
   title: string;
   description: string;
 }
 
-export interface BuildProfileListAPI {
+export interface BuildProfileResponse extends BuildProfile {
+  created_by: string | null;
+  created_on: string | null;
+  updated_on: string | null;
+}
+
+export type BuildProfileListCreateResponse = null | BuildProfileResponse;
+export type BuildProfileListReadResponse = null | {
   count: null | number;
   next: null | string;
   previous: null | string;
-  results: BuildProfile[];
+  results: BuildProfileResponse[];
 }
 
-// Initial State
-export interface ListSliceInitialState
-  extends AsyncThunkInitialState {
-  data: BuildProfile[];
-  response: BuildProfileListAPI;
-}
+export type BuildProfileDetailReadResponse = null | BuildProfileResponse;
+export type BuildProfileDetailUpdateResponse = null | BuildProfileResponse;
+export type BuildProfileDetailDeleteResponse = null;
+

@@ -9,34 +9,33 @@ import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Actions
-import { setBuildProfileForm } from 'build_profile/slice/form';
+import { updateBuildProfile } from 'build_profile/slice/detail';
+import { createBuildProfile } from 'build_profile/slice/list';
 
-// API
-import { postBuildProfile, putBuildProfile } from './_api';
+// Enums
+import { Status } from 'enums';
 
 // Hooks
-import { useAppDispatch } from 'hooks';
+import { useAppDispatch, useAppSelector } from 'hooks';
 
 // Types
+import { BuildProfile } from 'build_profile/_types';
 interface Props {
-  buildProfile?: {
-    id: number,
-    title: string,
-    description?: string,
-    created_on: string,
-    updated_on: string,
-  }
+  buildProfile: BuildProfile | null
 }
 
-const BuildProfileForm: FC<Props> = ({ buildProfile }) => {
+const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
   // Hooks
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   const [request, setRequest] = useState({
     title: '',
     description: '',
   });
   const [isChanged, setIsChanged] = useState(false);
+
+  const { create } = useAppSelector((state) => state.buildProfileList);
 
   useEffect(() => {
     // Updates disabled state of the submit button.
@@ -61,6 +60,14 @@ const BuildProfileForm: FC<Props> = ({ buildProfile }) => {
     }
   }, [buildProfile]);
 
+  useEffect(() => {
+    // Navigates to build profile page on successful creation.
+    if (create.status === Status.Succeeded) {
+      const buildProfileId = create.response?.id;
+      navigate(`/build_profile/${buildProfileId}`);
+    }
+  }, [navigate, create.status])
+
   // Callbacks
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -73,16 +80,14 @@ const BuildProfileForm: FC<Props> = ({ buildProfile }) => {
   const handleClick = async () => {
     if (buildProfile) {
       // Sends request to update existing buildProfile.
-      const { data, response } = await putBuildProfile(buildProfile.id, request);
-      if (response.status === 200) {
-        dispatch(setBuildProfileForm(data));
-      }
+      dispatch(updateBuildProfile({
+        // Adds id for update request
+        id: buildProfile.id,
+        ...request,
+      }));
     } else {
-      // Sends request to create new buildProfile.
-      const { data, response } = await postBuildProfile(request);
-      if (response.status === 201) {
-        navigate(`/buildProfiles/${data.id}`);
-      }
+      // Sends request to create new build profile.
+      dispatch(createBuildProfile(request));
     }
   };
 

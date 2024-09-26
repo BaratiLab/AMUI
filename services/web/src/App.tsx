@@ -34,7 +34,7 @@ import ViewSTL from "_pages/ViewSTL";
 
 const App: FC = () => {
   // Hooks
-  useToken(); // Retrieves Auth0 token and sets to redux store
+  const [token] = useToken(); // Retrieves Auth0 token and sets to redux store
   useCsrf();  // Retrieves CSRF token for post requests to Django
 
   // Firefox has a weird bug where you lose authentication on hard refresh.
@@ -58,10 +58,10 @@ const App: FC = () => {
       <CssBaseline />
       <Box sx={{ display: "flex" }}>
         <Navbar />
-        {isAuthenticated && <Drawer />}
+        {isAuthenticated && token && <Drawer />}
         <Box component="main" sx={{flexGrow: 1, p: 3, marginTop: "64px"}}>
           <Routes>
-            {isAuthenticated ? (
+            {isAuthenticated && token ? (
               <>
                 <Route path="" element={<Overview />} />
                 <Route path="/machine" element={<Machines />} />

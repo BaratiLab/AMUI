@@ -7,22 +7,33 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // API
-import {
-  getBuildProfiles,
-  postBuildProfile,
-} from "build_profile/_api";
+import { getBuildProfiles, postBuildProfile } from "build_profile/_api";
 
 // Enums
 import { Status } from "enums";
 
 // Types
-import { ListSliceInitialState } from "build_profile/_types";
+import { AsyncThunkInitialState } from "types";
+import {
+  BuildProfile,
+  BuildProfileListCreateResponse,
+  BuildProfileListReadResponse,
+} from "build_profile/_types";
+
+interface ListSliceInitialState {
+  create: {
+    response: BuildProfileListCreateResponse,
+  } & AsyncThunkInitialState,
+  read: {
+    response: BuildProfileListReadResponse,
+  } & AsyncThunkInitialState,
+  data: BuildProfile[],
+}
 
 // Constants
 const initialState: ListSliceInitialState = {
   create: {
-    response: {},
-    data: null,
+    response: null,
     status: Status.Idle,
     error: null,
   },
@@ -33,7 +44,6 @@ const initialState: ListSliceInitialState = {
       previous: null,
       results: [],
     },
-    data: [],
     status: Status.Idle,
     error: null,
   },
@@ -53,7 +63,7 @@ export const readBuildProfiles = createAsyncThunk(
 
 export const createBuildProfile = createAsyncThunk(
   "buildProfileList/create",
-  async (request) => {
+  async (request: BuildProfile) => {
     const response = await postBuildProfile(request)
     return response;
   }
@@ -65,27 +75,31 @@ export const slice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
+      // Create
       .addCase(createBuildProfile.pending, (state) => {
         state.create.status = Status.Loading;
       })
       .addCase(createBuildProfile.fulfilled, (state, action) => {
         state.create.status = Status.Succeeded;
         state.create.response = action.payload;
-        // state.data= [action.payload.resu..];
+        if (action.payload) {
+          // Should always be an object, just makes typescript happy.
+          state.data = [action.payload, ...state.data];
+        }
       })
       .addCase(createBuildProfile.rejected, (state, action) => {
-        state.read.status = Status.Failed;
-        state.read.response = { };
-        state.data = [];
-        state.read.error = action.error.message;
+        state.create.status = Status.Failed;
+        state.create.response = null;
+        state.create.error = action.error.message;
       })
+      // Read
       .addCase(readBuildProfiles.pending, (state) => {
         state.read.status = Status.Loading;
       })
       .addCase(readBuildProfiles.fulfilled, (state, action) => {
         state.read.status = Status.Succeeded;
         state.read.response = action.payload;
-        state.data = action.payload.results;
+        state.data = action.payload?.results || [];
       })
       .addCase(readBuildProfiles.rejected, (state, action) => {
         state.read.status = Status.Failed;

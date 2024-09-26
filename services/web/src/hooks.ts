@@ -7,7 +7,7 @@
 // Node Modules
 import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 // Types
@@ -35,6 +35,7 @@ export const useToken = (scope: string = "read:build_profile") => {
 
   // Hooks
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
     const getAccessToken = async () => {
@@ -46,10 +47,8 @@ export const useToken = (scope: string = "read:build_profile") => {
           }
         });
 
-        // Sets Auth0 token to session storage to reference without redux.
-        // Probably not needed
-        sessionStorage.setItem('token', token);
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        setToken(token);
       } catch (error) {
         console.log(error);
       }
@@ -60,6 +59,8 @@ export const useToken = (scope: string = "read:build_profile") => {
       getAccessToken();
     }
   }, [getAccessTokenSilently, isAuthenticated]);
+
+  return [token, setToken];
 };
 
 /**
@@ -81,10 +82,9 @@ export const useCsrf = () => {
     return data.csrfToken;
   };
 
-  useEffect(() => {
-      getCsrfToken().then(token => {
-          // Setting to local storage is probably not needed.
-          localStorage.setItem('csrfToken', token);
-      });
-  }, []);
-}
+  if (typeof window !== 'undefined') {
+    // Only run once per app load
+    // https://react.dev/learn/you-might-not-need-an-effect#initializing-the-application
+    getCsrfToken();
+  }
+};

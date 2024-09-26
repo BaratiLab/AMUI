@@ -7,7 +7,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 // Reducers
-import buildProfileFormReducer from 'build_profile/slice/form';
+import buildProfileDetailReducer from 'build_profile/slice/detail';
+import buildProfileListReducer from 'build_profile/slice/list';
 import themeReducer from "common/themeSlice";
 import specificationsReducer from "machine/specificationsSlice";
 import materialListReducer from "material/materialListSlice";
@@ -27,7 +28,8 @@ import configurationReducer from "process_map/configurationSlice";
 const store = configureStore({
   reducer: {
     // Build Profile
-    buildProfileForm: buildProfileFormReducer,
+    buildProfileDetail: buildProfileDetailReducer,
+    buildProfileList: buildProfileListReducer,
     // Machine
     machineSpecifications: specificationsReducer,
     // Materials

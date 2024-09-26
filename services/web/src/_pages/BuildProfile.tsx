@@ -6,20 +6,21 @@
 // Node Modules
 import { Backdrop, Box, Button, Fade, Modal, Typography } from '@mui/material';
 import { FC, useEffect, useState} from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 // Actions
-import { reset, setBuildProfileForm } from 'build_profile/slice/form';
-
-// API
-import { deleteBuildProfile, getBuildProfile } from 'build_profile/_api';
+import {
+  reset,
+  readBuildProfile,
+  deleteBuildProfile
+} from 'build_profile/slice/detail';
 
 // Components
 import BuildProfileForm from 'build_profile/BuildProfileForm';
 
 // Hooks
-import { useAppSelector } from 'hooks';
+import { useAppDispatch, useAppSelector } from 'hooks';
+import { Status } from 'enums';
 
 const style = {
   display: 'flex',
@@ -38,35 +39,53 @@ const style = {
 
 const BuildProfile: FC = () => {
   // Hooks
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
   const [modalIsShown, setModalIsShown] = useState(false);
-  const buildProfile = useAppSelector((state) => state.buildProfileForm);
+  const {
+    delete: {
+      status: deleteStatus,
+    },
+    read: {
+      status: readStatus,
+    },
+    data: buildProfile,
+  } = useAppSelector((state) => state.buildProfileDetail);
 
   useEffect(() => {
-    // Retrieves project by id from API and updates redux store.
-    const refreshBuildProfile = async () => {
-      const { data } = await getBuildProfile(id);
-      dispatch(setBuildProfileForm(data));
-    };
-    refreshBuildProfile();
-  }, [dispatch]);
+    if (id) {
+      // Retrieves data for specified build profile.
+      dispatch(readBuildProfile(id));
+    } else {
+      // Navigate to build profile list page if invalid id is provided.
+      navigate("/build_profile");
+    }
+  }, [dispatch, id, navigate]);
+
+  useEffect(() => {
+    // Redirects to list page if successfully deleted or non-existant.
+    // TODO: Handle case where entry no longer exists
+    // Redux status in this case still says successful, will need to rely on
+    // server status code response.
+    if (deleteStatus === Status.Succeeded) {
+      navigate("/build_profile");
+
+      // Reset build profile detail state.
+      reset();
+    }
+  }, [deleteStatus, readStatus])
 
   // Callbacks
   const handleClick = async () => {
-    const { response } = await deleteBuildProfile(id);
-    if (response.status === 204) {
-      navigate('/projects');
-      dispatch(reset());
-    }
+    dispatch(deleteBuildProfile(id as string));
   };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1em'}}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography component="h2" variant="h4">
-          BuildProfile
+          Build Profile
         </Typography>
         <Button variant="contained" onClick={() => setModalIsShown(true)}>
           Delete
