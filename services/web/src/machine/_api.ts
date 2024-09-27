@@ -10,9 +10,9 @@ import axios from 'axios';
  * @description API route to retrieve machine specifications.
  * @returns
  */
-export const getSpecifications = async () => {
+export const getMachines = async () => {
   try {
-    const response = await axios.get("machine/specifications/");
+    const response = await axios.get("machine/");
     const data = response.data;
     return data;
   } catch (error) {

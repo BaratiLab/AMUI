@@ -1,8 +1,7 @@
 from rest_framework import serializers
-from machine.models import Specification
+from machine.models import Machine
 
-
-class SpecificationSerializer(serializers.ModelSerializer):
+class MachineSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Specification
+        model = Machine
         fields = "__all__"

@@ -1,7 +1,7 @@
 from django.db import models
 
-class Specification(models.Model):
-    machine = models.CharField(max_length=100)
+class Machine(models.Model):
+    name = models.CharField(max_length=100)
     company = models.CharField(max_length=100, default="Unknown")
     power_max_w = models.IntegerField(blank=True, null=True)
     power_min_w = models.IntegerField(blank=True, null=True)

@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     "machine",
     "material",
     "melt_pool",
+    "part",
+    "print_plan",
     "slicer",
 ]
 

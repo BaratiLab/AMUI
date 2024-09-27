@@ -26,7 +26,7 @@ import { Section } from "process_map/_enums";
 
 // Hooks
 import { useAppDispatch } from "hooks";
-import { useSpecifications } from "machine/_hooks";
+// import { useSpecifications } from "machine/_hooks";
 
 // Types
 import { MachineSpecification } from "./_types";
@@ -35,9 +35,9 @@ const SpecificationCardsGrid: FC = () => {
   // Hooks
   const dispatch = useAppDispatch();
   const [limit, setLimit] = useState(INITIAL_SHOW_LIMIT);
-  const [
-    { data: machineSpecificationsData, status: machineSpecificationsStatus },
-  ] = useSpecifications();
+  // const [
+  //   { data: machineSpecificationsData, status: machineSpecificationsStatus },
+  // ] = useSpecifications();
 
   // Callbacks
   const handleShowMoreButtonClick = () => {

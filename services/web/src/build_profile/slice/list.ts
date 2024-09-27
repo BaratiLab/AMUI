@@ -16,6 +16,7 @@ import { Status } from "enums";
 import { AsyncThunkInitialState } from "types";
 import {
   BuildProfile,
+  BuildProfileResponse,
   BuildProfileListCreateResponse,
   BuildProfileListReadResponse,
 } from "build_profile/_types";
@@ -27,7 +28,7 @@ interface ListSliceInitialState {
   read: {
     response: BuildProfileListReadResponse,
   } & AsyncThunkInitialState,
-  data: BuildProfile[],
+  data: BuildProfileResponse[],
 }
 
 // Constants

@@ -22,15 +22,24 @@ import Navbar from "common/_Navbar";
 import Machines from "_pages/Machines";
 import Materials from "_pages/Materials";
 import Overview from "_pages/Overview";
-import Parts from "_pages/Parts";
+
 import BuildProfile from "_pages/BuildProfile";
 import BuildProfileNew from "_pages/BuildProfileNew";
 import BuildProfiles from "_pages/BuildProfiles";
-import ProcessMap from "_pages/ProcessMap";
-import ProcessMapAccordion from "_pages/ProcessMapAccordion";
-import Slicer from "_pages/Slicer";
-import Surrogate from "_pages/Surrogate"
-import ViewSTL from "_pages/ViewSTL";
+
+import Part from "_pages/Part";
+import PartNew from "_pages/PartNew";
+import Parts from "_pages/Parts";
+
+import PrintPlan from "_pages/PrintPlan";
+import PrintPlanNew from "_pages/PrintPlanNew";
+import PrintPlans from "_pages/PrintPlans";
+
+// import ProcessMap from "_pages/ProcessMap";
+// import ProcessMapAccordion from "_pages/ProcessMapAccordion";
+// import Slicer from "_pages/Slicer";
+// import Surrogate from "_pages/Surrogate"
+// import ViewSTL from "_pages/ViewSTL";
 
 const App: FC = () => {
   // Hooks
@@ -67,16 +76,28 @@ const App: FC = () => {
                 <Route path="/machine" element={<Machines />} />
                 <Route path="/material" element={<Materials />} />
                 <Route path="/part" element={<Parts />} />
+
+                {/* Build Profile */}
                 <Route path="/build_profile" element={<BuildProfiles />} />
                 <Route path="/build_profile/:id" element={<BuildProfile />} />
                 <Route path="/build_profile/new" element={<BuildProfileNew />} />
 
+                {/* Part */}
+                <Route path="/part" element={<Parts />} />
+                <Route path="/part/:id" element={<Part />} />
+                <Route path="/part/new" element={<PartNew />} />
+
+                {/* Print Plan */}
+                <Route path="/print_plan" element={<PrintPlans />} />
+                <Route path="/print_plan/:id" element={<PrintPlan />} />
+                <Route path="/print_plan/new" element={<PrintPlanNew />} />
+
                 {/* Legacy */}
-                <Route path="/process_map" element={<ProcessMap />} />
+                {/* <Route path="/process_map" element={<ProcessMap />} />
                 <Route path="/process_map_accordion" element={<ProcessMapAccordion />} />
                 <Route path="/view_stl" element={<ViewSTL />} />
                 <Route path="/surrogate" element={<Surrogate />} />
-                <Route path="/slicer" element={<Slicer />} />
+                <Route path="/slicer" element={<Slicer />} /> */}
               </>
             ): (
               <>

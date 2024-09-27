@@ -1,6 +1,7 @@
 /**
  * SpecificationCard.tsx
  * Card component for displaying machine specification.
+ * Legacy
  */
 
 // Node Modules

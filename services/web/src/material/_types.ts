@@ -3,23 +3,7 @@
  * Types within machine app.
  */
 
-// Types
-import { AsyncThunkInitialState } from "types";
-
-// Initial State
-export interface MaterialListSliceInitialState
-  extends AsyncThunkInitialState {
-  data: Material[];
-  response: {
-    count: null | number;
-    next: null | string;
-    previous: null | string;
-    results: Material[];
-  };
-}
-
-// Response
-export interface Material {
+export interface MaterialResponse {
   id: number;
   name: string;
   flow_3d_name: string;
@@ -30,4 +14,11 @@ export interface Material {
   viscosity_g_cm_s?: number | null;
   solidus_temperature_K?: number | null;
   liquidus_temperature_K?: number | null;
+}
+
+export type MaterialListReadResponse = null | {
+  count: null | number;
+  next: null | string;
+  previous: null | string;
+  results: MaterialResponse[];
 }

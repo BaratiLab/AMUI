@@ -5,31 +5,28 @@
 
 // Node Modules
 import { Box, Button, Typography } from '@mui/material';
-import { FC } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
+import { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Actions
-// import { setProjects } from './projectsSlice';
+import { readBuildProfiles } from 'build_profile/slice/list';
 
-// API
-// import { getProjects } from './api';
+// Hooks
+import { useAppDispatch, useAppSelector } from 'hooks';
 
 // Components
-// import ProjectsTable from './ProjectsTable';
+import BuildProfileTable from 'build_profile/BuildProfileTable';
 
 const BuildProfiles: FC = () => {
   // Hooks
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  // useEffect(() => {
-  //   // Retrieves projects from API and updates redux store.
-  //   const refreshProjects = async () => {
-  //     const data = await getProjects();
-  //     dispatch(setProjects(data));
-  //   };
-  //   refreshProjects();
-  // }, [dispatch]);
+  const { data } = useAppSelector((state) => state.buildProfileList);
+
+  useEffect(() => {
+    dispatch(readBuildProfiles());
+  }, [dispatch]);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1em'}}>
@@ -44,7 +41,7 @@ const BuildProfiles: FC = () => {
           Create Build Profile
         </Button>
       </Box>
-      {/* <ProjectsTable projects={projects.results} /> */}
+      <BuildProfileTable buildProfiles={data} />
     </Box>
   );
 };

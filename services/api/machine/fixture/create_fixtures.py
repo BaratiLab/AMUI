@@ -15,7 +15,7 @@ def convert_value(value):
 
 data = []
 
-with open("machine_info.csv", "r") as csv_file:
+with open("machine.csv", "r") as csv_file:
     csv_reader = csv.reader(csv_file)
 
     # Assuming the first row contains column headers, you can skip it
@@ -30,7 +30,7 @@ with open("machine_info.csv", "r") as csv_file:
         for i in range(len(headers)):
             row_data["fields"][headers[i]] = convert_value(row[i])
 
-        row_data["model"] = f"machine.Specification"
+        row_data["model"] = f"machine.Machine"
         row_data["pk"] = row_number
 
         # Add row number as a key to the dictionary
@@ -44,5 +44,5 @@ print(len(data))
 json_object = json.dumps(data, indent=2)
 
 # Write the JSON object to a file
-with open(f"specifications.json", "w") as json_file:
+with open(f"machine.json", "w") as json_file:
     json_file.write(json_object)

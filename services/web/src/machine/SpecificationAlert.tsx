@@ -1,6 +1,7 @@
 /**
  * SpecificationAlert.tsx
  * Alert component to display machine specification details in alert box.
+ * Legacy
  */
 
 // Node Modules

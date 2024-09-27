@@ -3,25 +3,9 @@
  * Types within machine app.
  */
 
-// Types
-import { AsyncThunkInitialState } from "types";
-
-// Initial State
-export interface SpecificationsSliceInitialState
-  extends AsyncThunkInitialState {
-  data: MachineSpecification[];
-  response: {
-    count: null | number;
-    next: null | string;
-    previous: null | string;
-    results: MachineSpecification[];
-  };
-}
-
-// Response
-export interface MachineSpecification {
+export interface MachineResponse {
   id: number;
-  machine: string;
+  name: string;
   company: string;
   power_max_w?: number | null;
   power_min_w?: number | null;
@@ -35,4 +19,11 @@ export interface MachineSpecification {
   tds_link: string;
   image_link: string;
   company_logo_link: string;
+}
+
+export type MachineListReadResponse = null | {
+  count: null | number;
+  next: null | string;
+  previous: null | string;
+  results: MachineResponse[];
 }

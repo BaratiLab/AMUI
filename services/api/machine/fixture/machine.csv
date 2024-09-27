@@ -1,4 +1,4 @@
-machine,company,power_max_w,power_min_w,velocity_max_m_per_s,velocity_min_m_per_s,spot_size_min_microns,spot_size_max_microns,laser_type,layer_thickness_min_microns,layer_thickness_max_microns,tds_link,image_link,company_logo_link
+name,company,power_max_w,power_min_w,velocity_max_m_per_s,velocity_min_m_per_s,spot_size_min_microns,spot_size_max_microns,laser_type,layer_thickness_min_microns,layer_thickness_max_microns,tds_link,image_link,company_logo_link
 EOS M290,EOS,400,,7,,100,100,Yb-fiber laser,40,40,https://www.eos.info/en-us/metal-solutions/metal-printers/data-sheets/sds-eos-m-290,static/images/EOS_M290.webp,static/images/EOS_Logo_2022.svg
 EOSINT M280,EOS,400,200,7,,100,500,Yb-fiber laser,20,40,https://webbuilder5.asiannet.com/ftp/2684/TD_M280_en_2011-03-29.pdf,static/images/EOSINT_M280.jpg,static/images/EOS_Logo_2022.svg
 EOSINT M270,EOS,200,,7,,100,100,Yb-fiber laser,20,40,https://www.eos.info/01_parts-and-applications/industry_different_parts_applications/metal_parts_applications/parts_metal_medical/dental/eos_m-270_dental_2017_en_web.pdf,static/images/EOSINT_M270.webp,static/images/EOS_Logo_2022.svg

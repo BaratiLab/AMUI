@@ -27,6 +27,8 @@ urlpatterns = [
     path("", include("melt_pool.urls")),
     path("", include("machine.urls")),
     path("", include("material.urls")),
+    path("", include("part.urls")),
+    path("", include("print_plan.urls")),
     path("", include("surrogate.urls")),
     path("", include("slicer.urls")),
     path("api/csrf-token/", views.get_csrf_token),

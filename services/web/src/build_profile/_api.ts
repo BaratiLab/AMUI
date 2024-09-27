@@ -37,7 +37,8 @@ export const getBuildProfiles = async (): Promise<BuildProfileListReadResponse> 
 export const deleteBuildProfile = async (id: string): Promise<BuildProfileDetailDeleteResponse> => {
   try {
     const response = await axios.delete(`build_profile/${id}/`);
-    return response.data;
+    const { data, status: code } = response;
+    return { data, code };
   } catch (error) {
     console.log(error);
     return null;

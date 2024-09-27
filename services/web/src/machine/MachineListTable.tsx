@@ -1,10 +1,10 @@
 /**
- * SpecificationsTable.tsx
+ * MachineListTable.tsx
  * Table component for displaying and navigating machine specifications.
  */
 
 // Node Modules
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -14,14 +14,27 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-// Hooks
-import { useSpecifications } from "machine/_hooks";
+// Enums
+import { Status } from "enums";
 
-const SpecificationsTable: FC = () => {
+// Hooks
+import { useAppDispatch, useAppSelector } from "hooks";
+
+// Actions
+import { readMachines } from "machine/slice/list";
+
+const MachineListTable: FC = () => {
   // Hooks
-  const [
-    { data: machineSpecificationsData, status: machineSpecificationsStatus },
-  ] = useSpecifications();
+  const dispatch = useAppDispatch();
+
+  const { read, data } = useAppSelector((state) => state.machineList);
+
+  useEffect(() => {
+    // Retrieves list of machines
+    if (read.status === Status.Idle) {
+      dispatch(readMachines());
+    }
+  }, [dispatch, read.status]);
 
   return (
     <TableContainer component={Paper}>
@@ -53,14 +66,12 @@ const SpecificationsTable: FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {machineSpecificationsData.map((row) => (
+          {data.map((row) => (
             <TableRow
               key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
-                {row.machine}
-              </TableCell>
+              <TableCell component="th" scope="row">{row.name}</TableCell>
               <TableCell>{row.company}</TableCell>
               <TableCell>{row.power_min_w}</TableCell>
               <TableCell>{row.power_max_w}</TableCell>
@@ -96,4 +107,4 @@ const SpecificationsTable: FC = () => {
   );
 };
 
-export default SpecificationsTable;
+export default MachineListTable;

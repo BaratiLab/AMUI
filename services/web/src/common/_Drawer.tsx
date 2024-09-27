@@ -21,6 +21,7 @@ import ListItemText from '@mui/material/ListItemText';
 
 import {
   Category,
+  Flare,
   Home,
   Microwave,
   Science,
@@ -44,6 +45,11 @@ const topListItems = [
     text: "Parts",
     icon: <Category />,
     link: "/part",
+  },
+  {
+    text: "Prints",
+    icon: <Flare />,
+    link: "/print_plan",
   },
 ];
 
@@ -77,7 +83,7 @@ const LinkListItem: FC<LinkListItemProps> = ({ linkListItem }) => {
   // TODO 117: Change main text and icon style to different color when selected
   // instead of just greying out.
   return (
-    <ListItem key={linkListItem.link} disablePadding>
+    <ListItem disablePadding>
       <ListItemButton
         onClick={() => navigate(linkListItem.link)}
         selected={location.pathname === linkListItem.link}
@@ -96,11 +102,11 @@ const _Drawer: FC = () => {
 
   // JSX
   const topListItemsJSX = topListItems.map((listItem) => (
-    <LinkListItem linkListItem={listItem} />
+    <LinkListItem linkListItem={listItem} key={listItem.link} />
   ));
 
   const bottomListItemsJSX = bottomListItems.map((listItem) => (
-    <LinkListItem linkListItem={listItem} />
+    <LinkListItem linkListItem={listItem} key={listItem.link}/>
   ));
 
   return (

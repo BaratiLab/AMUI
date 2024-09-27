@@ -10,8 +10,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import buildProfileDetailReducer from 'build_profile/slice/detail';
 import buildProfileListReducer from 'build_profile/slice/list';
 import themeReducer from "common/themeSlice";
-import specificationsReducer from "machine/specificationsSlice";
-import materialListReducer from "material/materialListSlice";
+import machineListReducer from "machine/slice/list";
+import materialListReducer from "material/slice/list";
 import metalsReducer from "material/metalsSlice";
 import eagarTsaiSliceReducer from "melt_pool/eagarTsaiSlice";
 import inferenceSliceReducer from "melt_pool/inferenceSlice";
@@ -31,7 +31,7 @@ const store = configureStore({
     buildProfileDetail: buildProfileDetailReducer,
     buildProfileList: buildProfileListReducer,
     // Machine
-    machineSpecifications: specificationsReducer,
+    machineList: machineListReducer,
     // Materials
     materialMetals: metalsReducer,
     materialList: materialListReducer,

@@ -4,15 +4,15 @@ from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 # from rest_framework.response import Response
 
-from machine.models import Specification 
-from machine.serializers import SpecificationSerializer
+from machine.models import Machine 
+from machine.serializers import MachineSerializer
 
-class SpecificationsList(generics.ListAPIView):
+class MachineList(generics.ListAPIView):
     """
     List available machine specifications.
     """
 
-    queryset = Specification.objects.all()
+    queryset = Machine.objects.all()
     # filter_backends = [DjangoFilterBackend]
-    serializer_class = SpecificationSerializer
+    serializer_class = MachineSerializer
     permission_classes = (AllowAny,)

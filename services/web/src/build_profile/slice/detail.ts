@@ -38,15 +38,6 @@ interface SliceInitialState {
   data: BuildProfile | null,
 }
 
-// const requestInitialState: BuildProfile = {
-//   id: null,
-//   title: '',
-//   description: '',
-//   created_by: null,
-//   created_on: null,
-//   updated_on: null,
-// };
-
 const initialState: SliceInitialState = {
   read: {
     response: null,
@@ -93,18 +84,7 @@ export const deleteBuildProfile = createAsyncThunk(
 export const slice = createSlice({
   name: "buildProfileDetail",
   initialState,
-  reducers: {
-    reset: () => initialState, 
-    // setBuildProfileDetailRequest: (state, action) => {
-    //   // Can't set `state = action.payload` directly as it won't update.
-    //   state.request.id = action.payload.id;
-    //   state.request.title = action.payload.title;
-    //   state.request.description = action.payload.description;
-    //   state.request.created_by = action.payload.created_by;
-    //   state.request.created_on = action.payload.created_on;
-    //   state.request.updated_on = action.payload.updated_on;
-    // },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       // Read
@@ -144,7 +124,7 @@ export const slice = createSlice({
       .addCase(deleteBuildProfile.fulfilled, (state, action) => {
         state.delete.status = Status.Succeeded;
         state.delete.response = action.payload;
-        state.data = action.payload;
+        state.data = null;
       })
       .addCase(deleteBuildProfile.rejected, (state, action) => {
         state.delete.status = Status.Failed;
@@ -153,8 +133,5 @@ export const slice = createSlice({
       });
   },
 });
-
-// Action creators are generated for each case reducer function
-export const { reset } = slice.actions;
 
 export default slice.reducer;

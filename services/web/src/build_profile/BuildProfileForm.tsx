@@ -4,13 +4,16 @@
  */
 
 // Node Modules
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, SelectChangeEvent, TextField } from '@mui/material';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Actions
 import { updateBuildProfile } from 'build_profile/slice/detail';
 import { createBuildProfile } from 'build_profile/slice/list';
+
+// Components
+import MaterialSelect from 'material/MaterialSelect';
 
 // Enums
 import { Status } from 'enums';
@@ -20,8 +23,15 @@ import { useAppDispatch, useAppSelector } from 'hooks';
 
 // Types
 import { BuildProfile } from 'build_profile/_types';
+
 interface Props {
-  buildProfile: BuildProfile | null
+  buildProfile?: BuildProfile | null
+}
+
+interface Request {
+  title: string;
+  description: string;
+  material: number | null;
 }
 
 const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
@@ -29,10 +39,12 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [request, setRequest] = useState({
+  const [request, setRequest] = useState<Request>({
     title: '',
     description: '',
+    material: null,
   });
+
   const [isChanged, setIsChanged] = useState(false);
 
   const { create } = useAppSelector((state) => state.buildProfileList);
@@ -42,7 +54,8 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
     if (buildProfile) {
       setIsChanged(
         request.title !== buildProfile.title ||
-        request.description !== buildProfile.description
+        request.description !== buildProfile.description ||
+        request.material !== buildProfile.material
       );
     } else {
       setIsChanged(request.title !== '' || request.description !== '');
@@ -56,6 +69,7 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
       setRequest({
         title: buildProfile.title,
         description: buildProfile.description,
+        material: buildProfile.material || null
       });
     }
   }, [buildProfile]);
@@ -75,6 +89,14 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
       ...prevState,
       [name]: value,
     }))
+  };
+
+  const handleMaterialSelect = (e: SelectChangeEvent) => {
+    const { value } = e.target;
+    setRequest((prevState) => ({
+      ...prevState,
+      material: Number(value),
+    }));
   };
 
   const handleClick = async () => {
@@ -106,6 +128,10 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
         onChange={handleChange}
         rows={4}
         value={request.description}
+      />
+      <MaterialSelect
+        value={request.material}
+        onChange={handleMaterialSelect}
       />
       <Button disabled={!isChanged} onClick={handleClick} variant="contained">
         Submit

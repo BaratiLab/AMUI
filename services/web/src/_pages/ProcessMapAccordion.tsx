@@ -31,7 +31,7 @@ import { Section } from "process_map/_enums";
 
 // Hooks
 import { useAppDispatch, useAppSelector } from "hooks";
-import { useSpecifications } from "machine/_hooks";
+// import { useSpecifications } from "machine/_hooks";
 
 // Types
 import { MachineSpecification } from "machine/_types";
@@ -43,9 +43,9 @@ const ProcessMapAccordion: FC = () => {
     (state) => state.processMapConfiguration,
   );
   const [machine, setMachine] = useState<MachineSpecification | null>(null);
-  const [
-    { data: machineSpecificationsData, status: machineSpecificationsStatus },
-  ] = useSpecifications();
+  // const [
+  //   { data: machineSpecificationsData, status: machineSpecificationsStatus },
+  // ] = useSpecifications();
 
   useEffect(() => {
     // Sets machine to state from redux store.

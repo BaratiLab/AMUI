@@ -33,7 +33,7 @@ python manage.py createsuperuser --noinput \
 # Seed melt pool data, check if fixtures exist first
 echo "Seeding data..."
 python manage.py loaddata melt_pool/fixture/records.json || echo "Records already loaded or error occurred."
-python manage.py loaddata machine/fixture/specifications.json || echo "Machine specs already loaded or error occurred."
+python manage.py loaddata machine/fixture/machine.json || echo "Machine already loaded or error occurred."
 python manage.py loaddata material/fixture/material.json || echo "Material already loaded or error occurred."
 
 # For production, use Gunicorn instead of runserver

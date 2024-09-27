@@ -1,6 +1,7 @@
 /**
  * MaterialForm.tsx
  * Form component for selecting material.
+ * LEGACY
  */
 
 // Node Modules

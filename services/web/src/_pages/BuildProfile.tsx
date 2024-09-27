@@ -1,26 +1,28 @@
 /**
  * BuildProfile.tsx
  * Page component for creating new or editing existing build profile.
+  //   // TODO: Handle case where entry no longer exists
+  //   // Redux status in this case still says successful, will need to rely on
+  //   // server status code response.
  */
 
 // Node Modules
-import { Backdrop, Box, Button, Fade, Modal, Typography } from '@mui/material';
+import { Backdrop, Box, Button, Fade, IconButton, Modal, Typography } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { FC, useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 // Actions
-import {
-  reset,
-  readBuildProfile,
-  deleteBuildProfile
-} from 'build_profile/slice/detail';
+import { readBuildProfile, deleteBuildProfile } from 'build_profile/slice/detail';
 
 // Components
 import BuildProfileForm from 'build_profile/BuildProfileForm';
 
 // Hooks
 import { useAppDispatch, useAppSelector } from 'hooks';
-import { Status } from 'enums';
+
+// Types
+import { BuildProfileDetailDeleteResponse } from 'build_profile/_types';
 
 const style = {
   display: 'flex',
@@ -44,12 +46,6 @@ const BuildProfile: FC = () => {
   const { id } = useParams();
   const [modalIsShown, setModalIsShown] = useState(false);
   const {
-    delete: {
-      status: deleteStatus,
-    },
-    read: {
-      status: readStatus,
-    },
     data: buildProfile,
   } = useAppSelector((state) => state.buildProfileDetail);
 
@@ -63,30 +59,25 @@ const BuildProfile: FC = () => {
     }
   }, [dispatch, id, navigate]);
 
-  useEffect(() => {
-    // Redirects to list page if successfully deleted or non-existant.
-    // TODO: Handle case where entry no longer exists
-    // Redux status in this case still says successful, will need to rely on
-    // server status code response.
-    if (deleteStatus === Status.Succeeded) {
-      navigate("/build_profile");
-
-      // Reset build profile detail state.
-      reset();
-    }
-  }, [deleteStatus, readStatus])
-
   // Callbacks
   const handleClick = async () => {
-    dispatch(deleteBuildProfile(id as string));
+    const { payload } = await dispatch(deleteBuildProfile(id as string));
+    if ((payload as BuildProfileDetailDeleteResponse)?.code === 204 ) {
+      navigate("/build_profile");
+    }
   };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1em'}}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography component="h2" variant="h4">
-          Build Profile
-        </Typography>
+        <Box display="flex" sx={{ gap: '1em' }}>
+          <IconButton onClick={() => navigate('/build_profile')}>
+            <ArrowBackIcon />
+          </IconButton>
+          <Typography component="h2" variant="h4">
+            Build Profile
+          </Typography>
+        </Box>
         <Button variant="contained" onClick={() => setModalIsShown(true)}>
           Delete
         </Button>

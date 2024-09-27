@@ -8,15 +8,15 @@ import { FC } from 'react';
 import { Box, Typography } from '@mui/material';
 
 // Components
-import MachineSpecificationsTable from 'machine/SpecificationsTable';
+import MachineListTable from 'machine/MachineListTable';
 
 const Machines: FC = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1em'}}>
       <Typography component="h2" variant="h4">
-        Build Profiles
+        Machines
       </Typography>
-      <MachineSpecificationsTable />
+      <MachineListTable />
     </Box>
   );
 };

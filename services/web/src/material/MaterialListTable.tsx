@@ -4,7 +4,7 @@
  */
 
 // Node Modules
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -13,12 +13,25 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
+// Actions
+import { readMaterials } from 'material/slice/list';
+
+// Enums
+import { Status } from 'enums';
+
 // Hooks
-import { useMaterialList } from "material/_hooks";
+import { useAppDispatch, useAppSelector } from 'hooks';
 
 const MaterialListTable: FC = () => {
   // Hooks
-  const [{ data, status }] = useMaterialList();
+  const dispatch = useAppDispatch();
+  const { data, read } = useAppSelector((state) => state.materialList)
+
+  useEffect(() => {
+    if (read.status === Status.Idle) {
+      dispatch(readMaterials());
+    }
+  }, [dispatch, read.status]);
 
   return (
     <TableContainer component={Paper}>

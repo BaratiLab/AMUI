@@ -1,7 +1,7 @@
 [
   {
     "fields": {
-      "machine": "EOS M290",
+      "name": "EOS M290",
       "company": "EOS",
       "power_max_w": 400,
       "power_min_w": null,
@@ -16,12 +16,12 @@
       "image_link": "static/images/EOS_M290.webp",
       "company_logo_link": "static/images/EOS_Logo_2022.svg"
     },
-    "model": "machine.Specification",
+    "model": "machine.Machine",
     "pk": 1
   },
   {
     "fields": {
-      "machine": "EOSINT M280",
+      "name": "EOSINT M280",
       "company": "EOS",
       "power_max_w": 400,
       "power_min_w": 200,
@@ -36,12 +36,12 @@
       "image_link": "static/images/EOSINT_M280.jpg",
       "company_logo_link": "static/images/EOS_Logo_2022.svg"
     },
-    "model": "machine.Specification",
+    "model": "machine.Machine",
     "pk": 2
   },
   {
     "fields": {
-      "machine": "EOSINT M270",
+      "name": "EOSINT M270",
       "company": "EOS",
       "power_max_w": 200,
       "power_min_w": null,
@@ -56,12 +56,12 @@
       "image_link": "static/images/EOSINT_M270.webp",
       "company_logo_link": "static/images/EOS_Logo_2022.svg"
     },
-    "model": "machine.Specification",
+    "model": "machine.Machine",
     "pk": 3
   },
   {
     "fields": {
-      "machine": "Concept Laser M2",
+      "name": "Concept Laser M2",
       "company": "GE",
       "power_max_w": 1000,
       "power_min_w": 400,
@@ -76,12 +76,12 @@
       "image_link": "static/images/concept_laser_m2.jpg",
       "company_logo_link": "static/images/GE_logo.svg"
     },
-    "model": "machine.Specification",
+    "model": "machine.Machine",
     "pk": 4
   },
   {
     "fields": {
-      "machine": "Renishaw AM500",
+      "name": "Renishaw AM500",
       "company": "Renishaw",
       "power_max_w": 500,
       "power_min_w": null,
@@ -96,12 +96,12 @@
       "image_link": "static/images/am500.jpeg",
       "company_logo_link": "static/images/renishaw_logo.jpeg"
     },
-    "model": "machine.Specification",
+    "model": "machine.Machine",
     "pk": 5
   },
   {
     "fields": {
-      "machine": "Renishaw AM400",
+      "name": "Renishaw AM400",
       "company": "Renishaw",
       "power_max_w": 400,
       "power_min_w": null,
@@ -116,12 +116,12 @@
       "image_link": "static/images/am400.jpeg",
       "company_logo_link": "static/images/renishaw_logo.jpeg"
     },
-    "model": "machine.Specification",
+    "model": "machine.Machine",
     "pk": 6
   },
   {
     "fields": {
-      "machine": "Renishaw AM250",
+      "name": "Renishaw AM250",
       "company": "Renishaw",
       "power_max_w": 400,
       "power_min_w": 200,
@@ -136,12 +136,12 @@
       "image_link": "static/images/am250.jpeg",
       "company_logo_link": "static/images/renishaw_logo.jpeg"
     },
-    "model": "machine.Specification",
+    "model": "machine.Machine",
     "pk": 7
   },
   {
     "fields": {
-      "machine": "BLT S210",
+      "name": "BLT S210",
       "company": "BLT",
       "power_max_w": 500,
       "power_min_w": null,
@@ -156,12 +156,12 @@
       "image_link": "static/images/BLTS210.jpeg",
       "company_logo_link": "static/images/blt_logo.png"
     },
-    "model": "machine.Specification",
+    "model": "machine.Machine",
     "pk": 8
   },
   {
     "fields": {
-      "machine": "Arcam EBM A2X",
+      "name": "Arcam EBM A2X",
       "company": "GE",
       "power_max_w": 3000,
       "power_min_w": null,
@@ -176,12 +176,12 @@
       "image_link": "static/images/arcam_ebm_a2x.png",
       "company_logo_link": "static/images/GE_logo.svg"
     },
-    "model": "machine.Specification",
+    "model": "machine.Machine",
     "pk": 9
   },
   {
     "fields": {
-      "machine": "Arcam EBM S12",
+      "name": "Arcam EBM S12",
       "company": "GE",
       "power_max_w": 3500,
       "power_min_w": null,
@@ -196,12 +196,12 @@
       "image_link": "static/images/arcam_ebm_s12.png",
       "company_logo_link": "static/images/GE_logo.svg"
     },
-    "model": "machine.Specification",
+    "model": "machine.Machine",
     "pk": 10
   },
   {
     "fields": {
-      "machine": "Aconity MINI",
+      "name": "Aconity MINI",
       "company": "Aconity 3D",
       "power_max_w": 1200,
       "power_min_w": 400,
@@ -216,12 +216,12 @@
       "image_link": "static/images/aconity_mini.png",
       "company_logo_link": "static/images/aconity_logo.jpeg"
     },
-    "model": "machine.Specification",
+    "model": "machine.Machine",
     "pk": 11
   },
   {
     "fields": {
-      "machine": "SLM 500 HL",
+      "name": "SLM 500 HL",
       "company": "SLM Solutions",
       "power_max_w": 700,
       "power_min_w": 400,
@@ -236,12 +236,12 @@
       "image_link": "static/images/slm500.jpeg",
       "company_logo_link": "static/images/slm_logo.jpeg"
     },
-    "model": "machine.Specification",
+    "model": "machine.Machine",
     "pk": 12
   },
   {
     "fields": {
-      "machine": "SLM 280 HL",
+      "name": "SLM 280 HL",
       "company": "SLM Solutions",
       "power_max_w": 1000,
       "power_min_w": 400,
@@ -256,12 +256,12 @@
       "image_link": "static/images/slm280.jpeg",
       "company_logo_link": "static/images/slm_logo.jpeg"
     },
-    "model": "machine.Specification",
+    "model": "machine.Machine",
     "pk": 13
   },
   {
     "fields": {
-      "machine": "SLM 125 HL",
+      "name": "SLM 125 HL",
       "company": "SLM Solutions",
       "power_max_w": 400,
       "power_min_w": 400,
@@ -276,7 +276,7 @@
       "image_link": "static/images/slm_125.jpeg",
       "company_logo_link": "static/images/slm_logo.jpeg"
     },
-    "model": "machine.Specification",
+    "model": "machine.Machine",
     "pk": 14
   }
 ]
