@@ -9,24 +9,24 @@ import { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Actions
-// import { readPrintPlans } from 'build_profile/slice/list';
+import { readPrintPlans } from 'print_plan/slice/list';
 
 // Hooks
 import { useAppDispatch, useAppSelector } from 'hooks';
 
 // Components
-// import PartTable from 'build_profile/PartTable';
+import PartTable from 'print_plan/PrintPlanTable';
 
 const PrintPlans: FC = () => {
   // Hooks
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // const { data } = useAppSelector((state) => state.buildProfileList);
+  const { data } = useAppSelector((state) => state.printPlanList);
 
-  // useEffect(() => {
-  //   dispatch(readPrintPlans());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(readPrintPlans());
+  }, [dispatch]);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1em'}}>
@@ -41,7 +41,7 @@ const PrintPlans: FC = () => {
           New Print
         </Button>
       </Box>
-      {/* <PartTable buildProfiles={data} /> */}
+      <PartTable printPlans={data} />
     </Box>
   );
 };

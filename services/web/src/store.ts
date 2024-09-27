@@ -9,9 +9,15 @@ import { configureStore } from "@reduxjs/toolkit";
 // Reducers
 import buildProfileDetailReducer from 'build_profile/slice/detail';
 import buildProfileListReducer from 'build_profile/slice/list';
-import themeReducer from "common/themeSlice";
 import machineListReducer from "machine/slice/list";
 import materialListReducer from "material/slice/list";
+import partDetailReducer from 'part/slice/detail';
+import partListReducer from 'part/slice/list';
+import printPlanDetailReducer from 'print_plan/slice/detail';
+import printPlanListReducer from 'print_plan/slice/list';
+import themeReducer from "common/themeSlice";
+
+// Legacy
 import metalsReducer from "material/metalsSlice";
 import eagarTsaiSliceReducer from "melt_pool/eagarTsaiSlice";
 import inferenceSliceReducer from "melt_pool/inferenceSlice";
@@ -33,8 +39,19 @@ const store = configureStore({
     // Machine
     machineList: machineListReducer,
     // Materials
-    materialMetals: metalsReducer,
     materialList: materialListReducer,
+    // Part
+    partDetail: partDetailReducer,
+    partList: partListReducer,
+    // Print Plan
+    printPlanDetail: printPlanDetailReducer,
+    printPlanList: printPlanListReducer,
+    // Theme
+    theme: themeReducer,
+
+    // Legacy
+    // Materials
+    materialMetals: metalsReducer,
     // Melt Pool
     meltPoolEagarTsai: eagarTsaiSliceReducer,
     meltPoolInference: inferenceSliceReducer,
@@ -50,8 +67,6 @@ const store = configureStore({
     slicerUploadFile: uploadFileReducer,
     // Surrogate
     surrogate: simulationSliceReducer,
-    // Theme
-    theme: themeReducer,
   },
 });
 

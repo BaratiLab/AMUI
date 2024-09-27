@@ -17,16 +17,31 @@ export interface BuildProfileResponse extends BuildProfile {
   material_name: string | null;
 }
 
-export type BuildProfileListCreateResponse = null | BuildProfileResponse;
-export type BuildProfileListReadResponse = null | {
-  count: null | number;
-  next: null | string;
-  previous: null | string;
-  results: BuildProfileResponse[];
+export type BuildProfileListCreateResponse = null | {
+  code: number;
+  data: BuildProfileResponse;
 }
 
-export type BuildProfileDetailReadResponse = null | BuildProfileResponse;
-export type BuildProfileDetailUpdateResponse = null | BuildProfileResponse;
+export type BuildProfileListReadResponse = null | {
+  code: number;
+  data: {
+    count: null | number;
+    next: null | string;
+    previous: null | string;
+    results: BuildProfileResponse[];
+  }
+}
+
+export type BuildProfileDetailReadResponse = null | {
+  code: number;
+  data: BuildProfileResponse;
+}
+
+export type BuildProfileDetailUpdateResponse = null | {
+  code: number;
+  data: BuildProfileResponse;
+}
+
 export type BuildProfileDetailDeleteResponse = null | {
   code: number;
   data: string;

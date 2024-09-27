@@ -6,7 +6,7 @@ class Part(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=100, blank=True, default="")
-    file = models.FileField(upload_to="uploads/")
+    file = models.FileField(upload_to="uploads/", blank=True, null=True)
 
     class Meta:
         ordering = ["created_on", "updated_on"]

@@ -8,21 +8,21 @@ import axios from 'axios';
 
 // Types
 import type {
-  BuildProfile,
-  BuildProfileListCreateResponse,
-  BuildProfileListReadResponse,
-  BuildProfileDetailReadResponse,
-  BuildProfileDetailUpdateResponse,
-  BuildProfileDetailDeleteResponse,
-} from "build_profile/_types";
+  Part,
+  PartListCreateResponse,
+  PartListReadResponse,
+  PartDetailReadResponse,
+  PartDetailUpdateResponse,
+  PartDetailDeleteResponse,
+} from "part/_types";
 
 /**
  * @description API route to retrieve build profiles.
  * @returns 
  */
-export const getBuildProfiles = async (): Promise<BuildProfileListReadResponse> => {
+export const getParts = async (): Promise<PartListReadResponse> => {
   try {
-    const response = await axios.get('build_profile/');
+    const response = await axios.get('part/');
     const { data, status: code } = response;
     return { data, code };
   } catch (error) {
@@ -35,9 +35,9 @@ export const getBuildProfiles = async (): Promise<BuildProfileListReadResponse> 
  * @description API route to delete individual build profile.
  * @returns 
  */
-export const deleteBuildProfile = async (id: string): Promise<BuildProfileDetailDeleteResponse> => {
+export const deletePart = async (id: string): Promise<PartDetailDeleteResponse> => {
   try {
-    const response = await axios.delete(`build_profile/${id}/`);
+    const response = await axios.delete(`part/${id}/`);
     const { data, status: code } = response;
     return { data, code };
   } catch (error) {
@@ -50,9 +50,9 @@ export const deleteBuildProfile = async (id: string): Promise<BuildProfileDetail
  * @description API route to retrieve individual build profile details.
  * @returns 
  */
-export const getBuildProfile = async (id: string): Promise<BuildProfileDetailReadResponse> => {
+export const getPart = async (id: string): Promise<PartDetailReadResponse> => {
   try {
-    const response = await axios.get(`build_profile/${id}/`);
+    const response = await axios.get(`part/${id}/`);
     const { data, status: code } = response;
     return { data, code };
   } catch (error) {
@@ -61,9 +61,9 @@ export const getBuildProfile = async (id: string): Promise<BuildProfileDetailRea
   }
 };
 
-export const putBuildProfile = async (buildProfile: BuildProfile): Promise<BuildProfileDetailUpdateResponse> => {
+export const putPart = async (part: Part): Promise<PartDetailUpdateResponse> => {
   try {
-    const response = await axios.put(`build_profile/${buildProfile.id}/`, buildProfile);
+    const response = await axios.put(`part/${part.id}/`, part);
     const { data, status: code } = response;
     return { data, code };
   } catch (error) {
@@ -72,9 +72,9 @@ export const putBuildProfile = async (buildProfile: BuildProfile): Promise<Build
   }
 };
 
-export const postBuildProfile = async (buildProfile: BuildProfile): Promise<BuildProfileListCreateResponse>=> {
+export const postPart = async (part: Part): Promise<PartListCreateResponse>=> {
   try {
-    const response = await axios.post('build_profile/',  buildProfile);
+    const response = await axios.post('part/',  part);
     const { data, status: code } = response;
     return { data, code };
   } catch (error) {

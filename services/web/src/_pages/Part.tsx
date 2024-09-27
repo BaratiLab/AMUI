@@ -13,16 +13,16 @@ import { FC, useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 // Actions
-// import { readPart, deletePart } from 'build_profile/slice/detail';
+import { readPart, deletePart } from 'part/slice/detail';
 
 // Components
-// import PartForm from 'build_profile/PartForm';
+import PartForm from 'part/PartForm';
 
 // Hooks
 import { useAppDispatch, useAppSelector } from 'hooks';
 
 // Types
-// import { PartDetailDeleteResponse } from 'build_profile/_types';
+import { PartDetailDeleteResponse } from 'part/_types';
 
 const style = {
   display: 'flex',
@@ -45,27 +45,26 @@ const Part: FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [modalIsShown, setModalIsShown] = useState(false);
-  // const {
-  //   data: buildProfile,
-  // } = useAppSelector((state) => state.buildProfileDetail);
 
-  // useEffect(() => {
-  //   if (id) {
-  //     // Retrieves data for specified build profile.
-  //     dispatch(readPart(id));
-  //   } else {
-  //     // Navigate to build profile list page if invalid id is provided.
-  //     navigate("/build_profile");
-  //   }
-  // }, [dispatch, id, navigate]);
+  const { data } = useAppSelector((state) => state.partDetail);
+
+  useEffect(() => {
+    if (id) {
+      // Retrieves data for specified build profile.
+      dispatch(readPart(id));
+    } else {
+      // Navigate to build profile list page if invalid id is provided.
+      navigate("/part");
+    }
+  }, [dispatch, id, navigate]);
 
   // Callbacks
-  // const handleClick = async () => {
-  //   const { payload } = await dispatch(deletePart(id as string));
-  //   if ((payload as PartDetailDeleteResponse)?.code === 204 ) {
-  //     navigate("/build_profile");
-  //   }
-  // };
+  const handleClick = async () => {
+    const { payload } = await dispatch(deletePart(id as string));
+    if ((payload as PartDetailDeleteResponse)?.code === 204 ) {
+      navigate("/part");
+    }
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1em'}}>
@@ -82,7 +81,7 @@ const Part: FC = () => {
           Delete
         </Button>
       </Box>
-      {/* <PartForm buildProfile={buildProfile} /> */}
+      <PartForm part={data} />
       <Modal
         closeAfterTransition
         onClose={() => setModalIsShown(false)}
@@ -100,7 +99,7 @@ const Part: FC = () => {
               Are you sure you would like to delete?
             </Typography>
             <Box sx={{ display: 'flex', gap: '1em'}}>
-              {/* <Button onClick={handleClick} variant="contained">Yes</Button> */}
+              <Button onClick={handleClick} variant="contained">Yes</Button>
               <Button
                 onClick={() => setModalIsShown(false)}
                 variant="contained"

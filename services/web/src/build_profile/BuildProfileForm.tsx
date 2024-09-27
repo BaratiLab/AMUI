@@ -22,7 +22,7 @@ import { Status } from 'enums';
 import { useAppDispatch, useAppSelector } from 'hooks';
 
 // Types
-import { BuildProfile } from 'build_profile/_types';
+import { BuildProfile, BuildProfileListCreateResponse, BuildProfileDetailUpdateResponse } from 'build_profile/_types';
 
 interface Props {
   buildProfile?: BuildProfile | null
@@ -102,14 +102,20 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
   const handleClick = async () => {
     if (buildProfile) {
       // Sends request to update existing buildProfile.
-      dispatch(updateBuildProfile({
+      const { payload } = await dispatch(updateBuildProfile({
         // Adds id for update request
         id: buildProfile.id,
         ...request,
       }));
+      if ((payload as BuildProfileDetailUpdateResponse)?.code === 200 ) {
+        navigate("/build_profile");
+      }
     } else {
       // Sends request to create new build profile.
-      dispatch(createBuildProfile(request));
+      const { payload } = await dispatch(createBuildProfile(request));
+      if ((payload as BuildProfileListCreateResponse)?.code === 201 ) {
+        navigate("/build_profile");
+      }
     }
   };
 

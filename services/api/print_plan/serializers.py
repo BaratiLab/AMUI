@@ -1,18 +1,20 @@
 from rest_framework import serializers
+
+from build_profile.models import BuildProfile
+from part.models import Part
 from print_plan.models import PrintPlan
 
+from build_profile.serializers import BuildProfileSerializer
+from part.serializers import PartSerializer
+
 class PrintPlanSerializer(serializers.ModelSerializer):
-    material_name = serializers.SerializerMethodField()
-    part_name = serializers.SerializerMethodField()
-    build_profile_title = serializers.SerializerMethodField()
+    part = PartSerializer(read_only=True)
+    build_profile = BuildProfileSerializer(read_only=True)
+
+    part_id = serializers.PrimaryKeyRelatedField(queryset=Part.objects.all(), source='part', write_only=True, allow_null=True)
+    build_profile_id = serializers.PrimaryKeyRelatedField(queryset=BuildProfile.objects.all(), source='build_profile', write_only=True, allow_null=True)
 
     class Meta:
         model = PrintPlan
         fields = "__all__"
         extra_kwargs = {'created_by': {'required': False}}
-
-    def get_part_name(self, obj):
-        return obj.part.name if obj.part else None
-
-    def get_build_profile_title(self, obj):
-        return obj.build_profile.title if obj.build_profile else None

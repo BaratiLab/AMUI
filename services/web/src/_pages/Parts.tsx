@@ -9,24 +9,24 @@ import { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Actions
-// import { readParts } from 'build_profile/slice/list';
+import { readParts } from 'part/slice/list';
 
 // Hooks
 import { useAppDispatch, useAppSelector } from 'hooks';
 
 // Components
-// import PartTable from 'build_profile/PartTable';
+import PartTable from 'part/PartTable';
 
 const Parts: FC = () => {
   // Hooks
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // const { data } = useAppSelector((state) => state.buildProfileList);
+  const { data } = useAppSelector((state) => state.partList);
 
-  // useEffect(() => {
-  //   dispatch(readParts());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(readParts());
+  }, [dispatch]);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1em'}}>
@@ -38,10 +38,10 @@ const Parts: FC = () => {
           onClick={() => navigate('/part/new')}
           variant="contained"
         >
-          Upload Part
+          New Part
         </Button>
       </Box>
-      {/* <PartTable buildProfiles={data} /> */}
+      <PartTable parts={data} />
     </Box>
   );
 };

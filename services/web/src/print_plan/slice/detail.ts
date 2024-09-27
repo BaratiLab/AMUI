@@ -8,10 +8,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // API
 import {
-  deleteBuildProfile as deleteBuildProfileAPI,
-  getBuildProfile,
-  putBuildProfile,
-} from "build_profile/_api";
+  deletePrintPlan as deletePrintPlanAPI,
+  getPrintPlan,
+  putPrintPlan,
+} from "print_plan/_api";
 
 // Enums
 import { Status } from "enums";
@@ -19,23 +19,23 @@ import { Status } from "enums";
 // Types
 import { AsyncThunkInitialState } from "types";
 import {
-  BuildProfile,
-  BuildProfileDetailDeleteResponse,
-  BuildProfileDetailReadResponse,
-  BuildProfileDetailUpdateResponse,
-} from "build_profile/_types";
+  PrintPlanRequest,
+  PrintPlanDetailDeleteResponse,
+  PrintPlanDetailReadResponse,
+  PrintPlanDetailUpdateResponse,
+} from "print_plan/_types";
 
 interface SliceInitialState {
   read: {
-    response: BuildProfileDetailReadResponse,
+    response: PrintPlanDetailReadResponse,
   } & AsyncThunkInitialState,
   update: {
-    response: BuildProfileDetailUpdateResponse,
+    response: PrintPlanDetailUpdateResponse,
   } & AsyncThunkInitialState,
   delete: {
-    response: BuildProfileDetailDeleteResponse,
+    response: PrintPlanDetailDeleteResponse,
   } & AsyncThunkInitialState,
-  data: BuildProfile | null,
+  data: PrintPlanRequest | null,
 }
 
 const initialState: SliceInitialState = {
@@ -57,76 +57,96 @@ const initialState: SliceInitialState = {
   data: null,
 };
 
-export const readBuildProfile = createAsyncThunk(
-  "buildProfileDetail/read",
+export const readPrintPlan = createAsyncThunk(
+  "printPlanDetail/read",
   async (id: string) => {
-    const response = await getBuildProfile(id);
+    const response = await getPrintPlan(id);
     return response;
   },
 );
 
-export const updateBuildProfile = createAsyncThunk(
-  "buildProfileDetail/update",
-  async (request: BuildProfile) => {
-    const response = await putBuildProfile(request);
+export const updatePrintPlan = createAsyncThunk(
+  "printPlanDetail/update",
+  async (request: PrintPlanRequest) => {
+    const response = await putPrintPlan(request);
     return response;
   },
 );
 
-export const deleteBuildProfile = createAsyncThunk(
-  "buildProfileDetail/delete",
+export const deletePrintPlan = createAsyncThunk(
+  "printPlanDetail/delete",
   async (id: string) => {
-    const response = await deleteBuildProfileAPI(id);
+    const response = await deletePrintPlanAPI(id);
     return response;
   },
 );
 
 export const slice = createSlice({
-  name: "buildProfileDetail",
+  name: "printPlanDetail",
   initialState,
   reducers: {},
   extraReducers(builder) {
     builder
       // Read
-      .addCase(readBuildProfile.pending, (state) => {
+      .addCase(readPrintPlan.pending, (state) => {
         state.read.status = Status.Loading;
       })
-      .addCase(readBuildProfile.fulfilled, (state, action) => {
+      .addCase(readPrintPlan.fulfilled, (state, action) => {
         state.read.status = Status.Succeeded;
         state.read.response = action.payload;
-        state.data = action.payload?.data || null;
+
+        if (action.payload) {
+          state.data = {
+            ...action.payload.data,
+            build_profile_id: action.payload.data.build_profile?.id || null,
+            part_id: action.payload.data.part?.id || null,
+          }
+        } else {
+          state.data =  null;
+        }
+
       })
-      .addCase(readBuildProfile.rejected, (state, action) => {
+      .addCase(readPrintPlan.rejected, (state, action) => {
         state.read.status = Status.Failed;
         state.read.response = null;
         state.read.error = action.error.message;
       })
 
       // Update
-      .addCase(updateBuildProfile.pending, (state) => {
+      .addCase(updatePrintPlan.pending, (state) => {
         state.update.status = Status.Loading;
       })
-      .addCase(updateBuildProfile.fulfilled, (state, action) => {
+      .addCase(updatePrintPlan.fulfilled, (state, action) => {
         state.update.status = Status.Succeeded;
         state.update.response = action.payload;
-        state.data = action.payload?.data || null;
+
+        if (action.payload) {
+          state.data = {
+            ...action.payload.data,
+            build_profile_id: action.payload.data.build_profile?.id || null,
+            part_id: action.payload.data.part?.id || null,
+          }
+        } else {
+          state.data =  null;
+        }
+
       })
-      .addCase(updateBuildProfile.rejected, (state, action) => {
+      .addCase(updatePrintPlan.rejected, (state, action) => {
         state.update.status = Status.Failed;
         state.update.response = null;
         state.update.error = action.error.message;
       })
 
       // Delete 
-      .addCase(deleteBuildProfile.pending, (state) => {
+      .addCase(deletePrintPlan.pending, (state) => {
         state.delete.status = Status.Loading;
       })
-      .addCase(deleteBuildProfile.fulfilled, (state, action) => {
+      .addCase(deletePrintPlan.fulfilled, (state, action) => {
         state.delete.status = Status.Succeeded;
         state.delete.response = action.payload;
         state.data = null;
       })
-      .addCase(deleteBuildProfile.rejected, (state, action) => {
+      .addCase(deletePrintPlan.rejected, (state, action) => {
         state.delete.status = Status.Failed;
         state.delete.response = null;
         state.delete.error = action.error.message;

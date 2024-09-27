@@ -7,7 +7,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // API
-import { getBuildProfiles, postBuildProfile } from "build_profile/_api";
+import { getPrintPlans, postPrintPlan } from "print_plan/_api";
 
 // Enums
 import { Status } from "enums";
@@ -15,20 +15,20 @@ import { Status } from "enums";
 // Types
 import { AsyncThunkInitialState } from "types";
 import {
-  BuildProfile,
-  BuildProfileResponse,
-  BuildProfileListCreateResponse,
-  BuildProfileListReadResponse,
-} from "build_profile/_types";
+  PrintPlan,
+  PrintPlanResponse,
+  PrintPlanListCreateResponse,
+  PrintPlanListReadResponse,
+} from "print_plan/_types";
 
 interface ListSliceInitialState {
   create: {
-    response: BuildProfileListCreateResponse,
+    response: PrintPlanListCreateResponse,
   } & AsyncThunkInitialState,
   read: {
-    response: BuildProfileListReadResponse,
+    response: PrintPlanListReadResponse,
   } & AsyncThunkInitialState,
-  data: BuildProfileResponse[],
+  data: PrintPlanResponse[],
 }
 
 // Constants
@@ -49,33 +49,33 @@ const initialState: ListSliceInitialState = {
 /**
  * @description Retrieves available build profiles.
  */
-export const readBuildProfiles = createAsyncThunk(
-  "buildProfileList/read",
+export const readPrintPlans = createAsyncThunk(
+  "printPlanList/read",
   async () => {
-    const response = await getBuildProfiles();
+    const response = await getPrintPlans();
     return response;
   },
 );
 
-export const createBuildProfile = createAsyncThunk(
-  "buildProfileList/create",
-  async (request: BuildProfile) => {
-    const response = await postBuildProfile(request)
+export const createPrintPlan = createAsyncThunk(
+  "printPlanList/create",
+  async (request: PrintPlan) => {
+    const response = await postPrintPlan(request)
     return response;
   }
 )
 
 export const slice = createSlice({
-  name: "buildProfileList",
+  name: "printPlanList",
   initialState,
   reducers: {},
   extraReducers(builder) {
     builder
       // Create
-      .addCase(createBuildProfile.pending, (state) => {
+      .addCase(createPrintPlan.pending, (state) => {
         state.create.status = Status.Loading;
       })
-      .addCase(createBuildProfile.fulfilled, (state, action) => {
+      .addCase(createPrintPlan.fulfilled, (state, action) => {
         state.create.status = Status.Succeeded;
         state.create.response = action.payload;
         if (action.payload) {
@@ -83,21 +83,21 @@ export const slice = createSlice({
           state.data = [action.payload.data, ...state.data];
         }
       })
-      .addCase(createBuildProfile.rejected, (state, action) => {
+      .addCase(createPrintPlan.rejected, (state, action) => {
         state.create.status = Status.Failed;
         state.create.response = null;
         state.create.error = action.error.message;
       })
       // Read
-      .addCase(readBuildProfiles.pending, (state) => {
+      .addCase(readPrintPlans.pending, (state) => {
         state.read.status = Status.Loading;
       })
-      .addCase(readBuildProfiles.fulfilled, (state, action) => {
+      .addCase(readPrintPlans.fulfilled, (state, action) => {
         state.read.status = Status.Succeeded;
         state.read.response = action.payload;
         state.data = action.payload?.data.results || [];
       })
-      .addCase(readBuildProfiles.rejected, (state, action) => {
+      .addCase(readPrintPlans.rejected, (state, action) => {
         state.read.status = Status.Failed;
         state.read.response = null;
         state.data = [];

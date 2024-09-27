@@ -8,7 +8,7 @@ import { Box, Typography } from '@mui/material';
 import { FC } from 'react';
 
 // Components
-// import PrintPlanForm from 'build_profile/PrintPlanForm';
+import PrintPlanForm from 'print_plan/PrintPlanForm';
 
 const PrintPlanNew: FC = () => {
   return (
@@ -18,7 +18,7 @@ const PrintPlanNew: FC = () => {
           New Print
         </Typography>
       </Box>
-      {/* <PrintPlanForm /> */}
+      <PrintPlanForm />
     </Box>
   );
 };

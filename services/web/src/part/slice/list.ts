@@ -7,7 +7,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // API
-import { getBuildProfiles, postBuildProfile } from "build_profile/_api";
+import { getParts, postPart } from "part/_api";
 
 // Enums
 import { Status } from "enums";
@@ -15,20 +15,20 @@ import { Status } from "enums";
 // Types
 import { AsyncThunkInitialState } from "types";
 import {
-  BuildProfile,
-  BuildProfileResponse,
-  BuildProfileListCreateResponse,
-  BuildProfileListReadResponse,
-} from "build_profile/_types";
+  Part,
+  PartResponse,
+  PartListCreateResponse,
+  PartListReadResponse,
+} from "part/_types";
 
 interface ListSliceInitialState {
   create: {
-    response: BuildProfileListCreateResponse,
+    response: PartListCreateResponse,
   } & AsyncThunkInitialState,
   read: {
-    response: BuildProfileListReadResponse,
+    response: PartListReadResponse,
   } & AsyncThunkInitialState,
-  data: BuildProfileResponse[],
+  data: PartResponse[],
 }
 
 // Constants
@@ -49,33 +49,33 @@ const initialState: ListSliceInitialState = {
 /**
  * @description Retrieves available build profiles.
  */
-export const readBuildProfiles = createAsyncThunk(
-  "buildProfileList/read",
+export const readParts = createAsyncThunk(
+  "partList/read",
   async () => {
-    const response = await getBuildProfiles();
+    const response = await getParts();
     return response;
   },
 );
 
-export const createBuildProfile = createAsyncThunk(
-  "buildProfileList/create",
-  async (request: BuildProfile) => {
-    const response = await postBuildProfile(request)
+export const createPart = createAsyncThunk(
+  "partList/create",
+  async (request: Part) => {
+    const response = await postPart(request)
     return response;
   }
 )
 
 export const slice = createSlice({
-  name: "buildProfileList",
+  name: "partList",
   initialState,
   reducers: {},
   extraReducers(builder) {
     builder
       // Create
-      .addCase(createBuildProfile.pending, (state) => {
+      .addCase(createPart.pending, (state) => {
         state.create.status = Status.Loading;
       })
-      .addCase(createBuildProfile.fulfilled, (state, action) => {
+      .addCase(createPart.fulfilled, (state, action) => {
         state.create.status = Status.Succeeded;
         state.create.response = action.payload;
         if (action.payload) {
@@ -83,21 +83,21 @@ export const slice = createSlice({
           state.data = [action.payload.data, ...state.data];
         }
       })
-      .addCase(createBuildProfile.rejected, (state, action) => {
+      .addCase(createPart.rejected, (state, action) => {
         state.create.status = Status.Failed;
         state.create.response = null;
         state.create.error = action.error.message;
       })
       // Read
-      .addCase(readBuildProfiles.pending, (state) => {
+      .addCase(readParts.pending, (state) => {
         state.read.status = Status.Loading;
       })
-      .addCase(readBuildProfiles.fulfilled, (state, action) => {
+      .addCase(readParts.fulfilled, (state, action) => {
         state.read.status = Status.Succeeded;
         state.read.response = action.payload;
         state.data = action.payload?.data.results || [];
       })
-      .addCase(readBuildProfiles.rejected, (state, action) => {
+      .addCase(readParts.rejected, (state, action) => {
         state.read.status = Status.Failed;
         state.read.response = null;
         state.data = [];

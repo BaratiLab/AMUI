@@ -13,16 +13,16 @@ import { FC, useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 // Actions
-// import { readPrintPlan, deletePrintPlan } from 'build_profile/slice/detail';
+import { readPrintPlan, deletePrintPlan } from 'print_plan/slice/detail';
 
 // Components
-// import PrintPlanForm from 'build_profile/PrintPlanForm';
+import PrintPlanForm from 'print_plan/PrintPlanForm';
 
 // Hooks
 import { useAppDispatch, useAppSelector } from 'hooks';
 
 // Types
-// import { PrintPlanDetailDeleteResponse } from 'build_profile/_types';
+import { PrintPlanDetailDeleteResponse } from 'print_plan/_types';
 
 const style = {
   display: 'flex',
@@ -45,27 +45,26 @@ const PrintPlan: FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [modalIsShown, setModalIsShown] = useState(false);
-  // const {
-  //   data: buildProfile,
-  // } = useAppSelector((state) => state.buildProfileDetail);
 
-  // useEffect(() => {
-  //   if (id) {
-  //     // Retrieves data for specified build profile.
-  //     dispatch(readPrintPlan(id));
-  //   } else {
-  //     // Navigate to build profile list page if invalid id is provided.
-  //     navigate("/build_profile");
-  //   }
-  // }, [dispatch, id, navigate]);
+  const { data } = useAppSelector((state) => state.printPlanDetail);
+
+  useEffect(() => {
+    if (id) {
+      // Retrieves data for specified print plan.
+      dispatch(readPrintPlan(id));
+    } else {
+      // Navigate to print plan list page if invalid id is provided.
+      navigate("/print_plan");
+    }
+  }, [dispatch, id, navigate]);
 
   // Callbacks
-  // const handleClick = async () => {
-  //   const { payload } = await dispatch(deletePrintPlan(id as string));
-  //   if ((payload as PrintPlanDetailDeleteResponse)?.code === 204 ) {
-  //     navigate("/build_profile");
-  //   }
-  // };
+  const handleClick = async () => {
+    const { payload } = await dispatch(deletePrintPlan(id as string));
+    if ((payload as PrintPlanDetailDeleteResponse)?.code === 204 ) {
+      navigate("/print_plan");
+    }
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1em'}}>
@@ -82,7 +81,7 @@ const PrintPlan: FC = () => {
           Delete
         </Button>
       </Box>
-      {/* <PrintPlanForm buildProfile={buildProfile} /> */}
+      <PrintPlanForm printPlan={data} />
       <Modal
         closeAfterTransition
         onClose={() => setModalIsShown(false)}
@@ -100,7 +99,7 @@ const PrintPlan: FC = () => {
               Are you sure you would like to delete?
             </Typography>
             <Box sx={{ display: 'flex', gap: '1em'}}>
-              {/* <Button onClick={handleClick} variant="contained">Yes</Button> */}
+              <Button onClick={handleClick} variant="contained">Yes</Button>
               <Button
                 onClick={() => setModalIsShown(false)}
                 variant="contained"

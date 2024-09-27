@@ -8,10 +8,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // API
 import {
-  deleteBuildProfile as deleteBuildProfileAPI,
-  getBuildProfile,
-  putBuildProfile,
-} from "build_profile/_api";
+  deletePart as deletePartAPI,
+  getPart,
+  putPart,
+} from "part/_api";
 
 // Enums
 import { Status } from "enums";
@@ -19,23 +19,23 @@ import { Status } from "enums";
 // Types
 import { AsyncThunkInitialState } from "types";
 import {
-  BuildProfile,
-  BuildProfileDetailDeleteResponse,
-  BuildProfileDetailReadResponse,
-  BuildProfileDetailUpdateResponse,
-} from "build_profile/_types";
+  Part,
+  PartDetailDeleteResponse,
+  PartDetailReadResponse,
+  PartDetailUpdateResponse,
+} from "part/_types";
 
 interface SliceInitialState {
   read: {
-    response: BuildProfileDetailReadResponse,
+    response: PartDetailReadResponse,
   } & AsyncThunkInitialState,
   update: {
-    response: BuildProfileDetailUpdateResponse,
+    response: PartDetailUpdateResponse,
   } & AsyncThunkInitialState,
   delete: {
-    response: BuildProfileDetailDeleteResponse,
+    response: PartDetailDeleteResponse,
   } & AsyncThunkInitialState,
-  data: BuildProfile | null,
+  data: Part | null,
 }
 
 const initialState: SliceInitialState = {
@@ -57,76 +57,76 @@ const initialState: SliceInitialState = {
   data: null,
 };
 
-export const readBuildProfile = createAsyncThunk(
-  "buildProfileDetail/read",
+export const readPart = createAsyncThunk(
+  "partDetail/read",
   async (id: string) => {
-    const response = await getBuildProfile(id);
+    const response = await getPart(id);
     return response;
   },
 );
 
-export const updateBuildProfile = createAsyncThunk(
-  "buildProfileDetail/update",
-  async (request: BuildProfile) => {
-    const response = await putBuildProfile(request);
+export const updatePart = createAsyncThunk(
+  "partDetail/update",
+  async (request: Part) => {
+    const response = await putPart(request);
     return response;
   },
 );
 
-export const deleteBuildProfile = createAsyncThunk(
-  "buildProfileDetail/delete",
+export const deletePart = createAsyncThunk(
+  "partDetail/delete",
   async (id: string) => {
-    const response = await deleteBuildProfileAPI(id);
+    const response = await deletePartAPI(id);
     return response;
   },
 );
 
 export const slice = createSlice({
-  name: "buildProfileDetail",
+  name: "partDetail",
   initialState,
   reducers: {},
   extraReducers(builder) {
     builder
       // Read
-      .addCase(readBuildProfile.pending, (state) => {
+      .addCase(readPart.pending, (state) => {
         state.read.status = Status.Loading;
       })
-      .addCase(readBuildProfile.fulfilled, (state, action) => {
+      .addCase(readPart.fulfilled, (state, action) => {
         state.read.status = Status.Succeeded;
         state.read.response = action.payload;
         state.data = action.payload?.data || null;
       })
-      .addCase(readBuildProfile.rejected, (state, action) => {
+      .addCase(readPart.rejected, (state, action) => {
         state.read.status = Status.Failed;
         state.read.response = null;
         state.read.error = action.error.message;
       })
 
       // Update
-      .addCase(updateBuildProfile.pending, (state) => {
+      .addCase(updatePart.pending, (state) => {
         state.update.status = Status.Loading;
       })
-      .addCase(updateBuildProfile.fulfilled, (state, action) => {
+      .addCase(updatePart.fulfilled, (state, action) => {
         state.update.status = Status.Succeeded;
         state.update.response = action.payload;
         state.data = action.payload?.data || null;
       })
-      .addCase(updateBuildProfile.rejected, (state, action) => {
+      .addCase(updatePart.rejected, (state, action) => {
         state.update.status = Status.Failed;
         state.update.response = null;
         state.update.error = action.error.message;
       })
 
       // Delete 
-      .addCase(deleteBuildProfile.pending, (state) => {
+      .addCase(deletePart.pending, (state) => {
         state.delete.status = Status.Loading;
       })
-      .addCase(deleteBuildProfile.fulfilled, (state, action) => {
+      .addCase(deletePart.fulfilled, (state, action) => {
         state.delete.status = Status.Succeeded;
         state.delete.response = action.payload;
         state.data = null;
       })
-      .addCase(deleteBuildProfile.rejected, (state, action) => {
+      .addCase(deletePart.rejected, (state, action) => {
         state.delete.status = Status.Failed;
         state.delete.response = null;
         state.delete.error = action.error.message;
