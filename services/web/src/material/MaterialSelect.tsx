@@ -26,7 +26,7 @@ interface Props {
   name?: string;
 }
 
-const MaterialSelect: FC<Props> = ({ value, onChange, name = "material" }) => {
+const MaterialSelect: FC<Props> = ({ value, onChange, name = "material_id" }) => {
   // Hooks
   const dispatch = useAppDispatch();
   const { data, read } = useAppSelector((state) => state.materialList)

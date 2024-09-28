@@ -14,24 +14,27 @@ import { createBuildProfile } from 'build_profile/slice/list';
 
 // Components
 import MaterialSelect from 'material/MaterialSelect';
-
-// Enums
-import { Status } from 'enums';
+import MachineSelect from 'machine/MachineSelect';
 
 // Hooks
-import { useAppDispatch, useAppSelector } from 'hooks';
+import { useAppDispatch } from 'hooks';
 
 // Types
-import { BuildProfile, BuildProfileListCreateResponse, BuildProfileDetailUpdateResponse } from 'build_profile/_types';
+import {
+  BuildProfileRequest,
+  BuildProfileListCreateResponse,
+  BuildProfileDetailUpdateResponse,
+} from 'build_profile/_types';
 
 interface Props {
-  buildProfile?: BuildProfile | null
+  buildProfile?: BuildProfileRequest | null
 }
 
 interface Request {
   title: string;
   description: string;
-  material: number | null;
+  machine_id: number | null;
+  material_id: number | null;
 }
 
 const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
@@ -42,12 +45,11 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
   const [request, setRequest] = useState<Request>({
     title: '',
     description: '',
-    material: null,
+    machine_id: null,
+    material_id: null,
   });
 
   const [isChanged, setIsChanged] = useState(false);
-
-  const { create } = useAppSelector((state) => state.buildProfileList);
 
   useEffect(() => {
     // Updates disabled state of the submit button.
@@ -55,10 +57,16 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
       setIsChanged(
         request.title !== buildProfile.title ||
         request.description !== buildProfile.description ||
-        request.material !== buildProfile.material
+        request.machine_id !== buildProfile.machine_id ||
+        request.material_id !== buildProfile.material_id 
       );
     } else {
-      setIsChanged(request.title !== '' || request.description !== '');
+      setIsChanged(
+        request.title !== '' ||
+        request.description !== '' ||
+        request.machine_id !== null ||
+        request.material_id !== null
+      );
     }
   }, [request, buildProfile])
 
@@ -69,18 +77,11 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
       setRequest({
         title: buildProfile.title,
         description: buildProfile.description,
-        material: buildProfile.material || null
+        machine_id: buildProfile.machine_id || null,
+        material_id: buildProfile.material_id || null
       });
     }
   }, [buildProfile]);
-
-  useEffect(() => {
-    // Navigates to build profile page on successful creation.
-    if (create.status === Status.Succeeded) {
-      const buildProfileId = create.response?.id;
-      navigate(`/build_profile/${buildProfileId}`);
-    }
-  }, [navigate, create.status])
 
   // Callbacks
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -91,11 +92,11 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
     }))
   };
 
-  const handleMaterialSelect = (e: SelectChangeEvent) => {
-    const { value } = e.target;
+  const handleSelect = (e: SelectChangeEvent) => {
+    const { name, value } = e.target;
     setRequest((prevState) => ({
       ...prevState,
-      material: Number(value),
+      [name]: Number(value),
     }));
   };
 
@@ -135,10 +136,8 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
         rows={4}
         value={request.description}
       />
-      <MaterialSelect
-        value={request.material}
-        onChange={handleMaterialSelect}
-      />
+      <MaterialSelect value={request.material_id} onChange={handleSelect} />
+      <MachineSelect value={request.machine_id} onChange={handleSelect} />
       <Button disabled={!isChanged} onClick={handleClick} variant="contained">
         Submit
       </Button>

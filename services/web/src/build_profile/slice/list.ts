@@ -15,8 +15,8 @@ import { Status } from "enums";
 // Types
 import { AsyncThunkInitialState } from "types";
 import {
-  BuildProfile,
-  BuildProfileResponse,
+  BuildProfileRequest,
+  BuildProfileListResponse,
   BuildProfileListCreateResponse,
   BuildProfileListReadResponse,
 } from "build_profile/_types";
@@ -28,7 +28,7 @@ interface ListSliceInitialState {
   read: {
     response: BuildProfileListReadResponse,
   } & AsyncThunkInitialState,
-  data: BuildProfileResponse[],
+  data: BuildProfileListResponse[],
 }
 
 // Constants
@@ -59,7 +59,7 @@ export const readBuildProfiles = createAsyncThunk(
 
 export const createBuildProfile = createAsyncThunk(
   "buildProfileList/create",
-  async (request: BuildProfile) => {
+  async (request: BuildProfileRequest) => {
     const response = await postBuildProfile(request)
     return response;
   }

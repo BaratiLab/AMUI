@@ -17,9 +17,9 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 // Types
-import { PrintPlanResponse } from 'print_plan/_types';
+import { PrintPlanListResponse } from 'print_plan/_types';
 
-const PrintPlanTableRow: FC<{printPlan: PrintPlanResponse}> = ({ printPlan }) => {
+const PrintPlanTableRow: FC<{printPlan: PrintPlanListResponse}> = ({ printPlan }) => {
   // Hooks
   const navigate = useNavigate();
   const createdOn = new Date(printPlan.created_on as string);
@@ -41,13 +41,13 @@ const PrintPlanTableRow: FC<{printPlan: PrintPlanResponse}> = ({ printPlan }) =>
         {printPlan.name}
       </TableCell>
       <TableCell align="left">
-        {printPlan.build_profile?.title || "No Profile"}
+        {printPlan.build_profile_title || "No Profile"}
       </TableCell>
       <TableCell align="left">
-        {printPlan.build_profile?.material_name || "No Material"}
+        {printPlan.build_profile_material_name || "No Material"}
       </TableCell>
       <TableCell align="left">
-        {printPlan.part?.name || "No Part"}
+        {printPlan.part_name || "No Part"}
       </TableCell>
       <TableCell align="right">
         {createdOn.toLocaleDateString("en-US", option)}
@@ -59,7 +59,7 @@ const PrintPlanTableRow: FC<{printPlan: PrintPlanResponse}> = ({ printPlan }) =>
   );
 }
 
-const PrintPlansTable: FC<{printPlans: PrintPlanResponse[]}> = ({ printPlans }) => {
+const PrintPlansTable: FC<{printPlans: PrintPlanListResponse[]}> = ({ printPlans }) => {
   // JSX
   const tableRowsJSX = printPlans.map((printPlan) => (
     <PrintPlanTableRow key={printPlan.id} printPlan={printPlan} />

@@ -1,5 +1,5 @@
 /**
- * PartSelect.tsx
+ * MachineSelect.tsx
  * Select input component for selecting material.
  */
 
@@ -11,7 +11,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 // Actions
-import { readParts } from 'part/slice/list';
+import { readMachines } from 'machine/slice/list';
 
 // Hooks
 import { useAppDispatch, useAppSelector } from 'hooks';
@@ -26,25 +26,25 @@ interface Props {
   name?: string;
 }
 
-const PartSelect: FC<Props> = ({ value, onChange, name = "part_id" }) => {
+const MachineSelect: FC<Props> = ({ value, onChange, name = "machine_id" }) => {
   // Hooks
   const dispatch = useAppDispatch();
-  const { data, read } = useAppSelector((state) => state.partList)
+  const { data, read } = useAppSelector((state) => state.machineList)
 
   useEffect(() => {
     if (read.status === Status.Idle) {
-      dispatch(readParts());
+      dispatch(readMachines());
     }
   }, [dispatch, read.status]);
 
   // JSX
-  const menuItemsJSX = data.map((part) => (
-    <MenuItem value={part.id}>{part.name}</MenuItem>
+  const menuItemsJSX = data.map((machine) => (
+    <MenuItem value={machine.id}>{machine.name}</MenuItem>
   ));
 
   return (
     <FormControl>
-      <InputLabel>Part</InputLabel>
+      <InputLabel>Machine</InputLabel>
       <Select name={name} value={value?.toString() || ""} onChange={onChange}>
         <MenuItem value="">
           <em>None</em>
@@ -55,4 +55,4 @@ const PartSelect: FC<Props> = ({ value, onChange, name = "part_id" }) => {
   );
 }
 
-export default PartSelect;
+export default MachineSelect;

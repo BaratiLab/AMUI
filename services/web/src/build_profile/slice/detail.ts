@@ -19,7 +19,7 @@ import { Status } from "enums";
 // Types
 import { AsyncThunkInitialState } from "types";
 import {
-  BuildProfile,
+  BuildProfileRequest,
   BuildProfileDetailDeleteResponse,
   BuildProfileDetailReadResponse,
   BuildProfileDetailUpdateResponse,
@@ -35,7 +35,7 @@ interface SliceInitialState {
   delete: {
     response: BuildProfileDetailDeleteResponse,
   } & AsyncThunkInitialState,
-  data: BuildProfile | null,
+  data: BuildProfileRequest | null,
 }
 
 const initialState: SliceInitialState = {
@@ -67,7 +67,7 @@ export const readBuildProfile = createAsyncThunk(
 
 export const updateBuildProfile = createAsyncThunk(
   "buildProfileDetail/update",
-  async (request: BuildProfile) => {
+  async (request: BuildProfileRequest) => {
     const response = await putBuildProfile(request);
     return response;
   },
@@ -94,7 +94,17 @@ export const slice = createSlice({
       .addCase(readBuildProfile.fulfilled, (state, action) => {
         state.read.status = Status.Succeeded;
         state.read.response = action.payload;
-        state.data = action.payload?.data || null;
+
+        if (action.payload) {
+          state.data = {
+            ...action.payload.data,
+            machine_id: action.payload.data.machine?.id || null,
+            material_id: action.payload.data.material?.id || null,
+          }
+        } else {
+          state.data =  null;
+        }
+
       })
       .addCase(readBuildProfile.rejected, (state, action) => {
         state.read.status = Status.Failed;
@@ -109,7 +119,17 @@ export const slice = createSlice({
       .addCase(updateBuildProfile.fulfilled, (state, action) => {
         state.update.status = Status.Succeeded;
         state.update.response = action.payload;
-        state.data = action.payload?.data || null;
+
+        if (action.payload) {
+          state.data = {
+            ...action.payload.data,
+            machine_id: action.payload.data.machine?.id || null,
+            material_id: action.payload.data.material?.id || null,
+          }
+        } else {
+          state.data =  null;
+        }
+
       })
       .addCase(updateBuildProfile.rejected, (state, action) => {
         state.update.status = Status.Failed;

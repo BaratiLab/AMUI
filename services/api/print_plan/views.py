@@ -5,21 +5,21 @@ from rest_framework.response import Response
 from rest_framework import generics, status, mixins
 
 from print_plan.models import PrintPlan
-from print_plan.serializers import PrintPlanSerializer
+from print_plan.serializers import PrintPlanListSerializer, PrintPlanDetailSerializer
 
 class PrintPlanList(mixins.ListModelMixin, generics.GenericAPIView):
   """
   List all print plans or create a new print plan.
   """
   queryset = PrintPlan.objects.all()
-  serializer_class = PrintPlanSerializer
+  serializer_class = PrintPlanListSerializer
   permission_classes = (IsAuthenticated, )
 
   def get(self, request, *args, **kwargs):
     return self.list(request, *args, **kwargs)
 
   def post(self, request, *args, **kwargs):
-    serializer = PrintPlanSerializer(data = request.data)
+    serializer = PrintPlanListSerializer(data = request.data)
     if serializer.is_valid():
       serializer.save(created_by=self.request.user)
       return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -39,12 +39,12 @@ class PrintPlanDetail(APIView):
 
   def get(self, request, pk, format=None):
     print_plan = self.get_object(pk)
-    serializer = PrintPlanSerializer(print_plan)
+    serializer = PrintPlanDetailSerializer(print_plan)
     return Response(serializer.data)
 
   def put(self, request, pk, format=None):
     print_plan = self.get_object(pk)
-    serializer = PrintPlanSerializer(print_plan, data=request.data)
+    serializer = PrintPlanDetailSerializer(print_plan, data=request.data)
     if serializer.is_valid():
       serializer.save()
       return Response(serializer.data)

@@ -15,8 +15,8 @@ import { Status } from "enums";
 // Types
 import { AsyncThunkInitialState } from "types";
 import {
-  PrintPlan,
-  PrintPlanResponse,
+  PrintPlanRequest,
+  PrintPlanListResponse,
   PrintPlanListCreateResponse,
   PrintPlanListReadResponse,
 } from "print_plan/_types";
@@ -28,7 +28,7 @@ interface ListSliceInitialState {
   read: {
     response: PrintPlanListReadResponse,
   } & AsyncThunkInitialState,
-  data: PrintPlanResponse[],
+  data: PrintPlanListResponse[],
 }
 
 // Constants
@@ -59,7 +59,7 @@ export const readPrintPlans = createAsyncThunk(
 
 export const createPrintPlan = createAsyncThunk(
   "printPlanList/create",
-  async (request: PrintPlan) => {
+  async (request: PrintPlanRequest) => {
     const response = await postPrintPlan(request)
     return response;
   }

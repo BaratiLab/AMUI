@@ -17,9 +17,9 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 // Types
-import { BuildProfileResponse } from 'build_profile/_types';
+import { BuildProfileListResponse } from 'build_profile/_types';
 
-const BuildProfileTableRow: FC<{buildProfile: BuildProfileResponse}> = ({ buildProfile }) => {
+const BuildProfileTableRow: FC<{buildProfile: BuildProfileListResponse}> = ({ buildProfile }) => {
   // Hooks
   const navigate = useNavigate();
   const createdOn = new Date(buildProfile.created_on as string);
@@ -43,6 +43,9 @@ const BuildProfileTableRow: FC<{buildProfile: BuildProfileResponse}> = ({ buildP
       <TableCell align="left">
         {buildProfile.material_name || "No Material"}
       </TableCell>
+      <TableCell align="left">
+        {buildProfile.machine_name || "No Machine"}
+      </TableCell>
       <TableCell align="right">
         {createdOn.toLocaleDateString("en-US", option)}
       </TableCell>
@@ -53,7 +56,7 @@ const BuildProfileTableRow: FC<{buildProfile: BuildProfileResponse}> = ({ buildP
   );
 }
 
-const BuildProfilesTable: FC<{buildProfiles: BuildProfileResponse[]}> = ({ buildProfiles }) => {
+const BuildProfilesTable: FC<{buildProfiles: BuildProfileListResponse[]}> = ({ buildProfiles }) => {
   // JSX
   const tableRowsJSX = buildProfiles.map((buildProfile) => (
     <BuildProfileTableRow key={buildProfile.id} buildProfile={buildProfile} />
@@ -66,6 +69,7 @@ const BuildProfilesTable: FC<{buildProfiles: BuildProfileResponse[]}> = ({ build
           <TableRow>
             <TableCell>Name</TableCell>
             <TableCell align="left">Material</TableCell>
+            <TableCell align="left">Machine</TableCell>
             <TableCell align="right">Created</TableCell>
             <TableCell align="right">Last Updated</TableCell>
           </TableRow>
