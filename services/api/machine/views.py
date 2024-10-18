@@ -2,10 +2,12 @@
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
+
 # from rest_framework.response import Response
 
-from machine.models import Machine 
+from machine.models import Machine
 from machine.serializers import MachineSerializer
+
 
 class MachineList(generics.ListAPIView):
     """

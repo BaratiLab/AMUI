@@ -11,8 +11,9 @@ import buildProfileDetailReducer from 'build_profile/slice/detail';
 import buildProfileListReducer from 'build_profile/slice/list';
 import machineListReducer from "machine/slice/list";
 import materialListReducer from "material/slice/list";
-import partDetailReducer from 'part/slice/detail';
-import partListReducer from 'part/slice/list';
+import partDetailReducer from 'part/slice/partDetail';
+import partListReducer from 'part/slice/partList';
+import partFileListReducer from 'part/slice/partFileList';
 import printPlanDetailReducer from 'print_plan/slice/detail';
 import printPlanListReducer from 'print_plan/slice/list';
 import themeReducer from "common/themeSlice";
@@ -43,6 +44,7 @@ const store = configureStore({
     // Part
     partDetail: partDetailReducer,
     partList: partListReducer,
+    partFileList: partFileListReducer,
     // Print Plan
     printPlanDetail: printPlanDetailReducer,
     printPlanList: printPlanListReducer,

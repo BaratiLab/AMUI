@@ -4,35 +4,32 @@
  */
 
 // Node Modules
-import { Box, Button, SelectChangeEvent, TextField } from '@mui/material';
+import { Box, Button, TextField } from '@mui/material';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Actions
-import { updatePart } from 'part/slice/detail';
-import { createPart } from 'part/slice/list';
+import { updatePart } from 'part/slice/partDetail';
+// import { createPart } from 'part/slice/partList';
 
 // Components
 // import MaterialSelect from 'material/MaterialSelect';
 
-// Enums
-import { Status } from 'enums';
-
 // Hooks
-import { useAppDispatch, useAppSelector } from 'hooks';
+import { useAppDispatch } from 'hooks';
 
 // Types
-import { Part, PartListCreateResponse, PartDetailUpdateResponse } from 'part/_types';
+import { PartDetailResponse, PartDetailUpdateResponse } from 'part/_types';
 
 interface Props {
-  part?: Part | null
+  part: PartDetailResponse
 }
 
 interface Request {
   name: string;
 }
 
-const PartForm: FC<Props> = ({ part = null }) => {
+const PartForm: FC<Props> = ({ part }) => {
   // Hooks
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -42,8 +39,6 @@ const PartForm: FC<Props> = ({ part = null }) => {
   });
 
   const [isChanged, setIsChanged] = useState(false);
-
-  const { create } = useAppSelector((state) => state.partList);
 
   useEffect(() => {
     // Updates disabled state of the submit button.
@@ -66,14 +61,6 @@ const PartForm: FC<Props> = ({ part = null }) => {
     }
   }, [part]);
 
-  useEffect(() => {
-    // Navigates to build profile page on successful creation.
-    if (create.status === Status.Succeeded) {
-      const partId = create.response?.id;
-      navigate(`/part/${partId}`);
-    }
-  }, [navigate, create.status])
-
   // Callbacks
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -92,7 +79,7 @@ const PartForm: FC<Props> = ({ part = null }) => {
   // };
 
   const handleClick = async () => {
-    if (part) {
+    // if (part) {
       // Sends request to update existing part.
       const { payload } = await dispatch(updatePart({
         // Adds id for update request
@@ -102,13 +89,13 @@ const PartForm: FC<Props> = ({ part = null }) => {
       if ((payload as PartDetailUpdateResponse)?.code === 200 ) {
         navigate("/part");
       }
-    } else {
-      // Sends request to create new build profile.
-      const { payload } = await dispatch(createPart(request));
-      if ((payload as PartListCreateResponse)?.code === 201 ) {
-        navigate("/part");
-      }
-    }
+    // } else {
+    //   // Sends request to create new build profile.
+    //   const { payload } = await dispatch(createPart(request));
+    //   if ((payload as PartListCreateResponse)?.code === 201 ) {
+    //     navigate("/part");
+    //   }
+    // }
   };
 
   return (

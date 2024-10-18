@@ -28,5 +28,20 @@
     },
     "model": "material.Material",
     "pk": 2
+  },
+  {
+    "fields": {
+      "name": "Inconel 718",
+      "flow_3d_name": "Ni-IN_718-Mills data",
+      "uns_id": "N07718",
+      "density_g_cm_3": 7.40197,
+      "specific_heat_erg_g_K": 7260000,
+      "thermal_conductivity_erg_cm_s_K": 2944500,
+      "viscosity_g_cm_s": 0.072,
+      "solidus_temperature_K": 1523.15,
+      "liquidus_temperature_K": 1608.15
+    },
+    "model": "material.Material",
+    "pk": 3
   }
 ]

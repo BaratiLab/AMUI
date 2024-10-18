@@ -6,6 +6,8 @@
 // Node Modules
 import queryString from "query-string";
 
+import axios from "axios";
+
 // Types
 import {
   MeltPoolFilterset,
@@ -38,12 +40,18 @@ export const getRecords = async (filterset?: MeltPoolFilterset) => {
  */
 export const getDimensions = async () => {
   try {
-    const response = await request(
-      // `melt_pool/dimensions/?${stringifiedFilterset || ""}`,
-      `melt_pool/dimensions/`,
-    );
-    const data = await response.json();
+    const response = await axios.get(`melt_pool/dimensions/`);
+    const data = response.data;
     return data;
+    // const response = await request(`melt_pool/dimensions/`);
+    // const data = await response.json();
+    // return data;
+    // const response = await request(
+    //   // `melt_pool/dimensions/?${stringifiedFilterset || ""}`,
+    //   `melt_pool/dimensions/`,
+    // );
+    // const data = await response.json();
+    // return data;
   } catch (error) {
     console.log(error);
   }

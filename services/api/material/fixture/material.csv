@@ -1,3 +1,4 @@
 name,flow_3d_name,uns_id,density_g_cm_3,specific_heat_erg_g_K,thermal_conductivity_erg_cm_s_K,viscosity_g_cm_s,solidus_temperature_K,liquidus_temperature_K
 Stainless Steel 316 L,Stainless_Steel-Fe_316-Mills_data,S31603,7.2492,7260000,2895100,0.08,1674.15,1697.15
 Ti-6Al-4V,Titanium_Alloy-Ti_Al_V_IMI 318-Mills_data,R56400,4.42,5460000,700000,0.0325,1873.15,1923.15
+Inconel 718,Ni-IN_718-Mills data,N07718,7.40197,7260000,2944500,0.072,1523.15,1608.15

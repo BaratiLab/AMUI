@@ -4,22 +4,21 @@
  */
 
 // Node Modules
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { FC, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 // Actions
-import { readParts } from 'part/slice/list';
+import { readParts } from 'part/slice/partList';
 
 // Hooks
 import { useAppDispatch, useAppSelector } from 'hooks';
 
 // Components
 import PartTable from 'part/PartTable';
+import PartFileDropzone from 'part/PartFileDropzone';
 
 const Parts: FC = () => {
   // Hooks
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const { data } = useAppSelector((state) => state.partList);
@@ -34,13 +33,8 @@ const Parts: FC = () => {
         <Typography component="h2" variant="h4">
           Parts
         </Typography>
-        <Button
-          onClick={() => navigate('/part/new')}
-          variant="contained"
-        >
-          New Part
-        </Button>
       </Box>
+      <PartFileDropzone />
       <PartTable parts={data} />
     </Box>
   );

@@ -18,17 +18,25 @@ filterset_fields = [
     "hatch_spacing",
 ]
 
+
 class RecordFilter(FilterSet):
-    power_min = NumberFilter(field_name="power", lookup_expr='gte')
-    power_max = NumberFilter(field_name="power", lookup_expr='lte')
-    velocity_min = NumberFilter(field_name="velocity", lookup_expr='gte')
-    velocity_max = NumberFilter(field_name="velocity", lookup_expr='lte')
-    hatch_spacing_min = NumberFilter(field_name="hatch_spacing", lookup_expr='gte')
-    hatch_spacing_max = NumberFilter(field_name="hatch_spacing", lookup_expr='lte')
+    power_min = NumberFilter(field_name="power", lookup_expr="gte")
+    power_max = NumberFilter(field_name="power", lookup_expr="lte")
+    velocity_min = NumberFilter(field_name="velocity", lookup_expr="gte")
+    velocity_max = NumberFilter(field_name="velocity", lookup_expr="lte")
+    hatch_spacing_min = NumberFilter(field_name="hatch_spacing", lookup_expr="gte")
+    hatch_spacing_max = NumberFilter(field_name="hatch_spacing", lookup_expr="lte")
 
     class Meta:
         model = Record
-        fields = filterset_fields + ['power_min', 'power_max', 'velocity_min', 'velocity_max', 'hatch_spacing_min', 'hatch_spacing_max']
+        fields = filterset_fields + [
+            "power_min",
+            "power_max",
+            "velocity_min",
+            "velocity_max",
+            "hatch_spacing_min",
+            "hatch_spacing_max",
+        ]
 
 
 class RecordsList(generics.ListAPIView):
@@ -41,6 +49,7 @@ class RecordsList(generics.ListAPIView):
     permission_classes = (AllowAny,)
     filter_backends = [DjangoFilterBackend]
     filterset_class = RecordFilter
+
 
 # class ProcessParametersDict(APIView):
 #     """
@@ -62,6 +71,7 @@ class RecordsList(generics.ListAPIView):
 
 #         return Response(unique_values)
 
+
 class ProcessParametersDict(APIView):
     """
     Provides a dictionary of process parameters by material
@@ -70,13 +80,12 @@ class ProcessParametersDict(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request):
-
         material = request.GET.get("material", None)
         # print(material)
         unique_values = {}
         if material is not None:
             queryset = Record.objects.filter(material=material)
-        else: 
+        else:
             queryset = Record.objects.all()
         serializer = RecordSerializer(queryset, many=True)
         data = serializer.data
@@ -86,9 +95,15 @@ class ProcessParametersDict(APIView):
 
             unique_values[field_name] = sorted([x for x in values if x is not None])
 
-        power_marks = [{"value": x, "label": f"{x:.0f}"} for x in unique_values["power"]]
-        hatch_spacing_marks = [{"value": x, "label": f"{x} µm"} for x in unique_values["hatch_spacing"]]
-        velocity_marks = [{"value": x, "label": f"{x} m/s"} for x in unique_values["velocity"]]
+        power_marks = [
+            {"value": x, "label": f"{x:.0f}"} for x in unique_values["power"]
+        ]
+        hatch_spacing_marks = [
+            {"value": x, "label": f"{x} µm"} for x in unique_values["hatch_spacing"]
+        ]
+        velocity_marks = [
+            {"value": x, "label": f"{x} m/s"} for x in unique_values["velocity"]
+        ]
 
         marks = {
             "power_marks": power_marks,
@@ -97,6 +112,7 @@ class ProcessParametersDict(APIView):
         }
 
         return Response(marks)
+
 
 class MetalsDict(APIView):
     """
@@ -113,11 +129,12 @@ class MetalsDict(APIView):
         data = serializer.data
 
         # for field_name in filterset_fields:
-        values = queryset.values_list('material', flat=True).distinct()
+        values = queryset.values_list("material", flat=True).distinct()
 
         metals = sorted([x for x in values if x is not None])
 
         return Response(metals)
+
 
 class Inference(APIView):
     """
@@ -134,19 +151,71 @@ class Inference(APIView):
 
     def calc_abs_coeff2(self, k, T1, W, rho, Cp, V, P):
         T0 = 293
-        numerator = (np.pi * k * (T1 - T0) * W) + (np.e * np.pi * rho * Cp * (T1 - T0) * V * (W**2) / 8)
+        numerator = (np.pi * k * (T1 - T0) * W) + (
+            np.e * np.pi * rho * Cp * (T1 - T0) * V * (W**2) / 8
+        )
         denominator = P + 1e-16
         return numerator / denominator
 
     def convert_to_dict(self, Ws):
         Ps = [
-            0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 
-            260, 280, 300, 320, 340, 360, 380, 400, 420, 440, 460, 480
+            0,
+            20,
+            40,
+            60,
+            80,
+            100,
+            120,
+            140,
+            160,
+            180,
+            200,
+            220,
+            240,
+            260,
+            280,
+            300,
+            320,
+            340,
+            360,
+            380,
+            400,
+            420,
+            440,
+            460,
+            480,
         ]
         Vs = [
-            0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 
-            1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 
-            2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9
+            0,
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            1.0,
+            1.1,
+            1.2,
+            1.3,
+            1.4,
+            1.5,
+            1.6,
+            1.7,
+            1.8,
+            1.9,
+            2.0,
+            2.1,
+            2.2,
+            2.3,
+            2.4,
+            2.5,
+            2.6,
+            2.7,
+            2.8,
+            2.9,
         ]
         W_dict = {}
         for i in range(25):
@@ -156,8 +225,8 @@ class Inference(APIView):
                 v = Vs[j]
                 W_dict[p][v] = Ws[i][j]
 
-        return W_dict        
-    
+        return W_dict
+
     def replace_special_characters(self, text):
         """
         Replace special characters "-", ".", " ", and "/" with an empty string.
@@ -169,43 +238,55 @@ class Inference(APIView):
         str: The text with special characters replaced.
         """
 
-        if (text is not None):
+        if text is not None:
             special_characters = ["-", ".", " ", "/"]
             for char in special_characters:
                 text = text.replace(char, "")
         return text
-    
+
     def get(self, request):
-        with open('./melt_pool/rf.pt', 'rb') as f:
+        with open("./melt_pool/rf.pt", "rb") as f:
             model = pickle.load(f)
-        with open('./melt_pool/material_mapping.pkl', 'rb') as f:
+        with open("./melt_pool/material_mapping.pkl", "rb") as f:
             material_mapping = pickle.load(f)
 
-        material = request.query_params.get('material')
-        min_p = float(request.query_params.get('power_min'))
-        max_p = float(request.query_params.get('power_max'))
-        min_v = float(request.query_params.get('velocity_min'))
-        max_v = float(request.query_params.get('velocity_max'))
+        material = request.query_params.get("material")
+        min_p = float(request.query_params.get("power_min"))
+        max_p = float(request.query_params.get("power_max"))
+        min_v = float(request.query_params.get("velocity_min"))
+        max_v = float(request.query_params.get("velocity_max"))
         # r0 = int(request.query_params.get('r0'))  # TODO: r0 is beam radius
         r0 = 50e-6
         # W = int(request.query_params.get('W'))  # TODO: W is meltpool width
         Ws = self.convert_to_dict(
-            next(iter(load_dataset(
-                "baratilab/Eagar-Tsai",
-                "process_maps",
-                split=f"m_{self.replace_special_characters(material)}_p_0_480_20_v_0.0_2.9_0.1"
-            )))['widths']
+            next(
+                iter(
+                    load_dataset(
+                        "baratilab/Eagar-Tsai",
+                        "process_maps",
+                        split=f"m_{self.replace_special_characters(material)}_p_0_480_20_v_0.0_2.9_0.1",
+                    )
+                )
+            )["widths"]
         )
 
-        p_step = float(request.query_params.get('power_step')) if request.query_params.get('power_step') else 10
-        v_step = float(request.query_params.get('velocity_step')) if request.query_params.get('velocity_step') else 0.1
+        p_step = (
+            float(request.query_params.get("power_step"))
+            if request.query_params.get("power_step")
+            else 10
+        )
+        v_step = (
+            float(request.query_params.get("velocity_step"))
+            if request.query_params.get("velocity_step")
+            else 0.1
+        )
 
-        composition = material_mapping[material]['composition']
-        min_abs = material_mapping[material]['min_absorptivity']
-        T1 = material_mapping[material]['melting_point']
-        rho = material_mapping[material]['density']
-        Cp = material_mapping[material]['specific_heat']
-        k = material_mapping[material]['thermal_conductivity']
+        composition = material_mapping[material]["composition"]
+        min_abs = material_mapping[material]["min_absorptivity"]
+        T1 = material_mapping[material]["melting_point"]
+        rho = material_mapping[material]["density"]
+        Cp = material_mapping[material]["specific_heat"]
+        k = material_mapping[material]["thermal_conductivity"]
 
         preds = []
         p = min_p
@@ -223,7 +304,8 @@ class Inference(APIView):
             p += p_step
 
         # {0: 'LOF', 1: 'balling', 2: 'desirable', 3: 'keyhole'}
-        return Response({'prediction': preds})
+        return Response({"prediction": preds})
+
 
 class EagarTsai(APIView):
     """
@@ -243,14 +325,14 @@ class EagarTsai(APIView):
         str: The text with special characters replaced.
         """
 
-        if (text is not None):
+        if text is not None:
             special_characters = ["-", ".", " ", "/"]
             for char in special_characters:
                 text = text.replace(char, "")
         return text
 
     def get(self, request):
-        material = request.query_params.get('material')
+        material = request.query_params.get("material")
         material_name = self.replace_special_characters(material)
 
         ds = load_dataset(
@@ -272,7 +354,6 @@ class EagarTsai(APIView):
             # split="m_Ti49Al2Cr2Nb_p_0_480_20_v_0.0_2.9_0.1",
             # split="m_Ti6Al4V_p_0_480_20_v_0.0_2.9_0.1",
             # split="m_TiCInconel718_p_0_480_20_v_0.0_2.9_0.1",
-
             split=f"m_{material_name}_p_0_480_20_v_0.0_2.9_0.1",
             streaming="true",
         )
@@ -282,32 +363,44 @@ class EagarTsai(APIView):
             dimensions = data
             if material == "Ti-6Al-4V":
                 with open("./melt_pool/ti64_surrogate.pkl", "rb") as f:
-                    surrogate = pickle.load(f)              
+                    surrogate = pickle.load(f)
                     dimensions = {
                         **dimensions,
                         **surrogate,
                     }
-            
+
         return Response(dimensions)
 
-class Flow3d(APIView):
 
-    permission_classes = (AllowAny, )
+class Flow3d(APIView):
+    permission_classes = (AllowAny,)
 
     def get(self, request):
-        with open('./melt_pool/dimensions.pkl', 'rb') as f:
+        with open("./melt_pool/dimensions.pkl", "rb") as f:
             dimensions = pickle.load(f)
 
         return Response(dimensions)
 
-class Dimensions(APIView):
 
-    permission_classes = (AllowAny, )
+class Dimensions(APIView):
+    permission_classes = (AllowAny,)
 
     def get(self, request):
-        with open('./melt_pool/dimensions.pkl', 'rb') as f:
+        with open("./melt_pool/dimensions.pkl", "rb") as f:
             df = pickle.load(f)
-            dimensions = df[["power", "velocity", "beam_diameter", "depths_avg", "depths_std", "lengths_avg", "lengths_std", "widths_avg", "widths_std"]]
+            dimensions = df[
+                [
+                    "power",
+                    "velocity",
+                    "beam_diameter",
+                    "depths_avg",
+                    "depths_std",
+                    "lengths_avg",
+                    "lengths_std",
+                    "widths_avg",
+                    "widths_std",
+                ]
+            ]
             dimensions = dimensions.to_dict("records")
             powers = sorted(df["power"].unique())
             velocities = sorted(df["velocity"].unique())
@@ -315,11 +408,13 @@ class Dimensions(APIView):
             lengths_std = sorted(df["lengths_std"].unique())
             widths_std = sorted(df["widths_std"].unique())
 
-        return Response({
-            "dimensions": dimensions,
-            "powers": powers,
-            "velocities": velocities,
-            "depths_std": depths_std,
-            "lengths_std": lengths_std,
-            "widths_std": widths_std,
-        })
+        return Response(
+            {
+                "dimensions": dimensions,
+                "powers": powers,
+                "velocities": velocities,
+                "depths_std": depths_std,
+                "lengths_std": lengths_std,
+                "widths_std": widths_std,
+            }
+        )

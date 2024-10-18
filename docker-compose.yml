@@ -12,7 +12,9 @@ services:
       - ./services/api:/home/api
 
       # Links bundle to templates folder.
-      - bundle:/home/api/static
+      - static:/home/api/static
+
+      - media:/home/api/media
     # ports:
     #   - 8000:8000
     tty: true
@@ -43,7 +45,7 @@ services:
       - web_node_modules:/home/web/node_modules
 
       # Links bundle from build output to api server.
-      - bundle:/home/web/dist
+      - static:/home/web/dist
     tty: true
     ports:
       - 3000:3000
@@ -88,7 +90,8 @@ services:
     networks:
       - apinet
     volumes:
-      - bundle:/home/api/static
+      - static:/home/api/static
+      - media:/home/api/media
     restart: always
 
   # meltpoolnet:
@@ -115,7 +118,8 @@ services:
   #   tty: true
 
 volumes:
-  bundle:
+  static:
+  media:
   pgadmin:
   sql_data:
   web_node_modules:

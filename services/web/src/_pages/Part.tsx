@@ -1,9 +1,6 @@
 /**
  * Part.tsx
  * Page component for creating new or editing existing build profile.
-  //   // TODO: Handle case where entry no longer exists
-  //   // Redux status in this case still says successful, will need to rely on
-  //   // server status code response.
  */
 
 // Node Modules
@@ -13,10 +10,11 @@ import { FC, useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 // Actions
-import { readPart, deletePart } from 'part/slice/detail';
+import { readPart, deletePart } from 'part/slice/partDetail';
 
 // Components
 import PartForm from 'part/PartForm';
+import PartFileDropzone from 'part/PartFileDropzone';
 
 // Hooks
 import { useAppDispatch, useAppSelector } from 'hooks';
@@ -81,6 +79,7 @@ const Part: FC = () => {
           Delete
         </Button>
       </Box>
+      <PartFileDropzone part={data} />
       <PartForm part={data} />
       <Modal
         closeAfterTransition

@@ -7,12 +7,16 @@
 import { FC } from 'react';
 import { Typography } from '@mui/material';
 
+// Components
+import PartFileDropzone from 'part/PartFileDropzone';
+
 const Overview: FC = () => {
   return (
     <>
       <Typography variant="h3">
         Overview 
       </Typography>
+      <PartFileDropzone />
     </>
   );
 };

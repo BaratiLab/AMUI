@@ -20,6 +20,7 @@ import { Status } from "enums";
 import { AsyncThunkInitialState } from "types";
 import {
   Part,
+  PartDetailResponse,
   PartDetailDeleteResponse,
   PartDetailReadResponse,
   PartDetailUpdateResponse,
@@ -35,7 +36,7 @@ interface SliceInitialState {
   delete: {
     response: PartDetailDeleteResponse,
   } & AsyncThunkInitialState,
-  data: Part | null,
+  data: PartDetailResponse | null,
 }
 
 const initialState: SliceInitialState = {

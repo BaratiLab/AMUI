@@ -15,6 +15,9 @@ import App from "App";
 // Store
 import store from "store";
 
+// Styles
+// import 'react-dropzone-uploader/dist/styles.css'
+
 const root = createRoot(document.getElementById("app-root") as Element);
 
 root.render(

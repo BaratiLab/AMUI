@@ -5,52 +5,57 @@ from rest_framework.response import Response
 from rest_framework import generics, status, mixins
 
 from build_profile.models import BuildProfile
-from build_profile.serializers import BuildProfileListSerializer, BuildProfileDetailSerializer
+from build_profile.serializers import (
+    BuildProfileListSerializer,
+    BuildProfileDetailSerializer,
+)
+
 
 class BuildProfileList(mixins.ListModelMixin, generics.GenericAPIView):
-  """
-  List all build profiles or create a new build profile.
-  """
-  queryset = BuildProfile.objects.all()
-  serializer_class = BuildProfileListSerializer
-  permission_classes = (IsAuthenticated, )
+    """
+    List all build profiles or create a new build profile.
+    """
 
-  def get(self, request, *args, **kwargs):
-    return self.list(request, *args, **kwargs)
+    queryset = BuildProfile.objects.all()
+    serializer_class = BuildProfileListSerializer
+    permission_classes = (IsAuthenticated,)
 
-  def post(self, request, *args, **kwargs):
-    serializer = BuildProfileListSerializer(data = request.data)
-    if serializer.is_valid():
-      serializer.save(created_by=self.request.user)
-      return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        serializer = BuildProfileListSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(created_by=self.request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class BuildProfileDetail(APIView):
-  """
-  Retrieve, update or delete a build_profile instance.
-  """
+    """
+    Retrieve, update or delete a build_profile instance.
+    """
 
-  def get_object(self, pk):
-    try:
-      return BuildProfile.objects.get(pk=pk)
-    except BuildProfile.DoesNotExist:
-      raise Http404
+    def get_object(self, pk):
+        try:
+            return BuildProfile.objects.get(pk=pk)
+        except BuildProfile.DoesNotExist:
+            raise Http404
 
-  def get(self, request, pk, format=None):
-    build_profile = self.get_object(pk)
-    serializer = BuildProfileDetailSerializer(build_profile)
-    return Response(serializer.data)
+    def get(self, request, pk, format=None):
+        build_profile = self.get_object(pk)
+        serializer = BuildProfileDetailSerializer(build_profile)
+        return Response(serializer.data)
 
-  def put(self, request, pk, format=None):
-    build_profile = self.get_object(pk)
-    serializer = BuildProfileDetailSerializer(build_profile, data=request.data)
-    if serializer.is_valid():
-      serializer.save()
-      return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, pk, format=None):
+        build_profile = self.get_object(pk)
+        serializer = BuildProfileDetailSerializer(build_profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-  def delete(self, request, pk, format=None):
-    build_profile = self.get_object(pk)
-    build_profile.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    def delete(self, request, pk, format=None):
+        build_profile = self.get_object(pk)
+        build_profile.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

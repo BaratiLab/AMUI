@@ -28,14 +28,13 @@ import BuildProfileNew from "_pages/BuildProfileNew";
 import BuildProfiles from "_pages/BuildProfiles";
 
 import Part from "_pages/Part";
-import PartNew from "_pages/PartNew";
 import Parts from "_pages/Parts";
 
 import PrintPlan from "_pages/PrintPlan";
 import PrintPlanNew from "_pages/PrintPlanNew";
 import PrintPlans from "_pages/PrintPlans";
 
-// import ProcessMap from "_pages/ProcessMap";
+import ProcessMap from "_pages/ProcessMap";
 // import ProcessMapAccordion from "_pages/ProcessMapAccordion";
 // import Slicer from "_pages/Slicer";
 // import Surrogate from "_pages/Surrogate"
@@ -75,7 +74,6 @@ const App: FC = () => {
                 <Route path="" element={<Overview />} />
                 <Route path="/machine" element={<Machines />} />
                 <Route path="/material" element={<Materials />} />
-                <Route path="/part" element={<Parts />} />
 
                 {/* Build Profile */}
                 <Route path="/build_profile" element={<BuildProfiles />} />
@@ -85,7 +83,6 @@ const App: FC = () => {
                 {/* Part */}
                 <Route path="/part" element={<Parts />} />
                 <Route path="/part/:id" element={<Part />} />
-                <Route path="/part/new" element={<PartNew />} />
 
                 {/* Print Plan */}
                 <Route path="/print_plan" element={<PrintPlans />} />
@@ -93,11 +90,11 @@ const App: FC = () => {
                 <Route path="/print_plan/new" element={<PrintPlanNew />} />
 
                 {/* Legacy */}
-                {/* <Route path="/process_map" element={<ProcessMap />} />
-                <Route path="/process_map_accordion" element={<ProcessMapAccordion />} />
-                <Route path="/view_stl" element={<ViewSTL />} />
-                <Route path="/surrogate" element={<Surrogate />} />
-                <Route path="/slicer" element={<Slicer />} /> */}
+                <Route path="/process_map" element={<ProcessMap />} />
+                {/* <Route path="/process_map_accordion" element={<ProcessMapAccordion />} /> */}
+                {/* <Route path="/view_stl" element={<ViewSTL />} /> */}
+                {/* <Route path="/surrogate" element={<Surrogate />} /> */}
+                {/* <Route path="/slicer" element={<Slicer />} /> */}
               </>
             ): (
               <>

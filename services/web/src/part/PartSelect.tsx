@@ -11,7 +11,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 // Actions
-import { readParts } from 'part/slice/list';
+import { readParts } from 'part/slice/partList';
 
 // Hooks
 import { useAppDispatch, useAppSelector } from 'hooks';

@@ -10,28 +10,31 @@ from rest_framework import status
 from slicer.models import UploadedFile
 from slicer.serializers import UploadedFileSerializer
 
+
 class RecentGCodeFiles(ListAPIView):
     queryset = UploadedFile.objects.all().order_by("-uploaded_at")
     serializer_class = UploadedFileSerializer
-    permission_classes = (AllowAny, )
+    permission_classes = (AllowAny,)
+
 
 class SlicerSTLToGCode(APIView):
     """
     Slices STL file to GCode
     """
 
-    permission_classes = (AllowAny, )
+    permission_classes = (AllowAny,)
 
     def post(self, request):
         print(request.data)
         file = request.data.get("file")
         subprocess.run(["prusa-slicer", "--gcode", f".{file}"])
         gcode_file = file[:-3] + "gcode"
-        return Response({'file': str(gcode_file)}, status=status.HTTP_201_CREATED)
+        return Response({"file": str(gcode_file)}, status=status.HTTP_201_CREATED)
+
 
 class UploadFile(APIView):
     parser_classes = (MultiPartParser, FormParser)
-    permission_classes = (AllowAny, )
+    permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
         file_serializer = UploadedFileSerializer(data=request.data)
@@ -41,23 +44,23 @@ class UploadFile(APIView):
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 # class GCodeFilesList(ListAPIView):
 class UploadAndSlice(APIView):
     """
     Route for Uploading 3D model and Slicing
     """
 
-    permission_classes = (AllowAny, )
+    permission_classes = (AllowAny,)
 
     def post(self, request):
-        file_serializer = UploadedFileSerializer(data = request.data)
+        file_serializer = UploadedFileSerializer(data=request.data)
         if file_serializer.is_valid():
             file_serializer.save()
             data = file_serializer.data
             file = data["file"]
             subprocess.run(["prusa-slicer", "--gcode", f".{file}"])
             gcode_file = file[:-3] + "gcode"
-            return Response({'file': str(gcode_file)}, status=status.HTTP_201_CREATED)
+            return Response({"file": str(gcode_file)}, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-

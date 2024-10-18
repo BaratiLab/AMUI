@@ -15,21 +15,23 @@ import torch
 room = 293
 nt = 99
 mkdir = lambda path: os.mkdir(path) if not os.path.exists(path) else None
-get_vp = lambda x: (int(x.split('_')[-1]), int(x.split('_')[-3]))
+get_vp = lambda x: (int(x.split("_")[-1]), int(x.split("_")[-3]))
 
-def prep_input(X, data_dir='Ti64-5m', include_d=False):
+
+def prep_input(X, data_dir="Ti64-5m", include_d=False):
     # X should contain p, v, t in its last dimension
     x = torch.as_tensor(X, dtype=torch.float)
-    d = x[..., 0]/x[..., 1]/0.5
-    dd = data_dir.split('-')[0]
-    if dd == 'Ti64':
+    d = x[..., 0] / x[..., 1] / 0.5
+    dd = data_dir.split("-")[0]
+    if dd == "Ti64":
         mx = torch.tensor([500, 1500, 100])
-    elif dd == 'SS316L':
+    elif dd == "SS316L":
         mx = torch.tensor([320, 400, 100])
     x /= mx
     if include_d:
         x = torch.cat([x, d.squeeze(-1)], dim=-1)
     return x
+
 
 def cross_section(T, x=None, y=None, z=None):
     """
@@ -38,25 +40,28 @@ def cross_section(T, x=None, y=None, z=None):
     """
     nx, ny, nz = np.array(T.shape) - 1
     if sum([x is None, y is None, z is None]) != 2:
-        print('Specify either x, y, z in [0,1]')
+        print("Specify either x, y, z in [0,1]")
     elif x is not None:
-        return T[round(x*nx), :, :].T
+        return T[round(x * nx), :, :].T
     elif y is not None:
-        return T[:, round(y*ny), :].T
+        return T[:, round(y * ny), :].T
     elif z is not None:
-        return T[:, :, round(z*nz)].T
+        return T[:, :, round(z * nz)].T
+
 
 def get_meshes(data_dir):
-    dr = './surrogate/Results/'+data_dir
-    mesh_x = np.load(dr+'/mesh_x.npy', allow_pickle=True)
-    mesh_y = np.load(dr+'/mesh_y.npy', allow_pickle=True)
-    mesh_z = np.load(dr+'/mesh_z.npy', allow_pickle=True)
+    dr = "./surrogate/Results/" + data_dir
+    mesh_x = np.load(dr + "/mesh_x.npy", allow_pickle=True)
+    mesh_y = np.load(dr + "/mesh_y.npy", allow_pickle=True)
+    mesh_z = np.load(dr + "/mesh_z.npy", allow_pickle=True)
     return mesh_x, mesh_y, mesh_z
 
+
 meshes = [
-    get_meshes(data_dir) for data_dir in 
-    ['Ti64-5m', 'Ti64-10m', 'Ti64-10m-powder', 'SS316L']
+    get_meshes(data_dir)
+    for data_dir in ["Ti64-5m", "Ti64-10m", "Ti64-10m-powder", "SS316L"]
 ]
+
 
 def rollout(x):
     roll = []
@@ -64,42 +69,45 @@ def rollout(x):
     for i in range(lx):
         for j in range(ly):
             for k in range(lz):
-                roll.append(f'({i},{j},{k}):{x[i,j,k]}')
+                roll.append(f"({i},{j},{k}):{x[i,j,k]}")
     return roll
+
 
 def numpy_to_csv(T):
     df_dict = {}
     for i, Tt in enumerate(T):
-        df_dict[f't={i}'] = rollout(Tt)
+        df_dict[f"t={i}"] = rollout(Tt)
     df = pd.DataFrame(df_dict)
     return df
 
-Device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+Device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 room = 293
 nt = 99
 
-class GenClass():
+
+class GenClass:
     # Initialization
-    def __init__(self, name, data_dir='Ti64-5m', Tmax=6500, include_d=False):
-        mkdir('./surrogate/Results/'+data_dir)
-        self.result_dir = './surrogate/Results/'+data_dir+'/'+name
-        self.outputs_dir = self.result_dir + '/outputs'
+    def __init__(self, name, data_dir="Ti64-5m", Tmax=6500, include_d=False):
+        mkdir("./surrogate/Results/" + data_dir)
+        self.result_dir = "./surrogate/Results/" + data_dir + "/" + name
+        self.outputs_dir = self.result_dir + "/outputs"
         mkdir(self.result_dir)
         mkdir(self.outputs_dir)
         self.prep_x = lambda x: prep_input(x, data_dir, include_d)
-        self.prep_T = lambda T: (T-room)/(Tmax-room)
-        self.post_T = lambda T: room + (Tmax-room)*T
+        self.prep_T = lambda T: (T - room) / (Tmax - room)
+        self.post_T = lambda T: room + (Tmax - room) * T
         self.Tmax = Tmax
 
     # Loading the state_dict
     def load_state_dict(self, path=None, masked=False):
         if path is None:
-            path = self.result_dir + '/State_dict'
+            path = self.result_dir + "/State_dict"
             if masked:
-                path += '_masked'
+                path += "_masked"
         if masked:
             self.load_state_dict_masker()
-        with open(path+'.pickle', 'rb') as f:
+        with open(path + ".pickle", "rb") as f:
             state_dict = pickle.load(f)
         for key, value in state_dict.items():
             setattr(self, key, value)
@@ -107,8 +115,8 @@ class GenClass():
     # Loading the state_dict of the masker
     def load_state_dict_masker(self, path=None):
         if path is None:
-            path = self.result_dir + '/State_dict_masker.pickle'
-        with open(path, 'rb') as f:
+            path = self.result_dir + "/State_dict_masker.pickle"
+        with open(path, "rb") as f:
             print(f)
             state_dict = pickle.load(f)
         for key, value in state_dict.items():
@@ -116,7 +124,7 @@ class GenClass():
 
     # Setting the models to test mode
     def test_mode(self, device=Device):
-        for model in ['model', 'masker']:
+        for model in ["model", "masker"]:
             try:
                 getattr(self, model).requires_grad_(False).eval().to(device)
             except:
@@ -136,6 +144,7 @@ class GenClass():
         Ts_pred = self.post_T(Ts_pred)
         return Ts_pred.squeeze().cpu().numpy()
 
+
 class Container:
     def __init__(self):
         self.room = 293
@@ -148,10 +157,10 @@ class Container:
         self.ax = None
         # Loading the Models
         info = [
-            ('FC[]_CNN[128, 64, 32, 16, 8, 4]', 'Ti64-5m'),
-            ('FC[]_CNN[128, 64, 32, 16, 8, 4]', 'Ti64-10m'),
-            ('FC[]_CNN[128, 64, 32, 16, 8, 4]', 'Ti64-10m-powder'),
-            ('FC[]_CNN[128, 64, 32, 16, 8, 4]', 'SS316L'),
+            ("FC[]_CNN[128, 64, 32, 16, 8, 4]", "Ti64-5m"),
+            ("FC[]_CNN[128, 64, 32, 16, 8, 4]", "Ti64-10m"),
+            ("FC[]_CNN[128, 64, 32, 16, 8, 4]", "Ti64-10m-powder"),
+            ("FC[]_CNN[128, 64, 32, 16, 8, 4]", "SS316L"),
         ]
         self.meshes = meshes
         self.Models_masked = []
@@ -180,7 +189,8 @@ class Simulation(APIView):
     Runs simulation page for surrogate model for creating melt pool.
     """
 
-    permission_classes = (AllowAny, )
+    permission_classes = (AllowAny,)
+
     def __init__(self):
         self.obj = Container()
 
@@ -194,10 +204,16 @@ class Simulation(APIView):
         self.obj.i = int(request.query_params.get("simulation_id"))
         self.obj.mesh = self.obj.meshes[self.obj.i]
         self.obj.melt = 1900 if self.obj.i < 3 else 1660
-        self.obj.T = np.stack([
-            self.obj.Models_masked[self.obj.i].test_process(self.obj.P, self.obj.V, masked=True),
-            self.obj.Models[self.obj.i].test_process(self.obj.P, self.obj.V, masked=False)
-        ])
+        self.obj.T = np.stack(
+            [
+                self.obj.Models_masked[self.obj.i].test_process(
+                    self.obj.P, self.obj.V, masked=True
+                ),
+                self.obj.Models[self.obj.i].test_process(
+                    self.obj.P, self.obj.V, masked=False
+                ),
+            ]
+        )
 
         nx, ny, nz = np.array(self.obj.T.shape[2:]) - 1
         self.obj.mesh_x, self.obj.mesh_y, self.obj.mesh_z = self.obj.mesh
@@ -208,6 +224,6 @@ class Simulation(APIView):
         self.obj.zline = lambda z: interp(z, self.obj.mesh_z)
 
         self.obj.fig = Figure(figsize=(6.4, 6.4))
-        self.obj.ax = self.obj.fig.subplots(2, 2, sharex='all', sharey='row')
+        self.obj.ax = self.obj.fig.subplots(2, 2, sharex="all", sharey="row")
 
         return Response()

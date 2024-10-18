@@ -17,9 +17,9 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 // Types
-import { PartResponse } from 'part/_types';
+import { PartListResponse } from 'part/_types';
 
-const PartTableRow: FC<{part: PartResponse}> = ({ part }) => {
+const PartTableRow: FC<{part: PartListResponse}> = ({ part }) => {
   // Hooks
   const navigate = useNavigate();
   const createdOn = new Date(part.created_on as string);
@@ -35,22 +35,36 @@ const PartTableRow: FC<{part: PartResponse}> = ({ part }) => {
     <TableRow
       hover
       onClick={() => navigate(`/part/${part.id}`)}
-      sx={{ '&:last-child td, &:last-child th': { border: 0}}}
+      sx={{
+        '&:last-child td, &:last-child th': { border: 0},
+        '&:hover': { cursor: "pointer"},
+      }}
     >
+      <TableCell align="center" component="th" scope="row">
+        <img
+          height={50}
+          loading="lazy"
+          src={part.part_file.thumbnail}
+          width={50}
+        />
+      </TableCell>
       <TableCell component="th" scope="row">
         {part.name}
       </TableCell>
-      <TableCell align="right">
-        {createdOn.toLocaleDateString("en-US", option)}
+      <TableCell align="center" component="th" scope="row">
+        {part.part_files.length}
       </TableCell>
       <TableCell align="right">
         {updatedOn.toLocaleDateString("en-US", option)}
+      </TableCell>
+      <TableCell align="right">
+        {createdOn.toLocaleDateString("en-US", option)}
       </TableCell>
     </TableRow>
   );
 }
 
-const PartsTable: FC<{parts: PartResponse[]}> = ({ parts }) => {
+const PartsTable: FC<{parts: PartListResponse[]}> = ({ parts }) => {
   // JSX
   const tableRowsJSX = parts.map((part) => (
     <PartTableRow key={part.id} part={part} />
@@ -61,9 +75,11 @@ const PartsTable: FC<{parts: PartResponse[]}> = ({ parts }) => {
       <Table sx={{ minWidth: 650 }} aria-label="part table">
         <TableHead>
           <TableRow>
+            <TableCell width={50}></TableCell>
             <TableCell>Name</TableCell>
-            <TableCell align="right">Created</TableCell>
+            <TableCell>{"Variation(s)"}</TableCell>
             <TableCell align="right">Last Updated</TableCell>
+            <TableCell align="right">Created</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

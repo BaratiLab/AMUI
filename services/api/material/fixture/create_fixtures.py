@@ -1,6 +1,7 @@
 import csv
 import json
 
+
 def convert_value(value):
     if value == "":
         return None
@@ -12,6 +13,7 @@ def convert_value(value):
             return float(value)
         except ValueError:
             return value
+
 
 data = []
 
