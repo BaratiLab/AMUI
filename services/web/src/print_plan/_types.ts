@@ -4,7 +4,7 @@
  */
 
 import { BuildProfileDetailResponse } from "build_profile/_types";
-import { PartResponse } from "part/_types";
+import { PartDetailResponse, PartListResponse } from "part/_types";
 
 export interface PrintPlanRequest {
   id?: number | null;
@@ -19,12 +19,12 @@ export interface PrintPlanListResponse extends Omit<PrintPlanRequest, 'build_pro
   updated_on: string | null;
   build_profile_title?: string;
   build_profile_material_name?: string;
-  part_name?: string;
+  part: PartListResponse | null;
 }
 
 export interface PrintPlanDetailResponse extends Omit<PrintPlanListResponse, 'build_profile_title' | 'build_profile_material_name' | 'part_name'> {
   build_profile: BuildProfileDetailResponse | null;
-  part: PartResponse | null;
+  part: PartDetailResponse | null;
 }
 
 export type PrintPlanListCreateResponse = null | {

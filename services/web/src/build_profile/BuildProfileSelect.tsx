@@ -39,7 +39,7 @@ const BuildProfileSelect: FC<Props> = ({ value, onChange, name = "build_profile_
 
   // JSX
   const menuItemsJSX = data.map((buildProfile) => (
-    <MenuItem value={buildProfile.id}>{buildProfile.title}</MenuItem>
+    <MenuItem value={buildProfile.id}>{buildProfile.name}</MenuItem>
   ));
 
   return (

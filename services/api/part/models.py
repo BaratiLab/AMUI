@@ -50,7 +50,8 @@ class PartFile(models.Model):
         super().save(*args, **kwargs)  # Save the object to get the file path
 
         # Generate thumbnail if an STL file is uploaded
-        if self.file and self.file.name.endswith(".stl"):
+        # if self.file and self.file.name.endswith(".stl"):
+        if self.file: # Allow for both ".stl" and ".STL"
             self.generate_thumbnail()
             super().save(update_fields=["thumbnail"])  # Save again with the thumbnail
 

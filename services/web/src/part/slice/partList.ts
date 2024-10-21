@@ -16,7 +16,7 @@ import { Status } from "enums";
 import { AsyncThunkInitialState } from "types";
 import {
   Part,
-  PartResponse,
+  PartListResponse,
   PartListCreateResponse,
   PartListReadResponse,
 } from "part/_types";
@@ -28,10 +28,24 @@ interface ListSliceInitialState {
   read: {
     response: PartListReadResponse,
   } & AsyncThunkInitialState,
-  data: PartResponse[],
+  data: PartListResponse[],
+  record: {
+    // Numeric Id values get converted to strings automatically
+    [key: string]: PartListResponse
+  }
 }
 
 // Constants
+const initialResponse = {
+  code: null,
+  data: {
+    count: null,
+    next: null,
+    previous: null,
+    results: [],
+  }
+};
+
 const initialState: ListSliceInitialState = {
   create: {
     response: null,
@@ -39,11 +53,12 @@ const initialState: ListSliceInitialState = {
     error: null,
   },
   read: {
-    response: null,
+    response: initialResponse,
     status: Status.Idle,
     error: null,
   },
   data: [],
+  record: {},
 };
 
 /**
@@ -80,7 +95,12 @@ export const slice = createSlice({
         state.create.response = action.payload;
         if (action.payload) {
           // Should always be an object, just makes typescript happy.
-          state.data = [action.payload.data, ...state.data];
+          const partListResponse = action.payload.data
+          state.data = [partListResponse, ...state.data];
+          state.record = {
+            ...state.record,
+            [partListResponse.id]: partListResponse,
+          };
         }
       })
       .addCase(createPart.rejected, (state, action) => {
@@ -95,11 +115,24 @@ export const slice = createSlice({
       .addCase(readParts.fulfilled, (state, action) => {
         state.read.status = Status.Succeeded;
         state.read.response = action.payload;
-        state.data = action.payload?.data.results || [];
+
+        const readResponse = action.payload.data;
+        state.data = readResponse.results;
+        state.record = readResponse.results
+          .reduce(
+            (
+              acc: { [key: string]: PartListResponse},
+              item: PartListResponse
+            ) => {
+              acc[item.id] = item;
+              return acc;
+            },
+            {}
+          );
       })
       .addCase(readParts.rejected, (state, action) => {
         state.read.status = Status.Failed;
-        state.read.response = null;
+        state.read.response = initialResponse;
         state.data = [];
         state.read.error = action.error.message;
       });

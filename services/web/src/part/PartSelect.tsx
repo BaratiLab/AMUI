@@ -5,6 +5,7 @@
 
 // Node Modules
 import { FC, useEffect } from 'react';
+import { Container } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -29,7 +30,7 @@ interface Props {
 const PartSelect: FC<Props> = ({ value, onChange, name = "part_id" }) => {
   // Hooks
   const dispatch = useAppDispatch();
-  const { data, read } = useAppSelector((state) => state.partList)
+  const { data, record, read } = useAppSelector((state) => state.partList)
 
   useEffect(() => {
     if (read.status === Status.Idle) {
@@ -42,16 +43,36 @@ const PartSelect: FC<Props> = ({ value, onChange, name = "part_id" }) => {
     <MenuItem value={part.id}>{part.name}</MenuItem>
   ));
 
+  const partThumbnailJSX = value !== null && (
+    <img
+      height={50}
+      loading="lazy"
+      src={record[value].part_file.thumbnail}
+      width={50}
+    />
+  );
+
   return (
-    <FormControl>
-      <InputLabel>Part</InputLabel>
-      <Select name={name} value={value?.toString() || ""} onChange={onChange}>
-        <MenuItem value="">
-          <em>None</em>
-        </MenuItem>
-        {menuItemsJSX}
-      </Select>
-    </FormControl>
+    <Container
+      disableGutters
+      maxWidth = {false}
+      sx={{ display: "flex", gap: "1em" }}
+    >
+      {partThumbnailJSX}
+      <FormControl sx={{ width: "100%"}}>
+        <InputLabel>Part</InputLabel>
+        <Select
+          name={name}
+          onChange={onChange}
+          value={value?.toString() || ""}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          {menuItemsJSX}
+        </Select>
+      </FormControl>
+    </Container>
   );
 }
 

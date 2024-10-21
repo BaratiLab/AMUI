@@ -5,11 +5,13 @@ from part.models import Part
 from print_plan.models import PrintPlan
 
 from build_profile.serializers import BuildProfileDetailSerializer
-from part.serializers import PartDetailSerializer
+from part.serializers import PartDetailSerializer, PartListSerializer
 
 
 class PrintPlanListSerializer(serializers.ModelSerializer):
-    part_name = serializers.CharField(source="part.name", read_only=True)
+    part = PartListSerializer(read_only=True)
+    # part_name = serializers.CharField(source="part.name", read_only=True)
+    # part_file_thumbnail = serializers.FileField(source="part.part_file.thumbnail", read_only=True)
     build_profile_title = serializers.CharField(
         source="build_profile.title", read_only=True
     )

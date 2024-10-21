@@ -35,8 +35,19 @@ const PrintPlanTableRow: FC<{printPlan: PrintPlanListResponse}> = ({ printPlan }
     <TableRow
       hover
       onClick={() => navigate(`/print_plan/${printPlan.id}`)}
-      sx={{ '&:last-child td, &:last-child th': { border: 0}}}
+      sx={{
+        '&:last-child td, &:last-child th': { border: 0},
+        '&:hover': { cursor: "pointer"},
+      }}
     >
+      <TableCell align="center" component="th" scope="row">
+        <img
+          height={50}
+          loading="lazy"
+          src={printPlan.part?.part_file.thumbnail}
+          width={50}
+        />
+      </TableCell>
       <TableCell component="th" scope="row">
         {printPlan.name}
       </TableCell>
@@ -47,7 +58,7 @@ const PrintPlanTableRow: FC<{printPlan: PrintPlanListResponse}> = ({ printPlan }
         {printPlan.build_profile_material_name || "No Material"}
       </TableCell>
       <TableCell align="left">
-        {printPlan.part_name || "No Part"}
+        {printPlan.part?.name || "No Part"}
       </TableCell>
       <TableCell align="right">
         {createdOn.toLocaleDateString("en-US", option)}
@@ -70,6 +81,7 @@ const PrintPlansTable: FC<{printPlans: PrintPlanListResponse[]}> = ({ printPlans
       <Table sx={{ minWidth: 650 }} aria-label="print_plan table">
         <TableHead>
           <TableRow>
+            <TableCell width={50}></TableCell>
             <TableCell>Name</TableCell>
             <TableCell align="left">Profile</TableCell>
             <TableCell align="left">Material</TableCell>

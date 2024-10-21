@@ -35,10 +35,13 @@ const BuildProfileTableRow: FC<{buildProfile: BuildProfileListResponse}> = ({ bu
     <TableRow
       hover
       onClick={() => navigate(`/build_profile/${buildProfile.id}`)}
-      sx={{ '&:last-child td, &:last-child th': { border: 0}}}
+      sx={{
+        '&:last-child td, &:last-child th': { border: 0},
+        '&:hover': { cursor: "pointer"},
+      }}
     >
       <TableCell component="th" scope="row">
-        {buildProfile.title}
+        {buildProfile.name}
       </TableCell>
       <TableCell align="left">
         {buildProfile.material_name || "No Material"}

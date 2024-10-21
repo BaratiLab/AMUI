@@ -7,6 +7,7 @@
 import { Box, Button, SelectChangeEvent, TextField } from '@mui/material';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { StlViewer } from 'react-stl-viewer';
 
 // Actions
 import { updatePrintPlan } from 'print_plan/slice/detail';
@@ -17,13 +18,13 @@ import BuildProfileSelect from 'build_profile/BuildProfileSelect';
 import PartSelect from 'part/PartSelect';
 
 // Hooks
-import { useAppDispatch } from 'hooks';
+import { useAppDispatch, useAppSelector } from 'hooks';
 
 // Types
-import { PrintPlanRequest, PrintPlanListCreateResponse, PrintPlanDetailUpdateResponse } from 'print_plan/_types';
+import { PrintPlanDetailResponse, PrintPlanListCreateResponse, PrintPlanDetailUpdateResponse } from 'print_plan/_types';
 
 interface Props {
-  printPlan?: PrintPlanRequest | null
+  printPlan?: PrintPlanDetailResponse | null
 }
 
 interface Request {
@@ -44,14 +45,16 @@ const PrintPlanForm: FC<Props> = ({ printPlan = null }) => {
   });
 
   const [isChanged, setIsChanged] = useState(false);
+  const {record: partListRecord} = useAppSelector((state) => state.partList)
+  const {data} = useAppSelector((state) => state.buildProfileDetail)
 
   useEffect(() => {
     // Updates disabled state of the submit button.
     if (printPlan) {
       setIsChanged(
         request.name !== printPlan.name ||
-        request.build_profile_id !== printPlan.build_profile_id ||
-        request.part_id !== printPlan.part_id
+        request.build_profile_id !== printPlan.build_profile?.id ||
+        request.part_id !== printPlan.part?.id
       );
     } else {
       setIsChanged(
@@ -68,8 +71,8 @@ const PrintPlanForm: FC<Props> = ({ printPlan = null }) => {
     if (printPlan) {
       setRequest({
         name: printPlan.name,
-        build_profile_id: printPlan.build_profile_id || null,
-        part_id: printPlan.part_id || null
+        build_profile_id: printPlan.build_profile?.id || null,
+        part_id: printPlan.part?.id || null
       });
     }
   }, [printPlan]);
@@ -85,10 +88,30 @@ const PrintPlanForm: FC<Props> = ({ printPlan = null }) => {
 
   const handleSelect = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
+
     setRequest((prevState) => ({
       ...prevState,
       [name]: Number(value) || null,
     }));
+  };
+
+  const handlePartSelect = (e: SelectChangeEvent) => {
+    const { name, value } = e.target;
+
+    if (printPlan === null) {
+      // Autogenerate print plan name based on part
+      const partName = partListRecord[value]?.name || ""
+      setRequest((prevState) => ({
+        ...prevState,
+        [name]: Number(value) || null,
+        name: `${partName} Print`,
+      }));
+    } else {
+      setRequest((prevState) => ({
+        ...prevState,
+        [name]: Number(value) || null,
+      }));
+    }
   };
 
   const handleClick = async () => {
@@ -111,19 +134,30 @@ const PrintPlanForm: FC<Props> = ({ printPlan = null }) => {
     }
   };
 
+  // JSX 
+  const stlViewerJSX = printPlan?.part?.part_file.file && (
+    <StlViewer
+      orbitControls
+      shadows
+      style={{ height: "50vh" }}
+      url={printPlan?.part?.part_file.file}
+    />
+  );
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: "1em" }}>
+      {stlViewerJSX}
       <TextField
         label="Name"
         name="name"
         onChange={handleChange}
         value={request.name}
       />
+      <PartSelect value={request.part_id} onChange={handlePartSelect} />
       <BuildProfileSelect
         value={request.build_profile_id}
         onChange={handleSelect}
       />
-      <PartSelect value={request.part_id} onChange={handleSelect} />
       <Button disabled={!isChanged} onClick={handleClick} variant="contained">
         Submit
       </Button>

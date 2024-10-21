@@ -20,6 +20,7 @@ import { Status } from "enums";
 import { AsyncThunkInitialState } from "types";
 import {
   BuildProfileRequest,
+  BuildProfileDetailResponse,
   BuildProfileDetailDeleteResponse,
   BuildProfileDetailReadResponse,
   BuildProfileDetailUpdateResponse,
@@ -35,22 +36,28 @@ interface SliceInitialState {
   delete: {
     response: BuildProfileDetailDeleteResponse,
   } & AsyncThunkInitialState,
-  data: BuildProfileRequest | null,
+  data: BuildProfileDetailResponse | null,
 }
+
+// Constants
+const initialDetailResponse = {
+  code: null,
+  data: null,
+};
 
 const initialState: SliceInitialState = {
   read: {
-    response: null,
+    response: initialDetailResponse,
     status: Status.Idle,
     error: null,
   },
   update: {
-    response: null,
+    response: initialDetailResponse,
     status: Status.Idle,
     error: null,
   },
   delete: {
-    response: null,
+    response: initialDetailResponse,
     status: Status.Idle,
     error: null,
   },
@@ -94,21 +101,11 @@ export const slice = createSlice({
       .addCase(readBuildProfile.fulfilled, (state, action) => {
         state.read.status = Status.Succeeded;
         state.read.response = action.payload;
-
-        if (action.payload) {
-          state.data = {
-            ...action.payload.data,
-            machine_id: action.payload.data.machine?.id || null,
-            material_id: action.payload.data.material?.id || null,
-          }
-        } else {
-          state.data =  null;
-        }
-
+        state.data = action.payload.data;
       })
       .addCase(readBuildProfile.rejected, (state, action) => {
         state.read.status = Status.Failed;
-        state.read.response = null;
+        state.read.response = initialDetailResponse;
         state.read.error = action.error.message;
       })
 
@@ -119,21 +116,11 @@ export const slice = createSlice({
       .addCase(updateBuildProfile.fulfilled, (state, action) => {
         state.update.status = Status.Succeeded;
         state.update.response = action.payload;
-
-        if (action.payload) {
-          state.data = {
-            ...action.payload.data,
-            machine_id: action.payload.data.machine?.id || null,
-            material_id: action.payload.data.material?.id || null,
-          }
-        } else {
-          state.data =  null;
-        }
-
+        state.data = action.payload.data;
       })
       .addCase(updateBuildProfile.rejected, (state, action) => {
         state.update.status = Status.Failed;
-        state.update.response = null;
+        state.update.response = initialDetailResponse;
         state.update.error = action.error.message;
       })
 
@@ -148,7 +135,7 @@ export const slice = createSlice({
       })
       .addCase(deleteBuildProfile.rejected, (state, action) => {
         state.delete.status = Status.Failed;
-        state.delete.response = null;
+        state.delete.response = initialDetailResponse;
         state.delete.error = action.error.message;
       });
   },

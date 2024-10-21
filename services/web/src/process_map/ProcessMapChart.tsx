@@ -22,6 +22,7 @@ interface Defects {
   lackOfFusion: number;
   balling: number;
   keyholing: number;
+  selected: boolean;
 }
 
 interface DefectsMap {
@@ -36,6 +37,8 @@ interface Props {
   width: number;
   height: number;
   meltPoolDimensions: MeltPoolDimension[];
+  onMouseDownCapture: () => void;
+  onTooltipChange: (data: any) => void;
   processMap:DefectsMap;
   domains: [number, number][];
   showControls?: boolean;
@@ -51,6 +54,8 @@ const ProcessMapChart: FC<Props & WithTooltipProvidedProps<PointsRange>> =
     processMap,
     domains,
     showControls = false,
+    onMouseDownCapture,
+    onTooltipChange,
     hideTooltip,
     showTooltip,
     tooltipOpen,
@@ -135,6 +140,7 @@ const ProcessMapChart: FC<Props & WithTooltipProvidedProps<PointsRange>> =
             tooltipTop: yScale(closest.data[1]),
             tooltipData: closest.data,
           });
+          onTooltipChange(closest.data)
         }
       },
       [xScale, yScale, showTooltip, voronoiLayout],
@@ -169,6 +175,7 @@ const ProcessMapChart: FC<Props & WithTooltipProvidedProps<PointsRange>> =
         const keyholing = processMap[key]["keyholing"] <= 1.5;
         const balling = processMap[key]["balling"] > 3.7;
         const lackOfFusion = processMap[key]["lackOfFusion"] >= 1;
+        const selected = processMap[key]["selected"]
 
         let fill = "green";
         if (keyholing) {
@@ -177,6 +184,18 @@ const ProcessMapChart: FC<Props & WithTooltipProvidedProps<PointsRange>> =
           fill = "purple";
         } else if (lackOfFusion) {
           fill = "blue";
+        } else if (selected) {
+          return (
+            <VoronoiPolygon
+              key={`polygon-${i}`}
+              polygon={polygon}
+              fill="yellow"
+              stroke="white"
+              strokeWidth={1}
+              strokeOpacity={0.2}
+              fillOpacity={1}
+            />
+          )
         }
 
         return(
@@ -203,6 +222,7 @@ const ProcessMapChart: FC<Props & WithTooltipProvidedProps<PointsRange>> =
             fill="url(#gradient)"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
+            onMouseDownCapture={onMouseDownCapture}
             onTouchMove={handleMouseMove}
             onTouchEnd={handleMouseLeave}
           />

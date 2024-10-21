@@ -8,31 +8,43 @@ import { MachineResponse } from "machine/_types";
 
 export interface BuildProfileRequest {
   id?: number | null;
-  title: string;
-  description: string;
+  name: string;
   material_id: number | null;
   machine_id: number | null;
+  layer_thickness: number;
+  hatch_spacing: number;
+  power: number;
+  velocity: number;
 }
 
-export interface BuildProfileListResponse extends Omit<BuildProfileRequest, 'material_id' | 'machine_id'> {
+export interface BuildProfileResponse {
   created_by: string | null;
   created_on: string | null;
   updated_on: string | null;
+  id: number;
+  name: string;
+  layer_thickness: number;
+  hatch_spacing: number;
+  power: number;
+  velocity: number;
+}
+
+export interface BuildProfileListResponse extends BuildProfileResponse {
   material_name?: string;
   machine_name?: string;
 }
 
-export interface BuildProfileDetailResponse extends Omit<BuildProfileListResponse, 'material_name' | 'machine_name'> {
+export interface BuildProfileDetailResponse extends BuildProfileResponse {
   material: MaterialResponse;
   machine: MachineResponse;
 }
 
-export type BuildProfileListCreateResponse = null | {
+export type BuildProfileListCreateResponse = {
   code: number;
   data: BuildProfileListResponse;
 }
 
-export type BuildProfileListReadResponse = null | {
+export type BuildProfileListReadResponse = {
   code: number;
   data: {
     count: null | number;
@@ -42,17 +54,17 @@ export type BuildProfileListReadResponse = null | {
   }
 }
 
-export type BuildProfileDetailReadResponse = null | {
-  code: number;
-  data: BuildProfileDetailResponse;
+export type BuildProfileDetailReadResponse = {
+  code: number | null;
+  data: BuildProfileDetailResponse | null;
 }
 
-export type BuildProfileDetailUpdateResponse = null | {
-  code: number;
-  data: BuildProfileDetailResponse;
+export type BuildProfileDetailUpdateResponse = {
+  code: number | null;
+  data: BuildProfileDetailResponse | null;
 }
 
-export type BuildProfileDetailDeleteResponse = null | {
-  code: number;
-  data: string;
+export type BuildProfileDetailDeleteResponse = {
+  code: number | null;
+  data: string | null;
 };

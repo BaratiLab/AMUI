@@ -29,16 +29,16 @@ export interface PartListResponse extends PartResponse {
 
 export type PartListCreateResponse = null | {
   code: number;
-  data: PartResponse;
+  data: PartListResponse;
 };
 
-export type PartListReadResponse = null | {
-  code: number;
+export type PartListReadResponse = {
+  code: null | number;
   data: {
     count: null | number;
     next: null | string;
     previous: null | string;
-    results: PartResponse[];
+    results: PartListResponse[];
   }
 }
 
