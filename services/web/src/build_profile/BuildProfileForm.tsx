@@ -241,7 +241,7 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
   };
 
   // JSX
-  const processMapJSX = request.material_id !== null && (
+  const processMapJSX = request.material_id === 2 && (
     <StyledProcessMapContainer>
       <TextField
         label="Power (W)"

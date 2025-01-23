@@ -13,6 +13,7 @@ class PrintPlan(models.Model):
         BuildProfile, on_delete=models.CASCADE, null=True, blank=True
     )
     part = models.ForeignKey(Part, on_delete=models.CASCADE, null=True, blank=True)
+    gcode_file = models.FileField(max_length=255, blank=True, null=True)
 
     class Meta:
         ordering = ["created_on", "updated_on"]

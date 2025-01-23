@@ -32,13 +32,13 @@ export const StyledGCodeLayerViewer = styled.div`
 `
 // Types
 interface Props {
-  status: Status
+  // status: Status
   style?: CSSProperties
   url: string | null
 }
 
 const GCodeLayerViewer: FC<Props> = ({
-  status = Status.Idle,
+  // status = Status.Idle,
   style = {
     width: '500px',
     height: '500px'
@@ -79,7 +79,8 @@ const GCodeLayerViewer: FC<Props> = ({
         orbitControls
         showAxes
         style={style}
-        url={status === Status.Succeeded ? url as string : ""}
+        // url={status === Status.Succeeded ? url as string : ""}
+        url={url}
         layer = {showSingleLayer ? layerIndex : null}
         onLayersLoaded ={handleLayersLoaded}
       />

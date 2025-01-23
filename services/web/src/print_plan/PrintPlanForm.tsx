@@ -4,24 +4,29 @@
  */
 
 // Node Modules
-import { Box, Button, SelectChangeEvent, TextField } from '@mui/material';
+import { Box, Button, Container, SelectChangeEvent, TextField } from '@mui/material';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StlViewer } from 'react-stl-viewer';
 
 // Actions
-import { updatePrintPlan } from 'print_plan/slice/detail';
+import { createPrintPlanGenerateGCode, updatePrintPlan } from 'print_plan/slice/detail';
 import { createPrintPlan } from 'print_plan/slice/list';
 
 // Components
 import BuildProfileSelect from 'build_profile/BuildProfileSelect';
 import PartSelect from 'part/PartSelect';
+import GCodeLayerViewer from 'slicer/GCodeLayerViewer';
 
 // Hooks
 import { useAppDispatch, useAppSelector } from 'hooks';
 
 // Types
-import { PrintPlanDetailResponse, PrintPlanListCreateResponse, PrintPlanDetailUpdateResponse } from 'print_plan/_types';
+import {
+  PrintPlanDetailResponse,
+  PrintPlanListCreateResponse,
+  PrintPlanDetailUpdateResponse,
+} from 'print_plan/_types';
 
 interface Props {
   printPlan?: PrintPlanDetailResponse | null
@@ -46,7 +51,6 @@ const PrintPlanForm: FC<Props> = ({ printPlan = null }) => {
 
   const [isChanged, setIsChanged] = useState(false);
   const {record: partListRecord} = useAppSelector((state) => state.partList)
-  const {data} = useAppSelector((state) => state.buildProfileDetail)
 
   useEffect(() => {
     // Updates disabled state of the submit button.
@@ -134,14 +138,31 @@ const PrintPlanForm: FC<Props> = ({ printPlan = null }) => {
     }
   };
 
+  const handleGenerateGCodeClick = async () => {
+    if (printPlan?.id) {
+      const { payload } = await dispatch(
+        createPrintPlanGenerateGCode(printPlan.id.toString())
+      );
+      console.log(payload)
+    }
+  };
+
   // JSX 
   const stlViewerJSX = printPlan?.part?.part_file.file && (
-    <StlViewer
-      orbitControls
-      shadows
-      style={{ height: "50vh" }}
-      url={printPlan?.part?.part_file.file}
-    />
+    <>
+      <Container sx={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+        <StlViewer
+          orbitControls
+          shadows
+          style={{ height: "50vh", width: "700px"}}
+          url={printPlan?.part?.part_file.file}
+        />
+        {printPlan.gcode_file && <GCodeLayerViewer url={printPlan.gcode_file} />}
+      </Container>
+      <Button onClick={handleGenerateGCodeClick}>
+        Slice Part
+      </Button>
+    </>
   );
 
   return (

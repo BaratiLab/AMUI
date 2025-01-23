@@ -82,3 +82,14 @@ export const postPrintPlan = async (printPlan: PrintPlanRequest): Promise<PrintP
     return null;
   }
 };
+
+export const postPrintPlanGenerateGCode = async (id: string): Promise<PrintPlanDetailReadResponse>=> {
+  try {
+    const response = await axios.post(`print_plan/${id}/generate_gcode`);
+    const { data, status: code } = response;
+    return { data, code };
+  } catch (error) {
+    console.log(error)
+    return null;
+  }
+};

@@ -11,6 +11,7 @@ import {
   deletePrintPlan as deletePrintPlanAPI,
   getPrintPlan,
   putPrintPlan,
+  postPrintPlanGenerateGCode,
 } from "print_plan/_api";
 
 // Enums
@@ -35,6 +36,13 @@ interface SliceInitialState {
   delete: {
     response: PrintPlanDetailDeleteResponse,
   } & AsyncThunkInitialState,
+
+
+  // Hacky method for creating gcode file
+  create: {
+    response: PrintPlanDetailReadResponse,
+  } & AsyncThunkInitialState,
+
   data: PrintPlanRequest | null,
 }
 
@@ -54,6 +62,14 @@ const initialState: SliceInitialState = {
     status: Status.Idle,
     error: null,
   },
+
+  // For GCode
+  create: {
+    response: null,
+    status: Status.Idle,
+    error: null,
+  },
+
   data: null,
 };
 
@@ -77,6 +93,14 @@ export const deletePrintPlan = createAsyncThunk(
   "printPlanDetail/delete",
   async (id: string) => {
     const response = await deletePrintPlanAPI(id);
+    return response;
+  },
+);
+
+export const createPrintPlanGenerateGCode = createAsyncThunk(
+  "printPlanDetail/create",
+  async (id: string) => {
+    const response = await postPrintPlanGenerateGCode(id);
     return response;
   },
 );
@@ -150,6 +174,31 @@ export const slice = createSlice({
         state.delete.status = Status.Failed;
         state.delete.response = null;
         state.delete.error = action.error.message;
+      })
+
+      // Create
+      .addCase(createPrintPlanGenerateGCode.pending, (state) => {
+        state.read.status = Status.Loading;
+      })
+      .addCase(createPrintPlanGenerateGCode.fulfilled, (state, action) => {
+        state.read.status = Status.Succeeded;
+        state.read.response = action.payload;
+
+        if (action.payload) {
+          state.data = {
+            ...action.payload.data,
+            build_profile_id: action.payload.data.build_profile?.id || null,
+            part_id: action.payload.data.part?.id || null,
+          }
+        } else {
+          state.data =  null;
+        }
+
+      })
+      .addCase(createPrintPlanGenerateGCode.rejected, (state, action) => {
+        state.read.status = Status.Failed;
+        state.read.response = null;
+        state.read.error = action.error.message;
       });
   },
 });
