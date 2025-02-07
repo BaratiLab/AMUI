@@ -94,29 +94,6 @@ services:
       - media:/home/api/media
     restart: always
 
-  # meltpoolnet:
-  #   container_name: amui-module-meltpoolnet
-  #   build:
-  #     context: ./services/module/meltpoolnet
-  #     dockerfile: Dockerfile
-  #   tty: true
-
-  # module-eagartsai:
-  #   container_name: amui-module-eagartsai
-  #   volumes:
-  #     - ./services/module/eagartsai:/home/eagartsai
-  #   build:
-  #     context: ./services/module/eagartsai
-  #     dockerfile: Dockerfile
-  #   tty: true
-
-  # module-example:
-  #   container_name: amui-module-example
-  #   build:
-  #     context: ./services/module/example
-  #     dockerfile: Dockerfile
-  #   tty: true
-
 volumes:
   static:
   media:

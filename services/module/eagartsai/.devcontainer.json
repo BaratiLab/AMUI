@@ -1,7 +1,0 @@
-{
-  "name": "amui-module-eagartsai",
-  "service": "module-eagartsai",
-  "workspaceFolder": "/home/eagartsai",
-  "dockerComposeFile": "../../../docker-compose.yml",
-  "shutdownAction": "stopCompose"
-}
