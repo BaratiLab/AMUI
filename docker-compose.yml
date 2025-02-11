@@ -32,7 +32,7 @@ services:
       context: ./services/flow3d
       dockerfile: Dockerfile
       args:
-        - LICENSE_SERVER=${LICENSE_SERVER}
+        - FLOW_3D_LICENSE_SERVER=${FLOW_3D_LICENSE_SERVER}
         - REDHAT_USERNAME=${REDHAT_USERNAME}
         - REDHAT_PASSWORD=${REDHAT_PASSWORD}
 
