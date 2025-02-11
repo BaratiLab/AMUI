@@ -24,6 +24,40 @@ services:
     networks:
       - apinet
 
+  flow3d:
+    container_name: amui-flow3d
+    environment:
+      - QT_QPA_PLATFORM=minimal
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - LICENSE_SERVER=${LICENSE_SERVER}
+        - REDHAT_USERNAME=${REDHAT_USERNAME}
+        - REDHAT_PASSWORD=${REDHAT_PASSWORD}
+
+    # Prevents container from immediately exiting
+    tty: true
+
+    # Sync only specified files and folders.
+    volumes:
+      # Flow3D related files.
+
+      # Outputs for prepin files and simulations
+      - ./out:/home/flow3d-docker/out
+
+      # Submodules
+      - ./githubs:/home/flow3d-docker/githubs
+
+      # Main folders used for running scripts and logging progress.
+      - ./notebooks:/home/flow3d-docker/notebooks
+      - ./scripts:/home/flow3d-docker/scripts
+
+      # Files whose edits should persist outside of the container.
+      - ./.devcontainer.json:/home/flow3d-docker/.devcontainer.json
+      - ./requirements.txt:/home/flow3d-docker/requirements.txt
+      - ./README.md:/home/flow3d-docker/README.md
+
   web:
     container_name: amui-web
     build:
