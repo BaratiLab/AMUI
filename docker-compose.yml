@@ -15,42 +15,12 @@ services:
       - static:/home/api/static
 
       - media:/home/api/media
-    # ports:
-    #   - 8000:8000
-    tty: true
+
     depends_on:
       - sql
     command: bash ./entrypoint.sh
     networks:
       - apinet
-
-  flow3d:
-    container_name: amui-flow3d
-    environment:
-      - QT_QPA_PLATFORM=minimal
-    build:
-      context: ./services/flow3d
-      dockerfile: Dockerfile
-      args:
-        - DEVELOPMENT=${DEVELOPMENT}
-        - FLOW_3D_LICENSE_SERVER=${FLOW_3D_LICENSE_SERVER}
-        - REDHAT_USERNAME=${REDHAT_USERNAME}
-        - REDHAT_PASSWORD=${REDHAT_PASSWORD}
-
-    # Prevents container from immediately exiting
-    tty: true
-
-    volumes:
-      # Persist changes and output files
-      - ./services/flow3d:/home/flow3d-docker
-
-      # Output files from FLOW-3D simulations
-      - flow3d_out:/home/flow3d-docker/out
-
-      # Clear when changing DEVELOPMENT argument otherwise will use previous
-      # package target for Flow3D.
-      # `docker volume rm amui_flow3d_venv`
-      - flow3d_venv:/home/flow3d-docker/venv
 
   web:
     container_name: amui-web
@@ -85,8 +55,12 @@ services:
       - sql_data:/var/lib/postgres/data/
     env_file:
       - .env
-    # ports:
-    #   - 5432:5432
+    networks:
+      - apinet
+  
+  redis:
+    container_name: amui-redis
+    image: redis:8.0-M03
     networks:
       - apinet
 
@@ -121,6 +95,36 @@ services:
       - static:/home/api/static
       - media:/home/api/media
     restart: always
+
+  flow3d:
+    container_name: amui-flow3d
+    environment:
+      - QT_QPA_PLATFORM=minimal
+    build:
+      context: ./services/flow3d
+      dockerfile: Dockerfile
+      args:
+        - DEVELOPMENT=${DEVELOPMENT}
+        - FLOW_3D_LICENSE_SERVER=${FLOW_3D_LICENSE_SERVER}
+        - REDHAT_USERNAME=${REDHAT_USERNAME}
+        - REDHAT_PASSWORD=${REDHAT_PASSWORD}
+    command: bash ./entrypoint.sh
+    depends_on:
+      - redis
+    networks:
+      - apinet
+
+    volumes:
+      # Persist changes and output files
+      - ./services/flow3d:/home/flow3d-docker
+
+      # Output files from FLOW-3D simulations
+      - flow3d_out:/home/flow3d-docker/out
+
+      # Clear when changing DEVELOPMENT argument otherwise will use previous
+      # package target for Flow3D.
+      # `docker volume rm amui_flow3d_venv`
+      - flow3d_venv:/home/flow3d-docker/venv
 
 volumes:
   static:
