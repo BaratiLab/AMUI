@@ -44,6 +44,12 @@ services:
       # Persist changes and output files
       - ./services/flow3d:/home/flow3d-docker
 
+      # Output files from FLOW-3D simulations
+      - flow3d_out:/home/flow3d-docker/out
+
+      # Clear when changing DEVELOPMENT argument otherwise will use previous
+      # package target for Flow3D.
+      # `docker volume rm amui_flow3d_venv`
       - flow3d_venv:/home/flow3d-docker/venv
 
   web:
@@ -122,6 +128,7 @@ volumes:
   pgadmin:
   sql_data:
   web_node_modules:
+  flow3d_out:
   flow3d_venv:
 
 networks:

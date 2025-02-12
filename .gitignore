@@ -163,5 +163,6 @@ cython_debug/
 *npy
 services/api/media/
 
+services/flow3d/out
 services/flow3d/setup/*
 !services/flow3d/setup/README.md

@@ -2,10 +2,12 @@
 # https://serverfault.com/a/1115318/525986
 # FROM redhat/ubi8:8.5
 
+##########################
+# Red Hat Initialization #
+##########################
+
 FROM redhat/ubi8:8.10
 
-ARG DEVELOPMENT
-ARG FLOW_3D_LICENSE_SERVER
 ARG REDHAT_PASSWORD
 ARG REDHAT_USERNAME
 
@@ -37,6 +39,12 @@ RUN dnf update -y
 RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 RUN dnf install -y screen
 
+#################################
+# FLOW-3D Software Installation #
+#################################
+
+ARG FLOW_3D_LICENSE_SERVER
+
 # Changes directory to created `flow3d_installer`.
 WORKDIR /home/flow3d-docker/installer
 
@@ -60,8 +68,13 @@ RUN cp /opt/flow3d/v12_u2_fsj_module_3_0_r7/local/flow3dvars.sh /etc/profile.d/c
 WORKDIR /home/flow3d-docker
 
 # Removes unnessary folders.
-RUN rm -rf setup
 RUN rm -rf installer
+
+################################
+# Python `venv` Initialization #
+################################
+
+ARG DEVELOPMENT
 
 # Copy python requirements over (allows caching of previous commands)
 COPY ./requirements.txt .
@@ -75,18 +88,19 @@ COPY ./githubs ./githubs
 
 # Needs spaces around brackets to run properly.
 RUN if [ "$DEVELOPMENT" = "true" ]; then \
+        echo "Installing editable Flow3D source"; \
         . venv/bin/activate && pip install -e ./githubs/Flow3D; \
     else \
+        echo "Installing published Flow3D package"; \
         . venv/bin/activate && pip install flow3d; \
     fi
 
-# Removes submodules folder.
-# Don't bother removing, changes need to persist if development
-# but in order to do that it need to be linked as volume.
-# I don't know if there's a way to do that easily.
-# Keeping `githubs` around doesn't really effect anything anyways
-# since pip will just install the pypi package if not development.
-# RUN if ["$DEVELOPMENT" != "true"]; then rm -rf githubs; fi
+########################
+# VSCode Dev Container #
+########################
 
 # Copy over vscode devcontainer config.
 COPY .devcontainer.json .
+
+# Copy over outputs from FLOW-3D Runs.
+COPY ./out ./out
