@@ -37,25 +37,6 @@ RUN dnf update -y
 RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 RUN dnf install -y screen
 
-# Copy python requirements over (allows caching of previous commands)
-COPY ./requirements.txt .
-
-# Create Virutal Environment for python
-RUN python3.12 -m venv venv
-RUN . venv/bin/activate && pip install -r requirements.txt
-
-# Copy over Flow3D python package
-COPY ./githubs .
-
-RUN if ["$DEVELOPMENT" = "true"]; then \
-        . venv/bin/activate && pip install -e ./githubs/Flow3D; \
-    else \
-        . venv/bin/activate && pip install flow3d; \
-    fi
-
-# # Installs `prepin_builder` package locally first.
-# # RUN pip3 install -e .
-
 # Changes directory to created `flow3d_installer`.
 WORKDIR /home/flow3d-docker/installer
 
@@ -79,10 +60,33 @@ RUN cp /opt/flow3d/v12_u2_fsj_module_3_0_r7/local/flow3dvars.sh /etc/profile.d/c
 WORKDIR /home/flow3d-docker
 
 # Removes unnessary folders.
-RUN rm -rf setup installer
+RUN rm -rf setup
+RUN rm -rf installer
+
+# Copy python requirements over (allows caching of previous commands)
+COPY ./requirements.txt .
+
+# Create Virutal Environment for python
+RUN python3.12 -m venv venv
+RUN . venv/bin/activate && pip install -r requirements.txt
+
+# Copy over Flow3D python package
+COPY ./githubs ./githubs
+
+# Needs spaces around brackets to run properly.
+RUN if [ "$DEVELOPMENT" = "true" ]; then \
+        . venv/bin/activate && pip install -e ./githubs/Flow3D; \
+    else \
+        . venv/bin/activate && pip install flow3d; \
+    fi
+
+# Removes submodules folder.
+# Don't bother removing, changes need to persist if development
+# but in order to do that it need to be linked as volume.
+# I don't know if there's a way to do that easily.
+# Keeping `githubs` around doesn't really effect anything anyways
+# since pip will just install the pypi package if not development.
+# RUN if ["$DEVELOPMENT" != "true"]; then rm -rf githubs; fi
 
 # Copy over vscode devcontainer config.
 COPY .devcontainer.json .
-
-# Removes submodules folder.
-RUN if ["$DEVELOPMENT" != "true"]; then rm -rf githubs; fi

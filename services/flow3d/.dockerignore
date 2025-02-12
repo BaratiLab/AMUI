@@ -1,0 +1,3 @@
+# Prevents these folders from being copied over to container
+# However, container will write these folders to shared volume.
+venv

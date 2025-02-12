@@ -32,6 +32,7 @@ services:
       context: ./services/flow3d
       dockerfile: Dockerfile
       args:
+        - DEVELOPMENT=${DEVELOPMENT}
         - FLOW_3D_LICENSE_SERVER=${FLOW_3D_LICENSE_SERVER}
         - REDHAT_USERNAME=${REDHAT_USERNAME}
         - REDHAT_PASSWORD=${REDHAT_PASSWORD}
@@ -42,6 +43,8 @@ services:
     volumes:
       # Persist changes and output files
       - ./services/flow3d:/home/flow3d-docker
+
+      - flow3d_venv:/home/flow3d-docker/venv
 
   web:
     container_name: amui-web
@@ -119,6 +122,7 @@ volumes:
   pgadmin:
   sql_data:
   web_node_modules:
+  flow3d_venv:
 
 networks:
   apinet:
