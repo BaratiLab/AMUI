@@ -1,0 +1,3 @@
+[submodule "services/flow3d/githubs/Flow3D"]
+	path = services/flow3d/githubs/Flow3D
+	url = git@github.com:ppak10/Flow3D.git

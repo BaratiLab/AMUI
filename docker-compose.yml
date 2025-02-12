@@ -29,34 +29,28 @@ services:
     environment:
       - QT_QPA_PLATFORM=minimal
     build:
-      context: .
+      context: ./services/flow3d
       dockerfile: Dockerfile
       args:
-        - LICENSE_SERVER=${LICENSE_SERVER}
+        - DEVELOPMENT=${DEVELOPMENT}
+        - FLOW_3D_LICENSE_SERVER=${FLOW_3D_LICENSE_SERVER}
         - REDHAT_USERNAME=${REDHAT_USERNAME}
         - REDHAT_PASSWORD=${REDHAT_PASSWORD}
 
     # Prevents container from immediately exiting
     tty: true
 
-    # Sync only specified files and folders.
     volumes:
-      # Flow3D related files.
+      # Persist changes and output files
+      - ./services/flow3d:/home/flow3d-docker
 
-      # Outputs for prepin files and simulations
-      - ./out:/home/flow3d-docker/out
+      # Output files from FLOW-3D simulations
+      - flow3d_out:/home/flow3d-docker/out
 
-      # Submodules
-      - ./githubs:/home/flow3d-docker/githubs
-
-      # Main folders used for running scripts and logging progress.
-      - ./notebooks:/home/flow3d-docker/notebooks
-      - ./scripts:/home/flow3d-docker/scripts
-
-      # Files whose edits should persist outside of the container.
-      - ./.devcontainer.json:/home/flow3d-docker/.devcontainer.json
-      - ./requirements.txt:/home/flow3d-docker/requirements.txt
-      - ./README.md:/home/flow3d-docker/README.md
+      # Clear when changing DEVELOPMENT argument otherwise will use previous
+      # package target for Flow3D.
+      # `docker volume rm amui_flow3d_venv`
+      - flow3d_venv:/home/flow3d-docker/venv
 
   web:
     container_name: amui-web
@@ -134,6 +128,8 @@ volumes:
   pgadmin:
   sql_data:
   web_node_modules:
+  flow3d_out:
+  flow3d_venv:
 
 networks:
   apinet:

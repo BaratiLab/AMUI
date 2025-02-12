@@ -1,0 +1,15 @@
+{
+  "name": "amui-flow3d",
+  "service": "flow3d",
+  "workspaceFolder": "/home/flow3d-docker",
+  "dockerComposeFile": "../../docker-compose.yml",
+"shutdownAction": "stopCompose",
+"customizations": {
+	"vscode": {
+		"extensions": [
+			"ms-toolsai.jupyter",
+			"ms-python.python"
+		]
+	}
+}
+}
