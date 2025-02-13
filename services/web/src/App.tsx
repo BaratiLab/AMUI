@@ -35,6 +35,8 @@ import PrintPlanNew from "_pages/PrintPlanNew";
 import PrintPlans from "_pages/PrintPlans";
 
 import ProcessMap from "_pages/ProcessMap";
+import Simulations from "_pages/Simulations";
+
 // import ProcessMapAccordion from "_pages/ProcessMapAccordion";
 // import Slicer from "_pages/Slicer";
 // import Surrogate from "_pages/Surrogate"
@@ -88,6 +90,9 @@ const App: FC = () => {
                 <Route path="/print_plan" element={<PrintPlans />} />
                 <Route path="/print_plan/:id" element={<PrintPlan />} />
                 <Route path="/print_plan/new" element={<PrintPlanNew />} />
+
+                {/* Simulation */}
+                <Route path="/simulation" element={<Simulations />} />
 
                 {/* Legacy */}
                 <Route path="/process_map" element={<ProcessMap />} />

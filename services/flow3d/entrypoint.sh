@@ -4,4 +4,5 @@
 # sleep 10s
 echo "Starting Worker..."
 . venv/bin/activate
-exec celery -A worker.worker worker --loglevel=info
+cd worker 
+exec celery -A app worker --loglevel=info

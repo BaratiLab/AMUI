@@ -103,7 +103,7 @@ COPY ./out ./out
 # Celery Worker #
 #################
 COPY ./entrypoint.sh .
-COPY ./worker ./worker
+COPY ./flow3d ./flow3d
 
 # Runs 'entrypoint.sh' script.
 # https://stackoverflow.com/a/50276037/10521456

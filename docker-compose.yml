@@ -108,7 +108,10 @@ services:
         - FLOW_3D_LICENSE_SERVER=${FLOW_3D_LICENSE_SERVER}
         - REDHAT_USERNAME=${REDHAT_USERNAME}
         - REDHAT_PASSWORD=${REDHAT_PASSWORD}
-    command: bash ./entrypoint.sh
+
+    # Uncomment for production
+    # command: bash ./entrypoint.sh
+    tty: true
     depends_on:
       - redis
     networks:
