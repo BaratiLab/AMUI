@@ -95,12 +95,17 @@ RUN if [ "$DEVELOPMENT" = "true" ]; then \
         . venv/bin/activate && pip install flow3d; \
     fi
 
-########################
-# VSCode Dev Container #
-########################
-
-# Copy over vscode devcontainer config.
-COPY .devcontainer.json .
-
 # Copy over outputs from FLOW-3D Runs.
+# Need to do this since its marked as a volume
 COPY ./out ./out
+
+#################
+# Celery Worker #
+#################
+COPY ./entrypoint.sh .
+COPY ./flow3d ./flow3d
+
+# Runs 'entrypoint.sh' script.
+# https://stackoverflow.com/a/50276037/10521456
+RUN sed -i 's/\r//' ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh

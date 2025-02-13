@@ -24,6 +24,7 @@ from api import views
 
 urlpatterns = [
     path("", include("build_profile.urls")),
+    path("", include("flow3d.urls")),
     path("", include("melt_pool.urls")),
     path("", include("machine.urls")),
     path("", include("material.urls")),

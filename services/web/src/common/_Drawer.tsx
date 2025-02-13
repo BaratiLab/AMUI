@@ -20,6 +20,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
 import {
+  Assignment,
   Category,
   Flare,
   Home,
@@ -35,6 +36,11 @@ const topListItems = [
     text: "Overview",
     icon: <Home />,
     link: "/",
+  },
+  {
+    text: "Simulations",
+    icon: <Assignment />,
+    link: "/simulation",
   },
   {
     text: "Profiles",

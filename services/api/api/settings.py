@@ -202,3 +202,7 @@ CSRF_COOKIE_SECURE = True
 
 # Use HTTPS for any URL returned by FileField or other storages
 USE_X_FORWARDED_HOST = True
+
+# Celery
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_BROKER_BACKEND = 'redis://redis:6379/0'
