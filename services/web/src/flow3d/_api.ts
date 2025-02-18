@@ -21,3 +21,14 @@ export const postFlow3DTestTask = async (xy: XY) => {
     return null;
   }
 };
+
+export const getFlow3DTestTask = async (task_id: string) => {
+  try {
+    const response = await axios.get(`flow3d/test_task/${task_id}/`);
+    const { data, status: code } = response;
+    return { data, code };
+  } catch (error) {
+    console.log(error)
+    return null;
+  }
+};

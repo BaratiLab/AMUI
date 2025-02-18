@@ -64,6 +64,18 @@ services:
     networks:
       - apinet
 
+  redisinsight:
+    container_name: amui-redisinsight
+    image: redislabs/redisinsight:latest
+    ports:
+      - 5540:5540
+    volumes:
+      - redisinsight_data:/data
+    networks:
+      - apinet
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+
   pgadmin:
     container_name: amui-pgadmin
     image: dpage/pgadmin4
@@ -99,6 +111,7 @@ services:
   flow3d:
     container_name: amui-flow3d
     environment:
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
       - QT_QPA_PLATFORM=minimal
     build:
       context: ./services/flow3d
@@ -109,7 +122,7 @@ services:
         - REDHAT_USERNAME=${REDHAT_USERNAME}
         - REDHAT_PASSWORD=${REDHAT_PASSWORD}
 
-    # Uncomment for production
+    # Uncomment for non-development 
     # command: bash ./entrypoint.sh
     tty: true
     depends_on:
@@ -137,6 +150,7 @@ volumes:
   web_node_modules:
   flow3d_out:
   flow3d_venv:
+  redisinsight_data:
 
 networks:
   apinet:

@@ -4,6 +4,7 @@ from flow3d import views
 
 urlpatterns = [
     path("flow3d/test_task/", views.Flow3DTestTask.as_view()),
+    path("flow3d/test_task/<str:task_id>/", views.Flow3DTestTask.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -8,7 +8,7 @@ import { Box, Button, TextField } from '@mui/material';
 import { ChangeEvent, FC, useState } from 'react';
 
 // API
-import { postFlow3DTestTask } from './_api';
+import { getFlow3DTestTask, postFlow3DTestTask } from './_api';
 
 interface Request {
   x: string;
@@ -21,6 +21,8 @@ const TestTaskForm: FC = () => {
     y: '',
   });
 
+  const [taskId, setTaskId] = useState('')
+
   // Callbacks
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -32,6 +34,10 @@ const TestTaskForm: FC = () => {
 
   const handleClick = async () => {
     await postFlow3DTestTask(request);
+  };
+
+  const handleClickTaskResult = async () => {
+    await getFlow3DTestTask(taskId);
   };
 
   return (
@@ -49,6 +55,15 @@ const TestTaskForm: FC = () => {
         value={request.y}
       />
       <Button onClick={handleClick} variant="contained">
+        Submit
+      </Button>
+      <TextField
+        label="Task Result"
+        name="task_result"
+        onChange={(e) => setTaskId(e.target.value)}
+        value={taskId}
+      />
+      <Button onClick={handleClickTaskResult} variant="contained">
         Submit
       </Button>
     </Box>
