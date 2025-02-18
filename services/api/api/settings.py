@@ -43,8 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third Party
     "corsheaders",
-    "django_filters",
     "django_extensions",
+    "django_filters",
     "rest_framework",
     # Apps
     "auth0",
@@ -204,5 +204,8 @@ CSRF_COOKIE_SECURE = True
 USE_X_FORWARDED_HOST = True
 
 # Celery
-CELERY_BROKER_URL = 'redis://redis:6379/0'
-CELERY_BROKER_BACKEND = 'redis://redis:6379/0'
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
+CELERY_IGNORE_RESULT = False
+CELERY_TRACK_STARTED = True
+CELERY_TASK_IGNORE_RESULT = False

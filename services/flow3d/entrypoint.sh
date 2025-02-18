@@ -5,4 +5,5 @@
 echo "Starting Worker..."
 . venv/bin/activate
 cd worker 
-exec celery -A app worker --loglevel=info
+
+exec celery -A app worker --loglevel=info --pool=solo -E
