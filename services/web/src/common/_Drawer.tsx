@@ -37,11 +37,11 @@ const topListItems = [
     icon: <Home />,
     link: "/",
   },
-  {
-    text: "Simulations",
-    icon: <Assignment />,
-    link: "/simulation",
-  },
+  // {
+  //   text: "Simulations",
+  //   icon: <Assignment />,
+  //   link: "/simulation",
+  // },
   {
     text: "Profiles",
     icon: <StackedLineChart />,

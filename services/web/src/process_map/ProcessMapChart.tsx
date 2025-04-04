@@ -23,6 +23,7 @@ interface Defects {
   balling: number;
   keyholing: number;
   selected: boolean;
+  spatter: boolean;
 }
 
 interface DefectsMap {
@@ -175,6 +176,7 @@ const ProcessMapChart: FC<Props & WithTooltipProvidedProps<PointsRange>> =
         const keyholing = processMap[key]["keyholing"] <= 1.5;
         const balling = processMap[key]["balling"] > 3.7;
         const lackOfFusion = processMap[key]["lackOfFusion"] >= 1;
+        const spatter = processMap[key]["spatter"];
         const selected = processMap[key]["selected"]
 
         let fill = "green";
@@ -198,6 +200,13 @@ const ProcessMapChart: FC<Props & WithTooltipProvidedProps<PointsRange>> =
           )
         }
 
+        // TODO: fix hacky
+        let fillOpacity = tooltipData === polygon.data ? 0.5 : 0.25
+        if (spatter) {
+          fill = "orange";
+          fillOpacity = 0.5;
+        }
+
         return(
           <VoronoiPolygon
             key={`polygon-${i}`}
@@ -206,7 +215,7 @@ const ProcessMapChart: FC<Props & WithTooltipProvidedProps<PointsRange>> =
             stroke="white"
             strokeWidth={1}
             strokeOpacity={0.2}
-            fillOpacity={tooltipData === polygon.data ? 0.5 : 0.25}
+            fillOpacity={fillOpacity}
           />
       )});
 
