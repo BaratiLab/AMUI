@@ -4,7 +4,7 @@
  */
 
 // Node Modules
-import { Box, Button, Container, FormControl, SelectChangeEvent, Slider, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, FormControl, FormControlLabel, Switch, SelectChangeEvent, Slider, TextField, Typography } from '@mui/material';
 import { ChangeEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
@@ -24,6 +24,8 @@ import ProcessMapChart from 'process_map/ProcessMapChart';
 
 // Hooks
 import { useAppDispatch, useAppSelector } from 'hooks';
+
+import { spatterMap, equation1 } from './spattermap';
 
 // Styled Components
 const StyledProcessMap = styled(Box)`
@@ -92,6 +94,8 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
 
   const [isChanged, setIsChanged] = useState(false);
   const [tooltipData, setTooltipData] = useState(null);
+  const [showSpatter, setShowSpatter] = useState(false);
+  const [spatterThreshold, setSpatterThreshold] = useState(10**5);
 
   const state = useAppSelector((state) => state.meltPoolDimensions);
 
@@ -121,7 +125,11 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
           lackOfFusion: hatchSpacingWidth**2 + layerThicknessDepth**2,
           balling: length / width,
           keyholing: isNaN(widthDepth) ? Infinity : widthDepth,
-          selected: Number(power) === Number(request.power) && Number(velocity) === Number(request.velocity)
+          selected: Number(power) === Number(request.power) && Number(velocity) === Number(request.velocity),
+
+          // TODO: Actually implement
+          // spatter: showSpatter ? spatterMap[`${power}-${velocity}`] : false,
+          spatter: showSpatter ? equation1(power, velocity * 1000) > spatterThreshold : false,
         }
       }
     }, {} as DefectsMap,
@@ -131,6 +139,8 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
     request.layer_thickness,
     request.power,
     request.velocity,
+    showSpatter,
+    spatterThreshold,
   ]);
 
   useEffect(() => {
@@ -240,6 +250,10 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
     }));
   };
 
+  const handleSpatterSliderChange = (e: Event, newValue: number | number[]) => {
+    setSpatterThreshold(newValue as number);
+  };
+
   // JSX
   const processMapJSX = request.material_id === 2 && (
     <StyledProcessMapContainer>
@@ -266,6 +280,15 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
         name="layer_thickness"
         value={request.layer_thickness * (10 ** 6)}
         sx={{ "gridArea": "layer_thickness", marginLeft: "0.5em"}}
+      />
+      <FormControlLabel
+        control={
+          <Switch
+            checked={showSpatter}
+            onChange={() => setShowSpatter((prevState) => !prevState)}
+          />
+        }
+        label="Show Potential Spatter"
       />
       <StyledProcessMap>
         <ParentSize>
@@ -331,6 +354,32 @@ const BuildProfileForm: FC<Props> = ({ buildProfile = null }) => {
             {"Layer Thickness (μm)"}
           </Typography>
         </FormControl>
+        {showSpatter && (
+          <FormControl
+            sx={{
+              alignItems: "center",
+              paddingBottom: "125px",
+            }}
+            variant="standard"
+          >
+            <Slider
+              // disabled={processParametersStatus === Status.Idle}
+              disableSwap
+              name="spatter_threshold"
+              value={spatterThreshold}
+              valueLabelDisplay="auto"
+              onChange={handleSpatterSliderChange}
+              orientation="vertical"
+              min={10**4}
+              max={10**6}
+              marks={true}
+              step={10**4}
+            />
+            <Typography paddingTop="10px" textAlign="center">
+              {"Spatter Threshold"}
+            </Typography>
+          </FormControl>
+        )}
       </StyledSlider>
     </StyledProcessMapContainer>
   )
